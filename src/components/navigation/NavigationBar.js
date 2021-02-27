@@ -1,4 +1,6 @@
-import React from "react";
+import "../../styles/nav-styles.css";
+
+import React from "react"
 
 import NavigationItem from "./NavigationItem";
 

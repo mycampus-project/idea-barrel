@@ -1,0 +1,32 @@
+{
+  "ideas": [],
+  "bulletins": [],
+  "events": [],
+  "users": [
+    {
+      "id": "john.doe@nokia.com",
+      "fName": "Jonathan",
+      "lName": "Doe"
+    },
+    {
+      "id": "jane.doe@nokia.com",
+      "fName": "Jane",
+      "lName": "Doe"
+    },
+    {
+      "id": "matti.meikalainen@nokia.com",
+      "fName": "Matti",
+      "lName": "Meikäläinen"
+    },
+    {
+      "id": "maija.meikalainen@nokia.com",
+      "fName": "Maija",
+      "lName": "Meikäläinen"
+    },
+    {
+      "id": "sven.svensson@nokia.com",
+      "fName": "Sven",
+      "lName": "Svensson"
+    }
+  ]
+}
