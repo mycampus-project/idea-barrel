@@ -1,5 +1,26 @@
 {
-  "ideas": [],
+  "ideas": [
+    {
+      "data": {
+        "title": "An example new idea post",
+        "body": "The structure of these objects can be anything.\n\n      Json-server accepts it as long as it's in JSON format.\n\n      Any sort of id doesn't have to be provided as json-server also provides that automatically.",
+        "votes": 0,
+        "catory": 404
+      },
+      "user_id": "sven.svensson@nokia.com",
+      "id": 1
+    },
+    {
+      "data": {
+        "title": "Remote working should stay as a permament option",
+        "body": "As title suggests",
+        "votes": 0,
+        "catory": "Improvements"
+      },
+      "user_id": "sven.svensson@nokia.com",
+      "id": 2
+    }
+  ],
   "bulletins": [],
   "events": [],
   "users": [
