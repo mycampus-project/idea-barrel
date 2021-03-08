@@ -3,7 +3,14 @@ import React from "react";
 const BulletinPage = () => {
   return (
     <div>
-      <p>Bullets</p>
+      <ul>
+      <li>
+        dsadas
+      </li>
+      <li>
+        dsadsa
+      </li>
+      </ul>
     </div>
   );
 };
