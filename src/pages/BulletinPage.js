@@ -8,7 +8,7 @@ const BulletinPage = () => {
         dsadas
       </li>
       <li>
-        dsadsa
+        dsadsa dsadsad sa
       </li>
       </ul>
     </div>
