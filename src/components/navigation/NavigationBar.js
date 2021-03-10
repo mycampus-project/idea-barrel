@@ -9,16 +9,26 @@ import { navigate } from "hookrouter";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-
+  },
+  toolbar: {
+    alignItems: 'flex-start',
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    flexGrow: 1
   },
   image: {
-    maxWidth: "150px",
+    flexGrow: 1,
+    marginRight: theme.spacing(2),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    maxWidth: 160
   },
   title: {
     flexGrow: 1
   },
   menuButton: {
     color: "#FFFFFF",
+    flexGrow: 1
 
   },
   offset: theme.mixins.toolbar
@@ -48,24 +58,28 @@ const NavigationBar = () => {
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
-        <Toolbar>
-
-          <img src={logo} className={classes.image} />
-
+        <Toolbar className={classes.toolbar}>
+          <img src={logo} className={classes.image} onClick={()=> handleNavigate("/")} />
+          <Typography variant="h6" className={classes.title}></Typography>
           {width < 650 // Breakpoint for view width of 650px. Smaller width renders only harmburger menu 
-            ?<div>
-              <IconButton edge="start" className={classes.menuButton} onClick={handleMenuClick} aria-haspopup="true">
+            ? <div>
+              <IconButton className={classes.menuButton} onClick={handleMenuClick} aria-haspopup="true">
                 <MenuIcon />
               </IconButton>
-
-              <Menu id="nav-menu" anchorEl={open} keepMounted open={open} onClose={handleMenuClose} >
+              <Menu
+                id="nav-menu"
+                anchorEl={open}
+                keepMounted open={open}
+                onClose={handleMenuClose}
+                anchorOrigin={{ vertical: "top", horizontal: "left" }}
+                transformOrigin={{ vertical: "bottom", horizontal: "right" }} >
                 <MenuItem onClick={() => handleNavigate("/")}>Home</MenuItem>
                 <MenuItem onClick={() => handleNavigate("/idea-barrel")}>Idea Barrel</MenuItem>
                 <MenuItem onClick={() => handleNavigate("/events")}>Events</MenuItem>
                 <MenuItem onClick={() => handleNavigate("/bulletin")}>Bulletin Board</MenuItem>
               </Menu>
             </div>
-            :<div>
+            : <div>
               <NavigationItem url="/" title="Home" />
               <NavigationItem url="/idea-barrel" title="Idea Barrel" />
               <NavigationItem url="/events" title="Events" />
