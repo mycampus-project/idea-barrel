@@ -21,6 +21,16 @@ const data = [
     info: "kaliaa",
     likes: "5"
   },
+  {
+    title: "ruokaa",
+    info: "ruokaa",
+    likes: "0"
+  },
+  {
+    title: "nukkuu",
+    info: "krooh",
+    likes: "0"
+  },
 ]
 const useStyles = makeStyles({
   root: {
@@ -46,9 +56,9 @@ const CategoryChoose = () => {
     <div className="eventsTop">
       <Container component='main' maxWidth="xs"></Container>
       <Button className={styles.eventButton} onClick={console.log("Button 1 clicked)")} variant="contained">Cat 1</Button>
-      <Button className={styles.eventButton} onClick={console.log("Button 1 clicked)")} variant="contained">Cat 2</Button>
-      <Button className={styles.eventButton} onClick={console.log("Button 1 clicked)")} variant="contained">Cat 3</Button>
-      <Button className={styles.eventButton} onClick={console.log("Button 1 clicked)")} variant="contained">Cat 4</Button>
+      <Button className={styles.eventButton} onClick={console.log("Button 2 clicked)")} variant="contained">Cat 2</Button>
+      <Button className={styles.eventButton} onClick={console.log("Button 3 clicked)")} variant="contained">Cat 3</Button>
+      <Button className={styles.eventButton} onClick={console.log("Button 4 clicked)")} variant="contained">Cat 4</Button>
       <Container />
     </div>
   )
