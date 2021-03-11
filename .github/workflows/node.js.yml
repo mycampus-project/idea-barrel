@@ -33,12 +33,14 @@ needs: [build]
 name: Idea Barrel Release
 on: [push]
 branches: [main]
+
 steps:
 - name: Zip Release
 uses: thedoctor0/zip-release@master
 with:
   filename: 'ideabarrel.zip'
   exclusions: '*.git* /*node_modules/* .editorconfig'
+
 - name: Upload Release
   uses: ncipollo/release-action@v1
     with:
