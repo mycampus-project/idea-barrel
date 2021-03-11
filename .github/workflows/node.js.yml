@@ -36,13 +36,13 @@ branches: [main]
 
 steps:
 - name: Zip Release
-uses: thedoctor0/zip-release@master
-with:
-  filename: 'ideabarrel.zip'
-  exclusions: '*.git* /*node_modules/* .editorconfig'
+  uses: thedoctor0/zip-release@master
+  with:
+    filename: 'ideabarrel.zip'
+    exclusions: '*.git* /*node_modules/* .editorconfig'
 
 - name: Upload Release
   uses: ncipollo/release-action@v1
-    with:
-        artifacts: "release.zip"
-        token: ${{ secrets.GITHUB_TOKEN }}
+  with:
+    artifacts: "release.zip"
+    token: ${{ secrets.GITHUB_TOKEN }}
