@@ -36,7 +36,7 @@ jobs:
     steps:
     - name: Discord notification
       env:
-        DISCORD_WEBHOOK: 'https://discordapp.com/channels/@me/674884605131751438/819631666929991721'
+        DISCORD_WEBHOOK: 'https://discordapp.com/api/webhooks/819631417847840799/fHDibLVKp_SSnjr7vHmbbqX-789HCPjqwikQr_p6p6B-5PdOaUB3z9FaexnTEnXcVQok'
       uses: Ilshidur/action-discord@master
       with:
        args: 'Staging has been updated - please pull!'
