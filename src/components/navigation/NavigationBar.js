@@ -85,10 +85,10 @@ const NavigationBar = () => {
               </Menu>
             </div>
             : <div id="desktop-nav-items">
-              <Button className={classes.desktopNav}>Home</Button>
-              <Button className={classes.desktopNav}>Idea Barrel</Button>
-              <Button className={classes.desktopNav}>Events</Button>
-              <Button className={classes.desktopNav}>Bulletin Board</Button>
+              <Button className={classes.desktopNav} onClick={() => handleNavigate("/")}>Home</Button>
+              <Button className={classes.desktopNav} onClick={() => handleNavigate("/idea-barrel")}>Idea Barrel</Button>
+              <Button className={classes.desktopNav} onClick={() => handleNavigate("/events")}>Events</Button>
+              <Button className={classes.desktopNav} onClick={() => handleNavigate("/bulletin")}>Bulletin Board</Button>
             </div>}
         </Toolbar>
       </AppBar>
