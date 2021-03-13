@@ -18,19 +18,20 @@ const APIDemo = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const users = await fetchUsersAsync();
+        setUsers(users);
+        setRandomUser(users);
+      } catch (e) {
+        console.log("error fetching users");
+        console.log(e);
+      }
+    };
     getUsers();
   }, []);
 
-  const getUsers = async () => {
-    try {
-      const users = await fetchUsersAsync();
-      setUsers(users);
-      setRandomUser(users);
-    } catch (e) {
-      console.log("error fetching users");
-      console.log(e);
-    }
-  };
+  
 
 
   // Set the "current user" to a random user from the
