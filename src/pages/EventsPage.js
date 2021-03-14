@@ -1,105 +1,156 @@
 import React, { useEffect, useState } from "react";
 import {
   Button,
-  Container,
   makeStyles,
   Card,
   CardHeader,
   CardContent,
   Typography,
+  Grid
 
 } from '@material-ui/core';
 
-const data = [
-  {
-    title: "kalastusta",
-    info: "kalaa",
-    likes: "5"
-  },
-  {
-    title: "kaliaa",
-    info: "kaliaa",
-    likes: "5"
-  },
-  {
-    title: "ruokaa",
-    info: "ruokaa",
-    likes: "0"
-  },
-  {
-    title: "nukkuu",
-    info: "krooh",
-    likes: "0"
-  },
-]
-const useStyles = makeStyles({
-  root: {
-    borderRadius: 10,
-    margin: 10,
-  },
-  cardContent: {
-    color: 'black',
-    marginTop: 10,
-  },
-  eventButton: {
-    borderRadius: 20,
-  }
-
-
-
-});
-
-// Just a list of things for testing purposes
-const CategoryChoose = () => {
-  const styles = useStyles();
-  return (
-    <div className="eventsTop">
-      <Container component='main' maxWidth="xs"></Container>
-      <Button className={styles.eventButton} onClick={console.log("Button 1 clicked)")} variant="contained">Cat 1</Button>
-      <Button className={styles.eventButton} onClick={console.log("Button 2 clicked)")} variant="contained">Cat 2</Button>
-      <Button className={styles.eventButton} onClick={console.log("Button 3 clicked)")} variant="contained">Cat 3</Button>
-      <Button className={styles.eventButton} onClick={console.log("Button 4 clicked)")} variant="contained">Cat 4</Button>
-      <Container />
-    </div>
-  )
-};
-
-
-const EventsPage = (props) => {
-  const { title, info, likes } = props.data;
-  const styles = useStyles();
-  return (
-    <Container component='main' maxWidth="xs">
-      <Container component='content'>
-        <div className="events">
-          <Card>
-            <CardHeader title={title} />
-            <CardContent>
-              <Typography variant="body" className={styles.body}>
-                {info}
-              </Typography>
-              <Typography variant="h5" className={styles.h5}>
-                {likes}
-              </Typography>
-            </CardContent>
-          </Card>
-        </div>
-      </Container>
-    </Container>
-  );
-};
 const Events = () => {
-  const eventItem = data.map((i) => <li><EventsPage data={i} /></li>)
+  const [sorted, setSorted] = useState('all');
+  const data = [
+    {
+      title: "kalastusta",
+      info: "kalaa tulee, kuha on jo saalista",
+      likes: "5",
+      category: "work",
+      date: "10.3.2021",
+      time: "15:21",
+    },
+    {
+      title: "kaliaa",
+      info: "kaliaa joka päivä täysii glug glug",
+      likes: "5",
+      category: "hobby",
+      date: "6.2.2021",
+      time: "15:21",
+    },
+    {
+      title: "ruokaa",
+      info: "ruokaa Infoa blabla, jotai safkaa heh",
+      likes: "0",
+      category: "essential",
+      date: "7.3.2021",
+      time: "15:15",
+    },
+    {
+      title: "nukkuu",
+      info: "krooh pyyh",
+      likes: "0",
+      category: "slack",
+      date: "9.1.2021",
+      time: "15:00",
+    },
+  ]
+  const handleSorted = (event) => {
+    setSorted(event);
+    console.log("event: " + event);
+  };
+
+  const useStyles = makeStyles({
+    root: {
+    },
+    body: {
+      color: 'black',
+      marginTop: 10,
+    },
+    h5: {
+      borderRadius: 20,
+    },
+    title: {
+      color: 'black',
+    },
+    eventButton: {
+      borderRadius: 30,
+      maxWidth: 1,
+    },
+    eventsTop: {
+      marginTop: "3%",
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+    },
+    category: {
+      justifyContent: 'flex-end'
+    }
+  });
+
+  // Just a list of things for testing purposes
+  const CategoryChoose = (props) => {
+    const styles = useStyles();
+
+    return (
+      <div className={styles.eventsTop}>
+        <Button className={styles.eventButton} onClick={() => handleSorted("all")} variant="contained">Show all</Button>
+        <Button className={styles.eventButton} onClick={() => handleSorted("hobby")} variant="contained">Hobby</Button>
+        <Button className={styles.eventButton} onClick={() => handleSorted("work")} variant="contained">Work</Button>
+        <Button className={styles.eventButton} onClick={() => handleSorted("essential")} variant="contained">Essential</Button>
+        <Button className={styles.eventButton} onClick={() => handleSorted("slack")} variant="contained">Slack</Button>
+      </div>
+    )
+  };
+
+
+  const EventsPage = (props) => {
+    const { title, info, likes, category, date, time } = props.data;
+    const styles = useStyles();
+
+    return (
+      <div className="events">
+        <Card>
+          <CardHeader className={styles.title} title={title} />
+          <CardContent>
+            <Typography variant="body" className={styles.body}>
+              {info}
+            </Typography>
+            <Typography variant="h5" className={styles.category}>
+              {category}
+            </Typography>
+            <Typography variant="h5" className={styles.h5}>
+              likes: {likes}
+            </Typography>
+            <Typography variant="h5" className={styles.date}>
+              {date}{" "}{time}
+            </Typography>
+          </CardContent>
+
+        </Card>
+      </div>
+    );
+  };
+
+  const Event = () => {
+
+    const sortedArray = data.filter((item) => {
+        return item.category === sorted;
+     }).map(({title, info, likes, category, date, time}) => {
+         return {title, info, likes, category, date, time};
+     });
+     console.log(sortedArray);
+     const eventItem = sortedArray.map((i) =>
+      <li><EventsPage data={i} /></li>)
+    
+
+    return (
+      <div>
+        <CategoryChoose />
+        <ul>
+          {eventItem}
+        </ul>
+      </div>
+    );
+  };
   return (
-    <div>
-      <CategoryChoose/>
-      <ul>
-        {eventItem}
-      </ul>
-    </div>
+    <Event />
   );
-};
+}
 
 export default Events;
+
+
 
 
