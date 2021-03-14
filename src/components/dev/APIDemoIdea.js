@@ -56,21 +56,6 @@ const APIDemo = () => {
     setUser(randomUser);
   };
 
-<<<<<<< HEAD
-
-  const fetchIdeas = async () => {
-    try {
-      const ideas = await fetchIdeasAsync();
-      setIdeas(ideas);
-    } catch (e) {
-      console.log("error fetching ideas");
-      console.log(e);
-    }
-  };
-
-
-=======
->>>>>>> da47043f9943a9803da7ff502d7e2ec78593f2bb
   // An idea template to demonstrate post request to the json-server
  
 
