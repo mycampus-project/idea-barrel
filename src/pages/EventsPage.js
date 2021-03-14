@@ -48,7 +48,6 @@ const Events = () => {
   ]
   const handleSorted = (event) => {
     setSorted(event);
-    console.log("event: " + event);
   };
 
   const useStyles = makeStyles({
@@ -125,24 +124,37 @@ const Events = () => {
 
   const Event = () => {
 
-    const sortedArray = data.filter((item) => {
-        return item.category === sorted;
-     }).map(({title, info, likes, category, date, time}) => {
-         return {title, info, likes, category, date, time};
-     });
-     console.log(sortedArray);
-     const eventItem = sortedArray.map((i) =>
-      <li><EventsPage data={i} /></li>)
-    
+    const allArray = data.map((details) => <li><EventsPage data={details} /></li>)
+    const sortedCategoryArray = data.filter((item) => {
+      return item.category === sorted;
+    }).map(({ title, info, likes, category, date, time }) => {
+      return { title, info, likes, category, date, time }
+    });
+    const sortedArray = sortedCategoryArray.map((item) => <li><EventsPage data={item} /></li>)
+    if (sorted === 'all') {
+      return (
+        <div>
+          <CategoryChoose />
+          <ul>
+            {allArray}
+          </ul>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <CategoryChoose />
+          <ul>
+            {sortedArray}
+          </ul>
+        </div>
+      )
+    }
 
-    return (
-      <div>
-        <CategoryChoose />
-        <ul>
-          {eventItem}
-        </ul>
-      </div>
-    );
+
+
+
+
   };
   return (
     <Event />
