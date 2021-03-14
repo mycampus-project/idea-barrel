@@ -19,24 +19,34 @@ const {
 
 const APIDemo = () => {
   const [ideas, setIdeas] = useState([]);
+  // eslint-disable-next-line
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const users = await fetchUsersAsync();
+        setUsers(users);
+        setRandomUser(users);
+      } catch (e) {
+        console.log("error fetching users");
+        console.log(e);
+      }
+    };
+    const fetchIdeas = async () => {
+      try {
+        const ideas = await fetchIdeasAsync();
+        setIdeas(ideas);
+      } catch (e) {
+        console.log("error fetching ideas");
+        console.log(e);
+      }
+    };
     getUsers();
     fetchIdeas();
   }, []);
 
-  const getUsers = async () => {
-    try {
-      const users = await fetchUsersAsync();
-      setUsers(users);
-      setRandomUser(users);
-    } catch (e) {
-      console.log("error fetching users");
-      console.log(e);
-    }
-  };
 
   const setRandomUser = (data) => {
     const randomUser =
@@ -46,6 +56,7 @@ const APIDemo = () => {
     setUser(randomUser);
   };
 
+<<<<<<< HEAD
 
   const fetchIdeas = async () => {
     try {
@@ -58,6 +69,8 @@ const APIDemo = () => {
   };
 
 
+=======
+>>>>>>> da47043f9943a9803da7ff502d7e2ec78593f2bb
   // An idea template to demonstrate post request to the json-server
  
 
@@ -88,19 +101,6 @@ const APIDemo = () => {
       </div>
     );
   };
-
-  // The list item in users list on the "home" page
-  const userItem = (user) => {
-    return (
-      <div key={user.id} style={dataStyle}>
-        <h4>
-          {user.fName} {user.lName}
-        </h4>
-        <p key={user.id}>{user.id}</p>
-      </div>
-    );
-  };
-
 
   return (
     <div>
