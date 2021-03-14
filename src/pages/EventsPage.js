@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   makeStyles,
@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardContent,
   Typography,
-  Grid
 
 } from '@material-ui/core';
 
@@ -14,6 +13,7 @@ const Events = () => {
   const [sorted, setSorted] = useState('all');
   const data = [
     {
+      uniqueID: "1",
       title: "kalastusta",
       info: "kalaa tulee, kuha on jo saalista",
       likes: "5",
@@ -22,6 +22,7 @@ const Events = () => {
       time: "15:21",
     },
     {
+      uniqueID: "2",
       title: "kaliaa",
       info: "kaliaa joka päivä täysii glug glug",
       likes: "5",
@@ -30,6 +31,7 @@ const Events = () => {
       time: "15:21",
     },
     {
+      uniqueID: "3",
       title: "ruokaa",
       info: "ruokaa Infoa blabla, jotai safkaa heh",
       likes: "0",
@@ -38,6 +40,7 @@ const Events = () => {
       time: "15:15",
     },
     {
+      uniqueID: "4",
       title: "nukkuu",
       info: "krooh pyyh",
       likes: "0",
@@ -52,16 +55,16 @@ const Events = () => {
 
   const useStyles = makeStyles({
     root: {
+      display: 'flex',
     },
     body: {
-      color: 'black',
-      marginTop: 10,
+      display: 'inline-block',
     },
     h5: {
       borderRadius: 20,
     },
     title: {
-      color: 'black',
+      fontSize: 20,
     },
     eventButton: {
       borderRadius: 30,
@@ -103,20 +106,19 @@ const Events = () => {
         <Card>
           <CardHeader className={styles.title} title={title} />
           <CardContent>
-            <Typography variant="body" className={styles.body}>
+            <Typography className={styles.body}>
               {info}
             </Typography>
-            <Typography variant="h5" className={styles.category}>
+            <Typography className={styles.category}>
               {category}
             </Typography>
-            <Typography variant="h5" className={styles.h5}>
+            <Typography className={styles.h5}>
               likes: {likes}
             </Typography>
-            <Typography variant="h5" className={styles.date}>
+            <Typography className={styles.date}>
               {date}{" "}{time}
             </Typography>
           </CardContent>
-
         </Card>
       </div>
     );
@@ -124,13 +126,16 @@ const Events = () => {
 
   const Event = () => {
 
-    const allArray = data.map((details) => <li><EventsPage data={details} /></li>)
+    // Two separate arrays, all items or sorted items depending on user choice (all or specific category)
+    // Not optimal, but works as intended for now
+
+    const allArray = data.map((details) => <li key={details.uniqueID}><EventsPage data={details} /></li>)
     const sortedCategoryArray = data.filter((item) => {
       return item.category === sorted;
     }).map(({ title, info, likes, category, date, time }) => {
       return { title, info, likes, category, date, time }
     });
-    const sortedArray = sortedCategoryArray.map((item) => <li><EventsPage data={item} /></li>)
+    const sortedArray = sortedCategoryArray.map((item) => <li key={item.uniqueID}><EventsPage data={item} /></li>)
     if (sorted === 'all') {
       return (
         <div>
@@ -150,11 +155,6 @@ const Events = () => {
         </div>
       )
     }
-
-
-
-
-
   };
   return (
     <Event />
