@@ -11,7 +11,8 @@ const mock_data = [
     description: "old shoes. Still in good condition",
     category: "selling",
     date: "10.3.2021",
-    user: "Matti"
+    user: "Matti",
+    id: 123
   },
   {
     title: "Nike Shoes",
@@ -19,7 +20,8 @@ const mock_data = [
     description: "old shoes. Still in good condition",
     category: "selling",
     date: "1.2.2021",
-    user: "Jesse"
+    user: "Jesse",
+    id: 321
   },
   {
     title: "Nike Shoes",
@@ -27,7 +29,8 @@ const mock_data = [
     description: "old shoes. Still in good condition",
     category: "selling",
     date: "5.7.2021",
-    user: "Janne"
+    user: "Janne",
+    id: 58293
   },
   {
     title: "Nike Shoes",
@@ -35,7 +38,8 @@ const mock_data = [
     description: "old shoes. Still in good condition",
     category: "selling",
     date: "5.7.2021",
-    user: "Janne"
+    user: "Janne",
+    id: 84932
   },
   {
     title: "Nike Shoes",
@@ -43,7 +47,8 @@ const mock_data = [
     description: "old shoes. Still in good condition",
     category: "selling",
     date: "5.7.2021",
-    user: "Janne"
+    user: "Janne",
+    id: 5023423
   },
 
 ]
@@ -98,10 +103,14 @@ const BulletinListItem = (props) => {
 
 const BulletinPage = () => {
 
-  const listItem = mock_data.map((d) => <li><BulletinListItem data={d} /></li>)
+  const listItem = mock_data.map((d) => <li onClick={() => handleNavigate(d)}><BulletinListItem data={d} /></li>)
+
+
+  const handleNavigate = (data) => {
+    navigate("/bulletin/"+ data.id)
+  }
 
   const createBulletinNav = () => {
-    console.log("nav")
     navigate("/bulletin-create")
   }
 
