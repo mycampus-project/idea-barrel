@@ -4,7 +4,9 @@ const CreateBulletinPage = () => {
 
 
     return(
-        <div></div>
+        <div>
+            
+        </div>
     )
 
 }

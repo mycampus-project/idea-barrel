@@ -37,12 +37,18 @@ const mock_data = [
     date: "5.7.2021",
     user: "Janne"
   },
+  {
+    title: "Nike Shoes",
+    image: null,
+    description: "old shoes. Still in good condition",
+    category: "selling",
+    date: "5.7.2021",
+    user: "Janne"
+  },
 
 ]
 
 const BulletinListItem = (props) => {
-
-
   const useStyles = makeStyles((theme) => ({
     root: {
       display: "flex"
@@ -64,13 +70,13 @@ const BulletinListItem = (props) => {
 
   const { title, image, description, category, date, user } = props.data //eslint-disable-line
   const byString = date + " by: " + user //eslint-disable-line
-
-
-
   return (
     <div>
       <Card className={classes.root}>
-        <CardMedia className={classes.cover} image={image} />
+        {image != null
+          ? <CardMedia className={classes.cover} image={image} />
+          : <div></div>
+        }
         <div className={classes.details}>
           <Typography component="h5" variant="h5">
             {title}
@@ -88,22 +94,6 @@ const BulletinListItem = (props) => {
       </Card>
     </div>
   )
-
-  /*
-    return (
-      <div>
-        <Card>
-          <CardHeader title={title} subheader={byString} />
-          <CardMedia component="img" src={image} title={title} height="140" />
-          <CardContent>
-            <Typography variant="body2" color="textSecondary" component="p">
-              {description}
-            </Typography>
-          </CardContent>
-        </Card>
-      </div>
-    )
-    */
 }
 
 const BulletinPage = () => {
