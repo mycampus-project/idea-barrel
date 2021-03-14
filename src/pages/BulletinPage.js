@@ -1,5 +1,7 @@
-import { Card, CardHeader, CardMedia, CardContent, Typography, makeStyles } from "@material-ui/core"; //eslint-disable-line
+import { Card, CardHeader, CardMedia, CardContent, Typography, makeStyles, Fab } from "@material-ui/core"; //eslint-disable-line
 import React from "react";
+import AddIcon from '@material-ui/icons/Add';
+import { navigate } from "hookrouter";
 
 
 const mock_data = [
@@ -58,56 +60,69 @@ const BulletinListItem = (props) => {
     },
   }))
 
-  const classes  = useStyles()
+  const classes = useStyles()
 
   const { title, image, description, category, date, user } = props.data //eslint-disable-line
   const byString = date + " by: " + user //eslint-disable-line
 
-  
 
-  return(
+
+  return (
     <div>
       <Card className={classes.root}>
-        <CardMedia className={classes.cover} image={image}/>
+        <CardMedia className={classes.cover} image={image} />
         <div className={classes.details}>
           <Typography component="h5" variant="h5">
             {title}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
-            {user}
+            By:  {user}
+          </Typography>
+          <Typography variant="subtitle2" color="textSecondary">
+            {date}
+          </Typography>
+          <Typography variant="subtitle1" color="textSecondary">
+            {description}
           </Typography>
         </div>
       </Card>
     </div>
   )
 
-/*
-  return (
-    <div>
-      <Card>
-        <CardHeader title={title} subheader={byString} />
-        <CardMedia component="img" src={image} title={title} height="140" />
-        <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {description}
-          </Typography>
-        </CardContent>
-      </Card>
-    </div>
-  )
-  */
+  /*
+    return (
+      <div>
+        <Card>
+          <CardHeader title={title} subheader={byString} />
+          <CardMedia component="img" src={image} title={title} height="140" />
+          <CardContent>
+            <Typography variant="body2" color="textSecondary" component="p">
+              {description}
+            </Typography>
+          </CardContent>
+        </Card>
+      </div>
+    )
+    */
 }
 
 const BulletinPage = () => {
 
   const listItem = mock_data.map((d) => <li><BulletinListItem data={d} /></li>)
 
+  const createBulletinNav = () => {
+    console.log("nav")
+    navigate("/bulletin-create")
+  }
 
   return (
     <div>
       <ul>
         {listItem}
       </ul>
+      <Fab color="primary" aria-label="add" style={{ margin: 0, top: "auto", right: 16, bottom: 16, left: "auto", position: "fixed" }} onClick={() => createBulletinNav()}>
+        <AddIcon />
+      </Fab>
     </div>
   );
 };
