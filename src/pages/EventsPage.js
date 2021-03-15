@@ -92,7 +92,7 @@ const Events = () => {
     },
     eventDetailButton: {
       position: 'absolute',
-      left: '93%',
+      left: '85%',
       top: '-5%',
     }
 
