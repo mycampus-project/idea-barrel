@@ -7,10 +7,12 @@ import {
   CardContent,
   Typography,
   ButtonBase,
+  CardActionArea,
   Dialog,
   DialogTitle,
   DialogContent,
   IconButton,
+  Grid,
 } from '@material-ui/core';
 import "../App.css"
 
@@ -59,7 +61,6 @@ const Events = () => {
   const handleSorted = (event) => {
     setSorted(event);
   };
-
   const useStyles = makeStyles({
     root: {
       display: 'flex',
@@ -71,9 +72,6 @@ const Events = () => {
       borderRadius: '50%',
       maxWidth: '5%',
     },
-    title: {
-      fontSize: '45px'
-    },
     card: {
       border: 'solid 1px blue',
     },
@@ -83,8 +81,7 @@ const Events = () => {
     likes: {
     },
     body: {
-      textAlign: 'right',
-      fontSize: "20px",
+      justifyContent: 'left',
     },
     category: {
       flexDirection: 'row',
@@ -94,12 +91,16 @@ const Events = () => {
       position: 'absolute',
       left: '85%',
       top: '-5%',
+    },
+    events: {
+      width: '100%',
     }
-
   });
+  
   // Just a list of things for testing purposes
   const CategoryChoose = (props) => {
     const styles = useStyles();
+    
 
     return (
       <div className={styles.eventsTop}>
@@ -122,7 +123,7 @@ const Events = () => {
 
     return (
       // Card for event details and dialog for more info
-      <div className="events">
+      <div className={styles.events} >
         <Dialog open={show} onClose={handleClose} fullWidth={true}>
           <IconButton className={styles.eventDetailButton} onClick={handleClose}>
             X
@@ -133,28 +134,34 @@ const Events = () => {
           <DialogContent>{time}</DialogContent>
         </Dialog>
 
-        <Card className={styles.card}>
-          <ButtonBase
-            className={styles.cardAction}
-            onClick={() => handleShow()}
-          >
-            <CardHeader title={title} titleTypographyProps={{ variant: 'h4' }} />
-            <CardContent>
+        <Card className={styles.card} onClick={() => handleShow()}>
+        <CardActionArea>
+          <CardContent>
+              <Grid container spacing={3} direction="row" alignItems="flex-start" justify="flex-start">
+                <CardHeader title={title} titleTypographyProps={{ variant: 'h3' }} />
+                <Typography className={styles.category}>
+                  {category}
+                </Typography>
+              </Grid>
               <Typography className={styles.body}>
                 {info}
               </Typography>
-              <Typography className={styles.category}>
-                {category}
-              </Typography>
-              <Typography className={styles.likes}>
-                likes: {likes}
-              </Typography>
-              <Typography className={styles.date}>
-                {date}{" "}{time}
-              </Typography>
+
+
+
+              <Grid container direction="row" alignItems="center">
+                <Typography className={styles.date}>
+                  {date}
+                </Typography>
+                <Typography className={styles.time}>
+                  {time}
+                </Typography>
+              </Grid>
+              
             </CardContent>
-          </ButtonBase>
+            </CardActionArea>
         </Card>
+        
       </div>
     );
   };
