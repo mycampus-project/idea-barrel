@@ -132,7 +132,7 @@ const Events = () => {
           <DialogContent>{date}</DialogContent>
           <DialogContent>{time}</DialogContent>
         </Dialog>
-        
+
         <Card className={styles.card}>
           <ButtonBase
             className={styles.cardAction}
