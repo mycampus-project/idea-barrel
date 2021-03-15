@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardContent,
   Typography,
-  ButtonBase,
   CardActionArea,
   Dialog,
   DialogTitle,
@@ -96,11 +95,11 @@ const Events = () => {
       width: '100%',
     }
   });
-  
+
   // Just a list of things for testing purposes
   const CategoryChoose = (props) => {
     const styles = useStyles();
-    
+
 
     return (
       <div className={styles.eventsTop}>
@@ -115,7 +114,7 @@ const Events = () => {
 
 
   const EventsPage = (props) => {
-    const { title, info, likes, category, date, time } = props.data;
+    const { title, info, category, date, time } = props.data;
     const styles = useStyles();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -135,8 +134,8 @@ const Events = () => {
         </Dialog>
 
         <Card className={styles.card} onClick={() => handleShow()}>
-        <CardActionArea>
-          <CardContent>
+          <CardActionArea>
+            <CardContent>
               <Grid container spacing={3} direction="row" alignItems="flex-start" justify="flex-start">
                 <CardHeader title={title} titleTypographyProps={{ variant: 'h3' }} />
                 <Typography className={styles.category}>
@@ -146,9 +145,6 @@ const Events = () => {
               <Typography className={styles.body}>
                 {info}
               </Typography>
-
-
-
               <Grid container direction="row" alignItems="center">
                 <Typography className={styles.date}>
                   {date}
@@ -157,11 +153,10 @@ const Events = () => {
                   {time}
                 </Typography>
               </Grid>
-              
             </CardContent>
-            </CardActionArea>
+          </CardActionArea>
         </Card>
-        
+
       </div>
     );
   };
