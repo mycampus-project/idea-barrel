@@ -6,11 +6,18 @@ import {
   CardHeader,
   CardContent,
   Typography,
-
+  ButtonBase,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton,
 } from '@material-ui/core';
+import "../App.css"
 
 const Events = () => {
   const [sorted, setSorted] = useState('all');
+
+
   const data = [
     {
       uniqueID: "1",
@@ -57,41 +64,50 @@ const Events = () => {
     root: {
       display: 'flex',
     },
-    body: {
-      display: 'inline-block',
-    },
-    h5: {
-      borderRadius: 20,
+    eventButton: {
+      marginTop: '2%',
+      marginLeft: '1%',
+      marginRight: '1%',
+      borderRadius: '50%',
+      maxWidth: '5%',
     },
     title: {
-      fontSize: 20,
+      fontSize: '45px'
     },
-    eventButton: {
-      borderRadius: 30,
-      maxWidth: 1,
+    card: {
+      border: 'solid 1px blue',
     },
-    eventsTop: {
-      marginTop: "3%",
-      flex: 1,
-      flexDirection: 'row',
-      justifyContent: 'space-around',
+    date: {
+      textAlign: 'end',
+    },
+    likes: {
+    },
+    body: {
+      textAlign: 'right',
+      fontSize: "20px",
     },
     category: {
-      justifyContent: 'flex-end'
+      flexDirection: 'row',
+      fontSize: '15px',
+    },
+    eventDetailButton: {
+      position: 'absolute',
+      left: '93%',
+      top: '-5%',
     }
-  });
 
+  });
   // Just a list of things for testing purposes
   const CategoryChoose = (props) => {
     const styles = useStyles();
 
     return (
       <div className={styles.eventsTop}>
-        <Button className={styles.eventButton} onClick={() => handleSorted("all")} variant="contained">Show all</Button>
-        <Button className={styles.eventButton} onClick={() => handleSorted("hobby")} variant="contained">Hobby</Button>
-        <Button className={styles.eventButton} onClick={() => handleSorted("work")} variant="contained">Work</Button>
-        <Button className={styles.eventButton} onClick={() => handleSorted("essential")} variant="contained">Essential</Button>
-        <Button className={styles.eventButton} onClick={() => handleSorted("slack")} variant="contained">Slack</Button>
+        <Button className={styles.eventButton} onClick={() => handleSorted("all")} variant="outlined" color="primary"> Show all</Button>
+        <Button className={styles.eventButton} onClick={() => handleSorted("hobby")} variant="contained" color="default" size="small">Hobby</Button>
+        <Button className={styles.eventButton} onClick={() => handleSorted("work")} variant="contained" color="default" size="small">Work</Button>
+        <Button className={styles.eventButton} onClick={() => handleSorted("essential")} variant="contained" color="default" size="small">Essential</Button>
+        <Button className={styles.eventButton} onClick={() => handleSorted("slack")} variant="contained" color="default" size="small">Slack</Button>
       </div>
     )
   };
@@ -100,25 +116,44 @@ const Events = () => {
   const EventsPage = (props) => {
     const { title, info, likes, category, date, time } = props.data;
     const styles = useStyles();
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     return (
+      // Card for event details and dialog for more info
       <div className="events">
-        <Card>
-          <CardHeader className={styles.title} title={title} />
-          <CardContent>
-            <Typography className={styles.body}>
-              {info}
-            </Typography>
-            <Typography className={styles.category}>
-              {category}
-            </Typography>
-            <Typography className={styles.h5}>
-              likes: {likes}
-            </Typography>
-            <Typography className={styles.date}>
-              {date}{" "}{time}
-            </Typography>
-          </CardContent>
+        <Dialog open={show} onClose={handleClose} fullWidth={true}>
+          <IconButton className={styles.eventDetailButton} onClick={handleClose}>
+            X
+                </IconButton>
+          <DialogTitle id="max-width-dialog-title">{title}</DialogTitle>
+          <DialogContent>{info}</DialogContent>
+          <DialogContent>{date}</DialogContent>
+          <DialogContent>{time}</DialogContent>
+        </Dialog>
+        
+        <Card className={styles.card}>
+          <ButtonBase
+            className={styles.cardAction}
+            onClick={() => handleShow()}
+          >
+            <CardHeader title={title} titleTypographyProps={{ variant: 'h4' }} />
+            <CardContent>
+              <Typography className={styles.body}>
+                {info}
+              </Typography>
+              <Typography className={styles.category}>
+                {category}
+              </Typography>
+              <Typography className={styles.likes}>
+                likes: {likes}
+              </Typography>
+              <Typography className={styles.date}>
+                {date}{" "}{time}
+              </Typography>
+            </CardContent>
+          </ButtonBase>
         </Card>
       </div>
     );
@@ -153,8 +188,8 @@ const Events = () => {
             {sortedArray}
           </ul>
         </div>
-      )
-    }
+      );
+    };
   };
   return (
     <Event />
