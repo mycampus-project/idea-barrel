@@ -173,26 +173,16 @@ const Events = () => {
       return { title, info, likes, category, date, time }
     });
     const sortedArray = sortedCategoryArray.map((item) => <li key={item.uniqueID}><EventsPage data={item} /></li>)
-    if (sorted === 'all') {
-      return (
-        <div>
-          <CategoryChoose />
-          <ul>
-            {allArray}
-          </ul>
+    return (
+      <div>
+        <CategoryChoose />
+        {sorted === 'all' ? 
+        <ul>{allArray}</ul> : 
+        <ul>{sortedArray}</ul> }
         </div>
-      );
-    } else {
-      return (
-        <div>
-          <CategoryChoose />
-          <ul>
-            {sortedArray}
-          </ul>
-        </div>
-      );
-    };
+    );
   };
+
   return (
     <Event />
   );
