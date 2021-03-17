@@ -58,7 +58,7 @@ const BulletinPage = () => {
 
   const [dialogOpen, setDialogOpen] = useState(false)
   const [dialogData, setDialogData] = useState("")
-
+  
   const handleDialogOpen = (data) => {
     setDialogData(data)
     setDialogOpen(true)

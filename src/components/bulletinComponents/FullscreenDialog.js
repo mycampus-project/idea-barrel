@@ -1,7 +1,8 @@
-import { makeStyles, Dialog, AppBar, Toolbar, Slide, IconButton, Typography } from "@material-ui/core"; //eslint-disable-line
+import { makeStyles, Dialog,Button, AppBar, Toolbar, Slide, IconButton, Typography } from "@material-ui/core"; //eslint-disable-line
 import React from "react";
 import CloseIcon from "@material-ui/icons/Close"
 
+// Slide Transition for the dialog
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
@@ -35,6 +36,7 @@ const FullscreenDialog = (props) => {
               <Typography variant="h5" className={classes.title}>
                 {data.category}
               </Typography>
+         
             </Toolbar>
           </AppBar>
           <div>

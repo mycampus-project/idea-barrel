@@ -24,16 +24,12 @@ const BulletinListItem = (props) => {
       boxPadding: {
         marginLeft: 25
       }
-  
     }))
   
     const classes = useStyles()
   
-  
-  
-  
     const { title, image, description, category, date, user } = props.data //eslint-disable-line
-    const byString = date + " by: " + user //eslint-disable-line
+  
     return (
       <div>
         <Card className={classes.row}>
@@ -59,5 +55,4 @@ const BulletinListItem = (props) => {
       </div>
     )
   }
-
   export default BulletinListItem
