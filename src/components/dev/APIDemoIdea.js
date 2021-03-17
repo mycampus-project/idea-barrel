@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DeleteForever } from "@material-ui/icons";
 import IdeaFormDemo from "../IBDemo/ideaFormDemo";
+import IdeaCard from "../../components/ideaparts/IdeaCard.js"
 
 import DummyAPI from "../../api/DummyAPI";
 
@@ -87,6 +88,8 @@ const APIDemo = () => {
     );
   };
 
+
+
   return (
     <div>
       <div style={dataStyle}>
@@ -108,6 +111,7 @@ const APIDemo = () => {
       })}
       <p></p>
       <IdeaFormDemo data={user}></IdeaFormDemo>
+      <IdeaCard></IdeaCard>
     </div>
   );
 };
