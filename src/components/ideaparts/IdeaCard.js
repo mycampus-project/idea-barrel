@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Button,
   makeStyles,
   Card,
   CardHeader,
@@ -10,11 +11,16 @@ import {
   DialogTitle,
   DialogContent,
   IconButton,
+  Container,
   Grid,
 } from '@material-ui/core';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import "../../App.css"
 
-const IdeaCard = () => {
+const IdeaCard = (props) => {
+
+  const ideaId = props = <Typography>Idea ID: {props.id}</Typography>
  
 
   const useStyles = makeStyles({
@@ -74,10 +80,10 @@ const IdeaCard = () => {
           <DialogContent>Info 3</DialogContent>
         </Dialog>
 
-        <Card className={styles.card} onClick={() => handleShow()}>
+        <Card className={styles.card} >
           <CardActionArea>
             <CardContent>
-              <Grid container spacing={3} direction="row" alignItems="flex-start" justify="flex-start">
+              <Grid onClick={() => handleShow()} container spacing={3} direction="row" alignItems="flex-start" justify="flex-start">
                 <CardHeader title="Title" titleTypographyProps={{ variant: 'h3' }} />
                 <Typography className={styles.category}>
                   Category
@@ -86,16 +92,34 @@ const IdeaCard = () => {
               <Typography className={styles.body}>
                 Info
               </Typography>
-              <Grid container direction="row" alignItems="center">
+              {ideaId}
+              </CardContent>
+              </CardActionArea>
+              <Grid container direction="row" justify="space-between">
                 <Typography className={styles.date}>
                   Info 2
                 </Typography>
                 <Typography className={styles.time}>
                   Info 3
                 </Typography>
+                <Container maxWidth="sm">
+                <Button
+        variant="contained"
+        color="default"
+        startIcon={<ArrowUpwardIcon />}
+      >
+        Upvote
+      </Button>
+      <Button
+        variant="contained"
+        color="default"
+        startIcon={<ArrowDownwardIcon />}
+      >
+        Downvote
+      </Button>
+      </Container>
               </Grid>
-            </CardContent>
-          </CardActionArea>
+          
         </Card>
 
       </div>

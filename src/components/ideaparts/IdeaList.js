@@ -6,11 +6,16 @@ import IdeaCard from '../ideaparts/IdeaCard.js';
 
 const IdeaList = () => {
 
+    const list = [1,2,3];
+    
+    const listItems = list.map((item) => (
+        <IdeaCard key={item} id={item}></IdeaCard>
+    ));
+
     return (
         <Container maxWidth="md">
         <List>
-        <IdeaCard></IdeaCard>
-        <IdeaCard></IdeaCard>
+            {listItems}
         </List>
         </Container>
     );
