@@ -17,7 +17,7 @@ const mock_data = [
   },
   {
     title: "Nike Shoes",
-    image: "https://static.highsnobiety.com/thumbor/Na9LoUW3ldw_2gvzfLeck1sxnyM=/1200x720/static.highsnobiety.com/wp-content/uploads/2020/03/27174925/nike-best-feature.jpg",
+    image: "http://www.freedigitalphotos.net/images/img/homepage/394230.jpg",
     description: "old shoes. Still in good condition",
     category: "Renting",
     date: "5.7.2021",
