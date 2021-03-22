@@ -28,7 +28,7 @@ const BulletinListItem = (props) => {
   
     const classes = useStyles()
   
-    const { title, image, description, category, date, user } = props.data //eslint-disable-line
+    const { title, image, body, category, date, user } = props.data //eslint-disable-line
   
     return (
       <div>
@@ -45,10 +45,14 @@ const BulletinListItem = (props) => {
               {title}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
+              {/*
               By:  {user}
+              */}
             </Typography>
             <Typography variant="subtitle2" color="textSecondary">
+{/*
               {date}
+*/}
             </Typography>
           </div>
         </Card>

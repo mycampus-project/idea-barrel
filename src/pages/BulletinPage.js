@@ -1,63 +1,35 @@
 import {  Fab } from "@material-ui/core"; //eslint-disable-line
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddIcon from '@material-ui/icons/Add';
 import { navigate } from "hookrouter";
+import BackendAPI from "../api/BackendAPI"
 import FullscreenDialog from "../components/bulletinComponents/FullscreenDialog.js"
 import BulletinListItem from "../components/bulletinComponents/BulletinListItem"
 
-const mock_data = [
-  {
-    title: "Parking 5 closed for maintanance",
-    image: null,
-    description: "old shoes. Still in good condition",
-    category: "Announcement",
-    date: "1.2.2021",
-    user: "Jussi Hepo",
-    id: 321
-  },
-  {
-    title: "Nike Shoes",
-    image: "http://www.freedigitalphotos.net/images/img/homepage/394230.jpg",
-    description: "old shoes. Still in good condition",
-    category: "Renting",
-    date: "5.7.2021",
-    user: "Janne",
-    id: 58293
-  },
-  {
-    title: "Nike Shoes",
-    image: "https://static.highsnobiety.com/thumbor/Na9LoUW3ldw_2gvzfLeck1sxnyM=/1200x720/static.highsnobiety.com/wp-content/uploads/2020/03/27174925/nike-best-feature.jpg",
-    description: "old shoes. Still in good condition",
-    category: "Selling",
-    date: "5.7.2021",
-    user: "Janne",
-    id: 84932
-  },
-  {
-    title: "Free candy",
-    image: null,
-    description: "old shoes. Still in good condition",
-    category: "Info",
-    date: "5.7.2021",
-    user: "Jukka",
-    id: 5023423
-  },
-  {
-    title: "Nike Shoes",
-    image: null,
-    description: "old shoes. Still in good condition",
-    category: "Info",
-    date: "5.7.2021",
-    user: "Janne",
-    id: 90990
-  },
-
-]
+const {
+  fetchBulletinsAsync,
+} = BackendAPI();
 
 const BulletinPage = () => {
 
   const [dialogOpen, setDialogOpen] = useState(false)
   const [dialogData, setDialogData] = useState("")
+  const [bulletins, setBulletins] = useState([])
+
+  const getBulletins = async () => {
+    try {
+      const response = await fetchBulletinsAsync();
+      console.log(response);
+      setBulletins(response);
+    } catch (e) {
+      console.log("error fetching bulletins");
+      console.log(e);
+    }
+  };
+
+  useEffect(()=>{
+    getBulletins()
+  },[])
   
   const handleDialogOpen = (data) => {
     setDialogData(data)
@@ -72,9 +44,11 @@ const BulletinPage = () => {
     navigate("/bulletin-create")
   }
 
-  const listItem = mock_data.map((d) =>
+  const listItem = bulletins.map((d) =>
    <li onClick={() => handleDialogOpen(d)} key={d.id}><BulletinListItem data={d} /></li>)
 
+  
+   
 
   return (
     <div>

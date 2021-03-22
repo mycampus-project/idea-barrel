@@ -55,7 +55,7 @@ const FullscreenDialog = (props) => {
         </AppBar>
         <div >
           {data.image != null
-            ? <img src={data.image} className={classes.image}/>
+            ? <img src={data.image} className={classes.image}  alt={data.title}/>
             : null
           }
           <Typography component="h4" variant="h4" className={classes.title}>
