@@ -8,11 +8,12 @@ import { navigate } from "hookrouter";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    minHeight: "64px"
+    
   },
   toolbar: {
     alignItems: 'flex-start',
     padding: theme.spacing(1),
+    minHeight: "64px",
     flexGrow: 1
   },
   image: {
@@ -63,7 +64,7 @@ const NavigationBar = () => {
         <Toolbar className={classes.toolbar}>
           <img src={logo} className={classes.image} onClick={() => handleNavigate("/")} alt="MyCampus Logo"/>
           <Typography variant="h6" className={classes.title}></Typography>
-          {width < 650 // Breakpoint for view width of 650px. Smaller width renders only harmburger menu 
+          {width < 670 // Breakpoint for view width of 670px. Smaller width renders only harmburger menu 
             ? <div>
               <IconButton className={classes.menuButton} onClick={handleMenuClick} aria-haspopup="true">
                 <MenuIcon />

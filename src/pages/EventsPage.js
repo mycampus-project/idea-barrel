@@ -1,68 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import BackendAPI from "../api/BackendAPI";
 import {
   Button,
-  makeStyles,
   Card,
   CardHeader,
   CardContent,
-  Typography,
   CardActionArea,
   Dialog,
   DialogTitle,
   DialogContent,
   IconButton,
   Grid,
+  makeStyles,
+  Typography,
 } from '@material-ui/core';
 import "../App.css"
 
+const {
+  fetchEventsAsync,
+} = BackendAPI();
+
 const Events = () => {
   const [sorted, setSorted] = useState('all');
+  const [events, setEvents] = useState([])
 
 
-  const data = [
-    {
-      uniqueID: "1",
-      title: "kalastusta",
-      info: "kalaa tulee, kuha on jo saalista",
-      likes: "5",
-      category: "work",
-      date: "10.3.2021",
-      time: "15:21",
-    },
-    {
-      uniqueID: "2",
-      title: "kaliaa",
-      info: "kaliaa joka päivä täysii glug glug",
-      likes: "5",
-      category: "hobby",
-      date: "6.2.2021",
-      time: "15:21",
-    },
-    {
-      uniqueID: "3",
-      title: "ruokaa",
-      info: "ruokaa Infoa blabla, jotai safkaa heh",
-      likes: "0",
-      category: "essential",
-      date: "7.3.2021",
-      time: "15:15",
-    },
-    {
-      uniqueID: "4",
-      title: "nukkuu",
-      info: "krooh pyyh",
-      likes: "0",
-      category: "slack",
-      date: "9.1.2021",
-      time: "15:00",
-    },
-  ]
+  const getEvents = async () => {
+    try {
+      const response = await fetchEventsAsync();
+      console.log(response);
+      setEvents(response);
+    } catch (e) {
+      console.log("error fetching bulletins");
+      console.log(e);
+    }
+  };
+
+  useEffect(()=>{
+    getEvents()
+  },[])
+  
   const handleSorted = (event) => {
     setSorted(event);
   };
+ 
   const useStyles = makeStyles({
     root: {
-      display: 'flex',
+      flexGrow: 1,
     },
     eventButton: {
       marginTop: '2%',
@@ -71,26 +55,42 @@ const Events = () => {
       borderRadius: '50%',
       maxWidth: '5%',
     },
-    card: {
+    cardContent: {
+      padding: '0',
+      marginLeft: 20,
+      marginRight: 20,
+      marginBottom: 10,
+    },
+    cardStyle: {
       border: 'solid 1px blue',
     },
-    date: {
+    cardTitle: {
+      marginTop: 10,
+      marginRight: 20,
+      marginBottom: 10,
+      padding: 0,
+    },
+    cardTopRow: {
+      marginTop: 10,
+      marginLeft: 5,
+      marginRight: 10
+    },
+    cardCategory: {
+      textAlign: 'end',
+      marginTop: 10,
+
+    },
+    dateTime: {
+      marginTop: '50%',
       textAlign: 'end',
     },
     likes: {
     },
-    body: {
+    info: {
       justifyContent: 'left',
     },
-    category: {
-      flexDirection: 'row',
-      fontSize: '15px',
-    },
-    eventDetailButton: {
-      position: 'absolute',
-      left: '85%',
-      top: '-5%',
-    },
+
+
     events: {
       width: '100%',
     }
@@ -123,41 +123,45 @@ const Events = () => {
     return (
       // Card for event details and dialog for more info
       <div className={styles.events} >
+        <Card className={styles.cardStyle} onClick={() => handleShow()}>
+          <CardActionArea>
+            <CardContent className={styles.cardContent}>
+              <Grid container spacing={2}>
+                <Grid item>
+                  <CardHeader className={styles.cardTitle} title={title} />
+                </Grid>
+                <Grid item xs container className={styles.cardTopRow} direction="column" spacing={2}>
+                  {info}
+                </Grid>
+                <Grid item xs>
+                  <Grid container spacing={0} direction="column">
+                    <Typography className={styles.cardCategory}>
+                      {category}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs>
+                    <Typography className={styles.dateTime}>
+                      {date}{" "}{time}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </CardActionArea>
+        </Card>
         <Dialog open={show} onClose={handleClose} fullWidth={true}>
-          <IconButton className={styles.eventDetailButton} onClick={handleClose}>
-            X
-                </IconButton>
+          <Grid container justify="flex-end" xl={2} direction="row">
+            <IconButton className="open event" onClick={handleClose}>
+              X
+            </IconButton>
+          </Grid>
           <DialogTitle id="max-width-dialog-title">{title}</DialogTitle>
           <DialogContent>{info}</DialogContent>
           <DialogContent>{date}</DialogContent>
           <DialogContent>{time}</DialogContent>
         </Dialog>
+      </div >
 
-        <Card className={styles.card} onClick={() => handleShow()}>
-          <CardActionArea>
-            <CardContent>
-              <Grid container spacing={3} direction="row" alignItems="flex-start" justify="flex-start">
-                <CardHeader title={title} titleTypographyProps={{ variant: 'h3' }} />
-                <Typography className={styles.category}>
-                  {category}
-                </Typography>
-              </Grid>
-              <Typography className={styles.body}>
-                {info}
-              </Typography>
-              <Grid container direction="row" alignItems="center">
-                <Typography className={styles.date}>
-                  {date}
-                </Typography>
-                <Typography className={styles.time}>
-                  {time}
-                </Typography>
-              </Grid>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-
-      </div>
     );
   };
 
@@ -166,8 +170,8 @@ const Events = () => {
     // Two separate arrays, all items or sorted items depending on user choice (all or specific category)
     // Not optimal, but works as intended for now
 
-    const allArray = data.map((details) => <li key={details.uniqueID}><EventsPage data={details} /></li>)
-    const sortedCategoryArray = data.filter((item) => {
+    const allArray = events.map((details) => <li key={details.uniqueID}><EventsPage data={details} /></li>)
+    const sortedCategoryArray = events.filter((item) => {
       return item.category === sorted;
     }).map(({ title, info, likes, category, date, time }) => {
       return { title, info, likes, category, date, time }
@@ -176,13 +180,12 @@ const Events = () => {
     return (
       <div>
         <CategoryChoose />
-        {sorted === 'all' ? 
-        <ul>{allArray}</ul> : 
-        <ul>{sortedArray}</ul> }
-        </div>
+        {sorted === 'all' ?
+          <ul>{allArray}</ul> :
+          <ul>{sortedArray}</ul>}
+      </div>
     );
   };
-
   return (
     <Event />
   );
