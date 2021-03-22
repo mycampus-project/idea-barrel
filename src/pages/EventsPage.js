@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import BackendAPI from "../api/BackendAPI";
 import {
   Button,
   Card,
@@ -15,50 +16,34 @@ import {
 } from '@material-ui/core';
 import "../App.css"
 
+const {
+  fetchEventsAsync,
+} = BackendAPI();
 
 const Events = () => {
   const [sorted, setSorted] = useState('all');
-  const data = [
-    {
-      uniqueID: "1",
-      title: "kalastusta",
-      info: "kalaa tulee, kuha on jo saalista",
-      likes: "5",
-      category: "work",
-      date: "10.3.2021",
-      time: "15:21",
-    },
-    {
-      uniqueID: "2",
-      title: "kaliaa",
-      info: "kaljaa illan päätteeks parit hassut kaljaa illan päätteeks parit hassut kaljaa illan päätteeks parit hassut kaljaa illan päätteeks parit hassut ",
-      likes: "5",
-      category: "hobby",
-      date: "6.2.2021",
-      time: "15:21",
-    },
-    {
-      uniqueID: "3",
-      title: "ruokaa",
-      info: "lounasta porukalla, lasagnee, perunoita, makkaraa, nomnomnomn, lounasta porukalla, lasagnee, perunoita, makkaraa, nomnomnomn lounasta porukalla, lasagnee, perunoita, makkaraa, nomnomnomn",
-      likes: "0",
-      category: "essential",
-      date: "7.3.2021",
-      time: "15:15",
-    },
-    {
-      uniqueID: "4",
-      title: "nukkuu",
-      info: "krooh pyyh",
-      likes: "0",
-      category: "slack",
-      date: "9.1.2021",
-      time: "15:00",
-    },
-  ]
+  const [events, setEvents] = useState([])
+
+
+  const getEvents = async () => {
+    try {
+      const response = await fetchEventsAsync();
+      console.log(response);
+      setEvents(response);
+    } catch (e) {
+      console.log("error fetching bulletins");
+      console.log(e);
+    }
+  };
+
+  useEffect(()=>{
+    getEvents()
+  },[])
+  
   const handleSorted = (event) => {
     setSorted(event);
   };
+ 
   const useStyles = makeStyles({
     root: {
       flexGrow: 1,
@@ -185,8 +170,8 @@ const Events = () => {
     // Two separate arrays, all items or sorted items depending on user choice (all or specific category)
     // Not optimal, but works as intended for now
 
-    const allArray = data.map((details) => <li key={details.uniqueID}><EventsPage data={details} /></li>)
-    const sortedCategoryArray = data.filter((item) => {
+    const allArray = events.map((details) => <li key={details.uniqueID}><EventsPage data={details} /></li>)
+    const sortedCategoryArray = events.filter((item) => {
       return item.category === sorted;
     }).map(({ title, info, likes, category, date, time }) => {
       return { title, info, likes, category, date, time }
