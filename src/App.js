@@ -7,7 +7,7 @@ function App() {
   return (
     <div>
       <CssBaseline />
-      <div>
+      <div style={{paddingBottom: "16px"}}>
         <NavigationBar></NavigationBar>
       </div>
       <div id="main-content">
