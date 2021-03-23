@@ -15,10 +15,8 @@ import {
   Grid,
   makeStyles,
   Typography,
-  Box
 } from '@material-ui/core';
 import "../App.css"
-import { InfoOutlined } from "@material-ui/icons";
 
 const {
   fetchEventsAsync,
@@ -52,8 +50,8 @@ const Events = () => {
     } else {
       setSorted(event)
     }
-
   };
+
   const createEventsNav = () => {
     navigate("/event-create")
   }
@@ -188,15 +186,13 @@ const Events = () => {
       return { title, info, likes, category, date, time }
     });
     const sortedArray = sortedCategoryArray.map((item) => <li key={item.uniqueID}><EventsPage data={item} /></li>)
-    const category = events.map((cat) => <CategoryChoose buttonData={cat} />);
-
-
+    const categoryList = events.map((item) => <CategoryChoose buttonData={item} />);
 
     return (
       <div>
         <div>
           <Button className={styles.eventButton} onClick={() => handleSorted('all')} variant="outlined" color="primary">Show All</Button>
-          {category}
+          {categoryList}
           <IconButton onClick={() => createEventsNav()} className={styles.postEventButton} aria-label="open"><AddCircleSharpIcon /></IconButton>
         </div>
         {sorted === 'all' ?
