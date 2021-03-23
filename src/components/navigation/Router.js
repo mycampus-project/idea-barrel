@@ -4,6 +4,7 @@ import EventsPage from "../../pages/EventsPage";
 import IdeaBarrelPage from "../../pages/IdeaBarrelPage";
 import HomePage from "../../pages/HomePage";
 import CreateBulletinPage from "../../pages/CreateBulletinPage"
+import CreateEventPage from "../../pages/CreateEventPage"
 import { useRoutes } from "hookrouter";
 
 const routes = {
@@ -11,7 +12,8 @@ const routes = {
   "/bulletin": () => <BulletinPage />,
   "/events": () => <EventsPage />,
   "/idea-barrel": () => <IdeaBarrelPage />,
-  "/bulletin-create": () => <CreateBulletinPage/>
+  "/bulletin-create": () => <CreateBulletinPage/>,
+  "/event-create": () => <CreateEventPage/>
 };
 
 const Router = () => {
