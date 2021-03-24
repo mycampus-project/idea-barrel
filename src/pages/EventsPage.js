@@ -178,6 +178,7 @@ const Events = () => {
     // Not optimal, but works as intended for now
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     const allArray = events.map((details) => <li key={details.senderId}><EventsPage data={details} /></li>)
     const sortedCategoryArray = events.filter((item) => {
       return item.category === sorted;
@@ -187,6 +188,8 @@ const Events = () => {
     const sortedArray = sortedCategoryArray.map((item) => <li key={item.uniqueID}><EventsPage data={item} /></li>)
     const categoryList = events.map((item) => <CategoryChoose buttonData={item} />);
 =======
+=======
+>>>>>>> events
     const allArray = events.map((data) => <EventsPage key={data.senderId} data={data} />)
     const sortedArray = events.filter((item) => item.category === sorted)
       .map(({ title, info, category, senderId }) => {
@@ -202,6 +205,19 @@ const Events = () => {
       }).map(data => data.category)
     const categoryList = filteredCategory.filter(returnSingleCategory).map((data) => <CategoryChoose buttonData={data} />)
 
+<<<<<<< HEAD
+>>>>>>> events
+=======
+=======
+    const allArray = events.map((details) => <li key={details.senderId}><EventsPage data={details} /></li>)
+    const sortedCategoryArray = events.filter((item) => {
+      return item.category === sorted;
+    }).map(({ title, info, likes, category, date, time }) => {
+      return { title, info, likes, category, date, time }
+    });
+    const sortedArray = sortedCategoryArray.map((item) => <li key={item.uniqueID}><EventsPage data={item} /></li>)
+    const categoryList = events.map((item) => <CategoryChoose buttonData={item} />);
+>>>>>>> 92f844e9c9bcfffe78d3234311cba00e7543a18e
 >>>>>>> events
 
     return (
