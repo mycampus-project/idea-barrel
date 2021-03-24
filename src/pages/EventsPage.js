@@ -26,15 +26,12 @@ const Events = () => {
   const [sorted, setSorted] = useState('all');
   const [events, setEvents] = useState([]);
 
-
   const getEvents = async () => {
     try {
       const response = await fetchEventsAsync();
-      console.log(response);
       setEvents(response);
     } catch (e) {
       console.log("error fetching bulletins");
-      console.log(e);
     }
   };
 
@@ -111,7 +108,7 @@ const Events = () => {
   // Just a list of things for testing purposes
   const CategoryChoose = (props) => {
     const styles = useStyles();
-    const { category } = props.buttonData;
+    const category = props.buttonData;
 
     return (
       <Button className={styles.eventButton} onClick={() => handleSorted({ category })} variant="outlined" color="primary">{category}</Button>
@@ -179,6 +176,7 @@ const Events = () => {
     // Two separate arrays, all items or sorted items depending on user choice (all or specific category)
     // Not optimal, but works as intended for now
 
+<<<<<<< HEAD
     const allArray = events.map((details) => <li key={details.senderId}><EventsPage data={details} /></li>)
     const sortedCategoryArray = events.filter((item) => {
       return item.category === sorted;
@@ -187,6 +185,23 @@ const Events = () => {
     });
     const sortedArray = sortedCategoryArray.map((item) => <li key={item.uniqueID}><EventsPage data={item} /></li>)
     const categoryList = events.map((item) => <CategoryChoose buttonData={item} />);
+=======
+    const allArray = events.map((data) => <EventsPage key={data.senderId} data={data} />)
+    const sortedArray = events.filter((item) => item.category === sorted)
+      .map(({ title, info, category, senderId }) => {
+        return { title, info, category, senderId }
+      })
+      .map((data) => <EventsPage data={data} />)
+    const returnSingleCategory = (value, index, self) => {
+      return self.indexOf(value) === index;
+    }
+    const filteredCategory = events.filter((item) => item)
+      .map(({ category }) => {
+        return { category }
+      }).map(data => data.category)
+    const categoryList = filteredCategory.filter(returnSingleCategory).map((data) => <CategoryChoose buttonData={data} />)
+
+>>>>>>> events
 
     return (
       <div>
