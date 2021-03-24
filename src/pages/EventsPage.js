@@ -1,4 +1,3 @@
-import EventNavigationBar from "../components/navigation/EventNavigationBar";
 import React, { useState, useEffect } from "react";
 import BackendAPI from "../api/BackendAPI";
 import AddCircleSharpIcon from '@material-ui/icons/AddCircleSharp';
@@ -177,19 +176,6 @@ const Events = () => {
     // Two separate arrays, all items or sorted items depending on user choice (all or specific category)
     // Not optimal, but works as intended for now
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    const allArray = events.map((details) => <li key={details.senderId}><EventsPage data={details} /></li>)
-    const sortedCategoryArray = events.filter((item) => {
-      return item.category === sorted;
-    }).map(({ title, info, likes, category, date, time }) => {
-      return { title, info, likes, category, date, time }
-    });
-    const sortedArray = sortedCategoryArray.map((item) => <li key={item.uniqueID}><EventsPage data={item} /></li>)
-    const categoryList = events.map((item) => <CategoryChoose buttonData={item} />);
-=======
-=======
->>>>>>> events
     const allArray = events.map((data) => <EventsPage key={data.senderId} data={data} />)
     const sortedArray = events.filter((item) => item.category === sorted)
       .map(({ title, info, category, senderId }) => {
@@ -205,20 +191,6 @@ const Events = () => {
       }).map(data => data.category)
     const categoryList = filteredCategory.filter(returnSingleCategory).map((data) => <CategoryChoose buttonData={data} />)
 
-<<<<<<< HEAD
->>>>>>> events
-=======
-=======
-    const allArray = events.map((details) => <li key={details.senderId}><EventsPage data={details} /></li>)
-    const sortedCategoryArray = events.filter((item) => {
-      return item.category === sorted;
-    }).map(({ title, info, likes, category, date, time }) => {
-      return { title, info, likes, category, date, time }
-    });
-    const sortedArray = sortedCategoryArray.map((item) => <li key={item.uniqueID}><EventsPage data={item} /></li>)
-    const categoryList = events.map((item) => <CategoryChoose buttonData={item} />);
->>>>>>> 92f844e9c9bcfffe78d3234311cba00e7543a18e
->>>>>>> events
 
     return (
       <div>
@@ -235,11 +207,7 @@ const Events = () => {
     );
   };
   return (
-    <div>
-      <EventNavigationBar></EventNavigationBar>
-      <p>Events</p>
-    </div>
-
+    <Event />
   );
 }
 
