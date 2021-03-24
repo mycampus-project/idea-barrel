@@ -26,7 +26,6 @@ const Events = () => {
   const [sorted, setSorted] = useState('all');
   const [events, setEvents] = useState([]);
 
-
   const getEvents = async () => {
     try {
       const response = await fetchEventsAsync();
@@ -49,6 +48,7 @@ const Events = () => {
       setSorted(event)
     }
   };
+
   const createEventsNav = () => {
     navigate("/event-create")
   }
@@ -108,7 +108,8 @@ const Events = () => {
   // Just a list of things for testing purposes
   const CategoryChoose = (props) => {
     const styles = useStyles();
-    const { category } = props.buttonData;
+    const category = props.buttonData;
+
     return (
       <Button className={styles.eventButton} onClick={() => handleSorted({ category })} variant="outlined" color="primary">{category}</Button>
     )
@@ -173,22 +174,29 @@ const Events = () => {
     const styles = useStyles();
 
     // Two separate arrays, all items or sorted items depending on user choice (all or specific category)
+    // Not optimal, but works as intended for now
 
     const allArray = events.map((data) => <EventsPage key={data.senderId} data={data} />)
     const sortedArray = events.filter((item) => item.category === sorted)
-      .map(({ title, info, category, senderId}) => {
+      .map(({ title, info, category, senderId }) => {
         return { title, info, category, senderId }
       })
       .map((data) => <EventsPage data={data} />)
-    
-      // Should be modified to eradicate duplicate categories, not working yet
-    const filteredCategory = events.map((data) => <CategoryChoose key={data.senderId} buttonData={data} />)
+    const returnSingleCategory = (value, index, self) => {
+      return self.indexOf(value) === index;
+    }
+    const filteredCategory = events.filter((item) => item)
+      .map(({ category }) => {
+        return { category }
+      }).map(data => data.category)
+    const categoryList = filteredCategory.filter(returnSingleCategory).map((data) => <CategoryChoose buttonData={data} />)
+
 
     return (
       <div>
         <div>
           <Button className={styles.eventButton} onClick={() => handleSorted('all')} variant="outlined" color="primary">Show All</Button>
-          {filteredCategory}
+          {categoryList}
           <IconButton onClick={() => createEventsNav()} className={styles.postEventButton} aria-label="open"><AddCircleSharpIcon /></IconButton>
         </div>
         {sorted === 'all' ?
