@@ -1,3 +1,4 @@
+import EventNavigationBar from "../components/navigation/EventNavigationBar";
 import React, { useState, useEffect } from "react";
 import BackendAPI from "../api/BackendAPI";
 import AddCircleSharpIcon from '@material-ui/icons/AddCircleSharp';
@@ -203,7 +204,11 @@ const Events = () => {
     );
   };
   return (
-    <Event />
+    <div>
+      <EventNavigationBar></EventNavigationBar>
+      <p>Events</p>
+    </div>
+
   );
 }
 
