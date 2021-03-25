@@ -18,8 +18,7 @@ const BackendAPI = () => {
       method: "DELETE",
       headers: { dev_token },
     });
-    const json = res.json();
-    return json;
+    return res;
   };
 
   const postDataToUrl = async (data, url) => {
@@ -30,10 +29,9 @@ const BackendAPI = () => {
         "Content-type": "application/json",
         dev_token,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     });
-    const json = res.json();
-    return json;
+    return res;
   };
 
   const fetchUsersAsync = async () => {

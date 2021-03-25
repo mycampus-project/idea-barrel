@@ -3,30 +3,11 @@ import {
     Grid,
     TextField,
     Typography,
-    createMuiTheme,
-    ThemeProvider,
 } from "@material-ui/core"
 import React, { useState } from "react"
 import BackendAPI from "../api/BackendAPI";
 import { navigate } from "hookrouter";
 
-const theme = createMuiTheme({
-    breakpoints: {
-        values: {
-            xs: 0,
-            sm: 600,
-            md: 960,
-            lg: 1280,
-            xl: 1920,
-        },
-    },
-    custom: {
-        cardDiv: {
-          margin: "10px 10px",
-          backgroundColor: "lightgreen"
-        }
-      }
-})
 
 
 const CreateEventPage = () => {
@@ -53,29 +34,28 @@ const CreateEventPage = () => {
             title: eventData.title,
             body: eventData.body,
             category: eventData.category,
-
         };
+
         const res = await postEventAsync(data)
-        console.log("postEventAsync", res)
-        if (res !== null) {
+        if (res.status === 200) {
             navigate('/events')
-            console.log("postEventAsync", res)
-
+        } else if (res.status === 400) {
+            console.log("Cant send", res)
         } else {
-            console.log("postEventAsync error", res)
+            console.log("different error")
         }
-
+    }
+    const onSubmit = (event) => {
+        event.preventDefault();
     }
 
     return (
         <div>
-            <ThemeProvider theme={theme}>
-                <Typography component="h4" variant="h4">
-                    Create event
+            <Typography component="h4" variant="h4">
+                Create event
             </Typography>
-                <form  noValidate>
+                <form noValidate onSubmit={onSubmit}>
                     <Grid container spacing={2}>
-
                         <Grid item xs={12}>
                             <Typography component="h5" variant="h5">
                                 SenderId
@@ -84,9 +64,10 @@ const CreateEventPage = () => {
                                 variant="outlined"
                                 name="senderId"
                                 autoFocus
+                                required
                                 fullWidth
                                 value={eventData.senderId}
-                                requiredlabel="Insert sender id"
+                                label="Insert sender id"
                                 onChange={updateField}
                             />
                         </Grid>
@@ -98,8 +79,9 @@ const CreateEventPage = () => {
                                 variant="outlined"
                                 name="title"
                                 fullWidth
+                                required
                                 value={eventData.title}
-                                requiredlabel="Insert event title"
+                                label="Insert event title"
                                 onChange={updateField}
                             />
                         </Grid>
@@ -110,9 +92,12 @@ const CreateEventPage = () => {
                             <TextField
                                 variant="outlined"
                                 name="body"
+                                multiline
+                                rows={5}
                                 fullWidth
+                                required
                                 value={eventData.body}
-                                requiredlabel="Insert event info"
+                                label="Insert event info"
                                 onChange={updateField}
                             />
                         </Grid>
@@ -125,7 +110,7 @@ const CreateEventPage = () => {
                                 name="category"
                                 value={eventData.category}
                                 fullWidth
-                                requiredlabel="Insert event category"
+                                label="Insert event info"
                                 onChange={updateField}
                             />
                         </Grid>
@@ -136,11 +121,10 @@ const CreateEventPage = () => {
                         variant="contained"
                         color="primary"
                     >
-                        Sign Up
+                        Submit event
           </Button>
-                </form>
-            </ThemeProvider>
-        </div>
+        </form>
+    </div>
     )
 }
 

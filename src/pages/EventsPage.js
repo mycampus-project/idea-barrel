@@ -27,7 +27,6 @@ const { fetchEventsAsync, deleteEventAsync } = BackendAPI();
 const Events = () => {
   const [sorted, setSorted] = useState("all");
   const [events, setEvents] = useState([]);
-
   const getEvents = async () => {
     try {
       const response = await fetchEventsAsync();
@@ -36,7 +35,7 @@ const Events = () => {
       console.log("error fetching bulletins");
     }
   };
-
+  
   useEffect(() => {
     getEvents();
   }, []);
@@ -55,8 +54,9 @@ const Events = () => {
   };
 
   const useStyles = makeStyles({
-    root: {
-
+    eventCard: {
+      border: '2px solid blue',
+      borderRadius: 4,
     },
   });
 
@@ -77,11 +77,12 @@ const Events = () => {
     spacing: 5,
     breakpoints: {
       values: {
-        xs: 0,
-        sm: 600,
-        md: 960,
-        lg: 1280,
-        xl: 1920,
+        // not applied
+        xsm: 280,
+        sm: 360,
+        lg: 768,
+        xl: 1024,
+        xxl: 1920,
       },
       MuiPaper: {
         root: {
@@ -102,7 +103,6 @@ const Events = () => {
       },
       MuiCardContent: {
         root: {
-
           padding: "20px",
           marginLeft: "0",
           marginRight: "0",
@@ -114,6 +114,7 @@ const Events = () => {
   // Just a list of things for testing purposes
   const CategoryChoose = (props) => {
     const category = props.buttonData;
+    
 
     return (
       <ThemeProvider theme={categoryButtonTheme}>
@@ -133,30 +134,46 @@ const Events = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const styles = useStyles();
+
+    const deleteEvent = (id, category) => {
+      deleteEventAsync(id, category).then((res) => {
+        // creates a new state without the deleted object
+      const newState = events.filter(item => item.id !== id)
+      // sets the new state "newState" as the current "events" state
+      setEvents(newState);
+      if (res.status === 200) {
+        // removes event if 
+        handleClose();
+        } else if (res.status === 400)
+        {
+          console.log("ERROR status:", res.status);
+        }
+          console.log("ERROR STATUS", res.status)
+      })
+    }
 
     return (
       // Card for event details and dialog for more info
-
-      <div>
         <ThemeProvider theme={eventCardTheme}>
           <Card onClick={() => handleShow()}>
-            <CardActionArea>
-              <CardContent>
+            <CardActionArea >
+              <CardContent className={styles.eventCard}>
                 <Box display="flex" flexDirection="row" minWidth="200px">
                   <Box width="100%">
                     <Typography variant="h6" component="h6">{title}</Typography>
                   </Box>
                   <Box flexShrink={0}>
-                    <Typography variant="body2" component="body2">{category}</Typography>
+                    <Typography variant="body1" component="body1">{category}</Typography>
                   </Box>
                 </Box>
                 <Box width="100%" justifyContent="flex-start">
                   <Box minHeight="100px" marginTop="1%" marginBottom="1%">
-                    <Typography variant="body1" component="body1">{body}</Typography>
+                    <Typography variant="body2" component="body2">{body}</Typography>
                   </Box>           
                 </Box>     
                 <Box display="flex" justifyContent="flex-end">
-                 <Typography variant="body" component="body">
+                 <Typography variant="subtitle" component="subtitle">
                   <Moment format="DD-MM-YYYY" date={date} />{" "}
                   <Moment format="HH:mm:ss" date={date} />
                 </Typography>
@@ -164,25 +181,12 @@ const Events = () => {
               </CardContent>
             </CardActionArea>
           </Card>
-
-
           <Dialog open={show} onClose={handleClose} fullWidth={true}>
             <Grid container justify="flex-end" xl={2} direction="row">
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={() =>
-                  deleteEventAsync(id, category).then((res) => {
-                    console.log("deleteEventAsync: " + res.msg);
-                    if (res.msg === "deleted") {
-                      console.log("done");
-                      handleClose();
-                      navigate("/events");
-                    } else {
-                      console.log(res);
-                    }
-                  })
-                }
+                onClick={() => deleteEvent(id, category)}
                 startIcon={<DeleteIcon />}
               ></Button>
               <IconButton className="open event" onClick={handleClose}>
@@ -198,7 +202,6 @@ const Events = () => {
             </DialogContent>
           </Dialog>
         </ThemeProvider>
-      </div>
     );
   };
 
