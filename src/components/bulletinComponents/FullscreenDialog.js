@@ -1,4 +1,4 @@
-import { makeStyles, Dialog, Button, AppBar, Toolbar, Slide, IconButton, Typography } from "@material-ui/core"; //eslint-disable-line
+import { makeStyles, Dialog, AppBar, Toolbar, Slide, IconButton, Typography } from "@material-ui/core"; //eslint-disable-line
 import React from "react";
 import CloseIcon from "@material-ui/icons/Close"
 
