@@ -1,5 +1,8 @@
-import { makeStyles, Select, TextField, Typography, Button, FormControl, InputLabel, Box } from "@material-ui/core"
+import { makeStyles, Select, TextField, Typography, Button, FormControl, InputLabel, Box, Snackbar } from "@material-ui/core"
+import MuiAlert from '@material-ui/lab/Alert';
 import React, { useState } from "react"
+import BackendAPI from "../api/BackendAPI"
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,25 +19,71 @@ const useStyles = makeStyles((theme) => ({
     FormControl: {
         margin: theme.spacing(1),
         minWidth: 120
+    },
+    snack: {
+        width: "100%",
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        },
     }
 }))
 
+const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+
 const CreateBulletinPage = () => {
 
-    const [errors, setErrors] = useState({ title: false, description: false })
-    const [helpers, setHelpers] = useState({ title: "", description: "" })
-    const [formState, setFormState] = useState({ title: "", description: "", category: "Announcement", image: null }) // Category set to Annoucement since is the automatically selected item in the selector
+    const {
+        postBulletinsAsync,
+    } = BackendAPI();
+
+    const [snack, setSnack] = useState({ open: false, severity: "success", message: "" })
+    const [errors, setErrors] = useState({ title: false, body: false })
+    const [helpers, setHelpers] = useState({ title: "", body: "" })
+    const [formState, setFormState] = useState({ title: "", body: "", category: "Announcement", image: null, senderId: "Arttu" }) // Category set to Annoucement since is the automatically selected item in the selector
     const classes = useStyles()                                                                                       // Remember to Change if selectors first option changes!
 
-    const hadnleFormSubmit = () => {
-        console.log("FormSubmitEvent")
-        console.log(formState)
+    const openSnack = (severity, message) => {
+        console.log("open snack")
+        setSnack({ open: true, severity: severity, message: message })
+    }
+
+    const handleSnackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
+        updateSnack("open", false)
+    }
+
+    const hadnleFormSubmit = async (data, url) => {
+        try {
+            await postBulletinsAsync(data).then((res) => {
+                console.log(res)
+                if (res.status === 200) {
+                    console.log("POST EVENT SUCCESS")
+                    openSnack("success", "Bulletin posted!")
+                } else {
+                    openSnack("error", res.statusText)
+                }
+            })
+        } catch (e) {
+
+        }
     }
 
     const updateHelperMsg = (helper, message) => {
         setHelpers({
             ...helpers,
             [helper]: message
+        })
+    }
+
+    const updateSnack = (field, value) => {
+        setSnack({
+            ...snack,
+            [field]: value
         })
     }
 
@@ -67,12 +116,12 @@ const CreateBulletinPage = () => {
 
             }
             case "description": {
-                if (formState.description.length === 0) {
-                    updateErrorBool("description", true)
-                    updateHelperMsg("description", "Required")
+                if (formState.body.length === 0) {
+                    updateErrorBool("body", true)
+                    updateHelperMsg("body", "Required")
                 } else {
-                    updateErrorBool("description", false)
-                    updateHelperMsg("description", "")
+                    updateErrorBool("body", false)
+                    updateHelperMsg("body", "")
                 }
                 break;
             }
@@ -108,13 +157,13 @@ const CreateBulletinPage = () => {
                         value={formState.description}
                         variant="outlined"
                         multiline
-                        id="description"
-                        label="Description"
+                        id="body"
+                        label="Body"
                         onBlur={handleOnBlur}
                         onChange={updateField}
                         rows={4}
-                        error={errors.description}
-                        helperText={helpers.description}
+                        error={errors.body}
+                        helperText={helpers.body}
                     />
                 </Box>
                 <Box className={classes.item}>
@@ -129,9 +178,17 @@ const CreateBulletinPage = () => {
                     </FormControl>
                 </Box>
                 <Box className={classes.item}>
-                    <Button variant="contained" color="primary" onClick={hadnleFormSubmit}>Submit</Button>
+                    <Button variant="contained" color="primary" onClick={() => hadnleFormSubmit(formState, "/bulletins")}>Submit</Button>
                 </Box>
+
             </form>
+            <div className={classes.snack}>
+                <Snackbar open={snack.open} autoHideDuration={2000} onClose={handleSnackClose}>
+                    <Alert onClose={handleSnackClose} severity={snack.severity}>
+                        {snack.message}
+                    </Alert>
+                </Snackbar>
+            </div>
         </div>
     )
 
