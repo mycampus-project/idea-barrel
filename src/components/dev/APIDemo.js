@@ -10,6 +10,7 @@ const dataStyle = {
 };
 
 const {
+  updateEventAsync,
   fetchUsersAsync,
   fetchBulletinsAsync,
   fetchIdeasAsync,
@@ -107,7 +108,27 @@ const APIDemo = () => {
       const category = "general";
       const id = "817d2831-71e1-40a1-a8eb-c34e9c38b32b";
       const del = await deleteEventAsync(id, category);
-      console.log(del);
+      const json = await del.json();
+      console.log(json);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // Update random event that exists in the db. Send the post that you want to update to BackendAPI's 
+  // updateEventAsync, updateIdeaAsync or updateBulletinAsync and that should be enough.
+  const updateEvent = async () => {
+    try {
+      const post = {
+        "senderId": "e5931891-e3d4-47bd-bcfd-f08bab68e36d",
+        "title": "This is an updated title" + Date.now().toLocaleString(),
+        "body": "just testing if updating an event works...",
+        "category": "Testing",
+        "id": "7fb523e0-090e-4263-a2a7-2d72a0066b03",
+      }
+      const update = await updateEventAsync(post);
+      const json = await update.json();
+      console.log(json);
     } catch (e) {
       console.log(e);
     }
@@ -196,6 +217,7 @@ const APIDemo = () => {
       })}
       <button onClick={() => postEvent()}>Post event</button>
       <button onClick={() => deleteEvent()}>Delete event</button>
+      <button onClick={() => updateEvent()}>Update idea</button>
     </div>
   );
 };
