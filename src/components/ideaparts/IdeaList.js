@@ -4,21 +4,38 @@ import Container from '@material-ui/core/Container';
 import IdeaCard from '../ideaparts/IdeaCard.js';
 
 
-const IdeaList = () => {
+class IdeaList extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        title: "",
+        body: "",
+        cat: "",
+      };
+    }
+  
+  
+    myChangeHandler = (event) => {
+      let nam = event.target.name;
+      let val = event.target.value;
+      this.setState({[nam]: val});
+    };
+  
+    render() {
+        let ideas = this.props.data;
 
-    const list = [1,2,3];
-    
-    const listItems = list.map((item) => (
-        <IdeaCard key={item} id={item}></IdeaCard>
-    ));
-
-    return (
-        <Container maxWidth="md">
-        <List>
-            {listItems}
-        </List>
-        </Container>
-    );
-}
-
-export default IdeaList;
+        const listItems = ideas.map((item) => (
+            <IdeaCard key={item} data={item}></IdeaCard>
+        ));
+      
+        return (
+            <Container maxWidth="md">
+            <List width="100%">
+                {listItems}
+            </List>
+            </Container>
+        );
+    }
+  }
+  
+  export default IdeaList;
