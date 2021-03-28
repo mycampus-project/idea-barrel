@@ -82,7 +82,7 @@ class IdeaCard extends React.Component {
  
 render(){
 
-    const {title, category, id, body, date, time } = this.props.data;
+    const {title, category, id, body} = this.props.data;
 
     return (
       // Card for event details and dialog for more info
