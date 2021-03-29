@@ -9,18 +9,26 @@ import {
   Container,
   Grid,
 } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import { DeleteForever } from "@material-ui/icons";
 import BackendAPI from "../../api/BackendAPI";
-
-
 import "../../App.css"
+
+const buttonTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#37d461'
+    },
+    secondary: {
+      main: '#e04331',
+  },
+}});
 
 const useStyles = theme => ({
   root: {
     display: 'inherit',
+    marginBottom: '0.3em',
   },
   eventButton: {
     marginTop: '2%',
@@ -30,7 +38,7 @@ const useStyles = theme => ({
     maxWidth: '5%',
   },
   card: {
-    border: 'solid 1px blue',
+    border: 'solid 3px blue',
   },
   date: {
     textAlign: 'end',
@@ -79,7 +87,6 @@ class IdeaCard extends React.Component {
     };
   }
 
- 
 render(){
 
     const {title, category, id, body} = this.props.data;
@@ -91,45 +98,42 @@ render(){
         <Card className={this.props.classes.card} >
           <CardActionArea>
             <CardContent>
-              <Grid container spacing={3} direction="row" alignItems="flex-start" justify="flex-start">
-                <CardHeader title={title} titleTypographyProps={{ variant: 'h3' }} />
+              <Grid container spacing={3} direction="column" alignItems="flex-start" justify="flex-start">
+                <CardHeader title={title} titleTypographyProps={{ variant: 'h4' }} />
                 <Typography className={this.props.classes.category}>
                   {category}
                 </Typography>
-              </Grid>
-              <Typography className={this.props.classes.body}>
+                <Typography className={this.props.classes.body}>
                 {body}
               </Typography>
-              Moi
+              </Grid>
               </CardContent>
               </CardActionArea>
-              <Grid container direction="row" justify="space-between">
+              <Grid container direction="row" justify="space-between" >
                 {/* <Typography className={this.props.classes.date}>
                   {date}
                 </Typography>
                 <Typography className={this.props.classes.time}>
                   {time}
                 </Typography> */}
-                <Container maxWidth="sm">
+                <Container maxWidth="md" flexWrap="nowrap">
+                  <MuiThemeProvider theme={buttonTheme}>
                 <Button
         variant="contained"
-        color="default"
+        color="primary"
         startIcon={<ArrowUpwardIcon />}
       >
         Upvote
       </Button>
-      <Button
-        variant="contained"
-        color="default"
-        startIcon={<ArrowDownwardIcon />}
-      >
-        Downvote
-      </Button>
+      </MuiThemeProvider>
+      </Container>
+      
+      {/* TODO: Conditional formatting. Flagging for users, delete for admin */}
+
       <DeleteForever
           onClick={() => deleteIdea(id, category)}
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", border: 'solid 1px red', borderRadius: 90, padding: '0.05em', margin: '0.2em' }}
         ></DeleteForever>
-      </Container>
               </Grid>
           
         </Card>
