@@ -46,7 +46,7 @@ class IdeaForm extends React.Component {
   render() {
       let user = this.props.data;
     return (
-      <Container maxWidth="xs">
+      <Container maxWidth="xs" style={{border: 'solid 2px blue'}}>
       <form>
         <h1>
           Submit an idea {this.state.username} {this.state.age}
@@ -59,7 +59,7 @@ class IdeaForm extends React.Component {
         <input type="text" name="cat" onChange={this.myChangeHandler} />
         <br />
         <br />
-        <Button variant="outlined" color="primary" onClick={() => postIdea(user, this.state.title, this.state.body, this.state.cat)}>
+        <Button variant="outlined" onClick={() => postIdea(user, this.state.title, this.state.body, this.state.cat)}>
           Click me to submit the idea
         </Button>
       </form>

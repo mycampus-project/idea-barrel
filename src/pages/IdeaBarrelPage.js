@@ -6,6 +6,9 @@ import BackendAPI from "../api/BackendAPI";
 
 const { fetchIdeasAsync, fetchUsersAsync} = BackendAPI();
 
+// TODO: If user == admin -> allow submissions OR ablity to delete submissions. Also have a list of flagged ideas visible
+// Properties for a idea: Date(DATE), Submitter(ID String), Flagged(BOOL),Title (STRING), Desc(STRING), Category (String [from a list]), Votes
+
 
 const IdeaBarrelPage = () => {
   const [ideas, setIdeas] = useState([]);
