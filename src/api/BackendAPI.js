@@ -29,9 +29,26 @@ const BackendAPI = () => {
         "Content-type": "application/json",
         dev_token,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
     return res;
+  };
+
+  const putRequestUrl = async (data, url) => {
+    const { id } = data || null;
+    if (id) {
+      const res = await fetch(rootUrl + "/" + url + "/" + id, {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+          dev_token,
+        },
+        body: JSON.stringify(data),
+      });
+      return res;
+    } else {
+      return "Post id missing";
+    }
   };
 
   const fetchUsersAsync = async () => {
@@ -74,6 +91,18 @@ const BackendAPI = () => {
     return delFromUrl(id, category, "bulletins");
   };
 
+  const updateEventAsync = async (data) => {
+    return putRequestUrl(data, "events");
+  };
+
+  const updateIdeaAsync = async (data) => {
+    return putRequestUrl(data, "ideas");
+  };
+
+  const updateBulletinAsync = async (data) => {
+    return putRequestUrl(data, "bulletins");
+  };
+
   return {
     fetchUsersAsync,
     fetchIdeasAsync,
@@ -85,6 +114,9 @@ const BackendAPI = () => {
     deleteEventAsync,
     deleteIdeaAsync,
     deleteBulletinAsync,
+    updateEventAsync,
+    updateIdeaAsync,
+    updateBulletinAsync
   };
 };
 
