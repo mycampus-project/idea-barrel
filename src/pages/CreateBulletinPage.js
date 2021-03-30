@@ -11,14 +11,22 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: "column",
     },
     item: {
-        paddingTop: theme.spacing(2)
+        paddingTop: theme.spacing(2),
+        width: "300dp",
+        textAlign: "center"
     },
-    form: {
-
+    formItem: {
+        width: "80%"
     },
     FormControl: {
-        margin: theme.spacing(1),
-        minWidth: 120
+        paddingTop: theme.spacing(1),
+   
+    },
+    imagePreview: {
+        maxWidth: "200px",
+        height: "auto",
+        aspectRatio: 3 / 2
+
     },
     snack: {
         width: "100%",
@@ -39,6 +47,7 @@ const CreateBulletinPage = () => {
         postBulletinsAsync,
     } = BackendAPI();
 
+    const hiddenFileInput = React.useRef(null)
     const [snack, setSnack] = useState({ open: false, severity: "success", message: "" })
     const [errors, setErrors] = useState({ title: false, body: false })
     const [helpers, setHelpers] = useState({ title: "", body: "" })
@@ -101,6 +110,17 @@ const CreateBulletinPage = () => {
         })
     }
 
+    const updateImage = (event) => {
+        setFormState({
+            ...formState,
+            "image": URL.createObjectURL(event.target.files[0])
+        })
+    }
+
+    const handleImageSelectClick = e => {
+        hiddenFileInput.current.click()
+    }
+
 
     const handleOnBlur = (event) => {
         switch (event.target.id) {
@@ -133,6 +153,7 @@ const CreateBulletinPage = () => {
     return (
         <div className={classes.root}>
             <form>
+
                 <Box className={classes.item}>
                     <Typography component="h4" variant="h4">
                         Create a new Bulletin!
@@ -149,6 +170,7 @@ const CreateBulletinPage = () => {
                         onChange={updateField}
                         error={errors.title}
                         helperText={helpers.title}
+                        className={classes.formItem}
                     />
                 </Box>
                 <Box className={classes.item}>
@@ -164,8 +186,18 @@ const CreateBulletinPage = () => {
                         rows={4}
                         error={errors.body}
                         helperText={helpers.body}
+                        className={classes.formItem}
                     />
                 </Box>
+                <Box className={classes.item}>
+                    <Button type="button" className={classes.formItem} formControl={false} variant="contained" color="primary" onClick={handleImageSelectClick}>Choose Image</Button>
+                    <input type="file" onChange={updateImage} style={{ display: "none" }} ref={hiddenFileInput} />
+                </Box>
+                {formState.image == null
+                    ? null
+                    : <Box className={classes.item}>
+                        <img src={formState.image} className={classes.imagePreview} alt={formState.title}/>
+                    </Box>}
                 <Box className={classes.item}>
                     <FormControl variant="outlined" className={classes.formControl}>
                         <InputLabel htmlFor="filled-category-native-simple">Category</InputLabel>
