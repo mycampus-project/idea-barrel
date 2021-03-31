@@ -18,8 +18,8 @@ class CalendarPage extends React.Component{
       End: new Date(2021,2,31,3,30),
       Start: new Date(2021,2,31,1,0),
       Summary: 'Test id2',
-      IsBlock: true
-      // IsAllDay: true,
+      // IsBlock: true
+      IsAllDay: true,
     }
   ],
     fields: {
