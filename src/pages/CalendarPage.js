@@ -1,5 +1,4 @@
 import React from "react";
-import EventNavigationBar from "../components/navigation/EventNavigationBar";
 import {Inject, ScheduleComponent,Day,Week,WorkWeek, Month, Agenda} from "@syncfusion/ej2-react-schedule";
 
 const CalendarPage = () => {
