@@ -1,5 +1,5 @@
 import React from "react";
-import {Inject, ScheduleComponent,Day,Week,WorkWeek, Month, Agenda, EventSettingsModel} from "@syncfusion/ej2-react-schedule";
+import {Inject, ScheduleComponent,Day,Week,WorkWeek, Month, Agenda, EventSettingsModel,ViewsDirective,ViewDirective,TimelineViews,TimelineMonth} from "@syncfusion/ej2-react-schedule";
 import {DataManager, WebApiAdaptor} from "@syncfusion/ej2-data";
 
 class CalendarPage extends React.Component{
@@ -75,8 +75,17 @@ class CalendarPage extends React.Component{
   });
 
   public render(){
-    return <ScheduleComponent currentView = 'Month' eventSettings = { this.localData} >
-    <Inject services = {[Day, Week, WorkWeek, Month, Agenda ]} />
+    return <ScheduleComponent currentView = 'Week' eventSettings = { this.localData} >
+      <ViewsDirective>
+        <ViewDirective option = 'Day' interval = {3}></ViewDirective>
+        <ViewDirective option = 'Week'></ViewDirective>
+        <ViewDirective option = 'WorkWeek' startHour = '08:00' endHour = '18:00'></ViewDirective>
+        <ViewDirective option = 'Month' isSelected= {true} showWeekNumber = {true}></ViewDirective>
+        <ViewDirective option = 'Agenda'></ViewDirective>
+        <ViewDirective option = 'TimelineDay'></ViewDirective>
+        <ViewDirective option = 'TimelineMonth'></ViewDirective>
+      </ViewsDirective>
+    <Inject services = {[Day, Week, WorkWeek, Month, Agenda,TimelineViews,TimelineMonth ]} />
   </ScheduleComponent>
   }
 }
