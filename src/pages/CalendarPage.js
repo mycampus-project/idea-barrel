@@ -1,4 +1,5 @@
 import React from "react";
+// eslint-disable-next-line
 import {Inject, ScheduleComponent,Day,Week,WorkWeek, Month, Agenda, EventSettingsModel,ViewsDirective,ViewDirective,TimelineViews,TimelineMonth} from "@syncfusion/ej2-react-schedule";
 import {DataManager, WebApiAdaptor} from "@syncfusion/ej2-data";
 
@@ -69,6 +70,7 @@ const CalendarPage = () => {
       endTime: {name: 'End'}
     }
   }
+  // eslint-disable-next-line
   const remoteData = new DataManager({
     url : 'https://js.syncfusion.com/demos/ejservices/api/Schedule/LoadData',
     adaptor: new WebApiAdaptor(),

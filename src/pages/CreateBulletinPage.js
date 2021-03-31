@@ -1,7 +1,8 @@
-import { makeStyles, Select, TextField, Typography, Button, FormControl, InputLabel, Box, Snackbar } from "@material-ui/core"
-import MuiAlert from '@material-ui/lab/Alert';
-import React, { useState } from "react"
+import { makeStyles, Select, TextField, Typography, Button, FormControl, InputLabel, Box,  } from "@material-ui/core"
+import React, { useState, useContext } from "react"
 import BackendAPI from "../api/BackendAPI"
+import { SnackbarContext} from "../contexts/SnackbarContext"
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     },
     FormControl: {
         paddingTop: theme.spacing(1),
-   
+
     },
     imagePreview: {
         maxWidth: "200px",
@@ -28,43 +29,21 @@ const useStyles = makeStyles((theme) => ({
         aspectRatio: 3 / 2
 
     },
-    snack: {
-        width: "100%",
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-        },
-    }
 }))
-
-const Alert = (props) => {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 
 const CreateBulletinPage = () => {
-
     const {
         postBulletinsAsync,
     } = BackendAPI();
 
+    const { setSnackbar } = useContext(SnackbarContext)
     const hiddenFileInput = React.useRef(null)
-    const [snack, setSnack] = useState({ open: false, severity: "success", message: "" })
     const [errors, setErrors] = useState({ title: false, body: false })
     const [helpers, setHelpers] = useState({ title: "", body: "" })
     const [formState, setFormState] = useState({ title: "", body: "", category: "Announcement", image: null, senderId: "Arttu" }) // Category set to Annoucement since is the automatically selected item in the selector
     const classes = useStyles()                                                                                       // Remember to Change if selectors first option changes!
 
-    const openSnack = (severity, message) => {
-        console.log("open snack")
-        setSnack({ open: true, severity: severity, message: message })
-    }
-
-    const handleSnackClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return
-        }
-        updateSnack("open", false)
-    }
 
     const hadnleFormSubmit = async (data, url) => {
         try {
@@ -72,9 +51,9 @@ const CreateBulletinPage = () => {
                 console.log(res)
                 if (res.status === 200) {
                     console.log("POST EVENT SUCCESS")
-                    openSnack("success", "Bulletin posted!")
+                    setSnackbar("Succesfully created a new bulletin!", 3, 3000)
                 } else {
-                    openSnack("error", res.statusText)
+                    
                 }
             })
         } catch (e) {
@@ -86,13 +65,6 @@ const CreateBulletinPage = () => {
         setHelpers({
             ...helpers,
             [helper]: message
-        })
-    }
-
-    const updateSnack = (field, value) => {
-        setSnack({
-            ...snack,
-            [field]: value
         })
     }
 
@@ -153,7 +125,6 @@ const CreateBulletinPage = () => {
     return (
         <div className={classes.root}>
             <form>
-
                 <Box className={classes.item}>
                     <Typography component="h4" variant="h4">
                         Create a new Bulletin!
@@ -196,7 +167,7 @@ const CreateBulletinPage = () => {
                 {formState.image == null
                     ? null
                     : <Box className={classes.item}>
-                        <img src={formState.image} className={classes.imagePreview} alt={formState.title}/>
+                        <img src={formState.image} className={classes.imagePreview} alt={formState.title} />
                     </Box>}
                 <Box className={classes.item}>
                     <FormControl variant="outlined" className={classes.formControl}>
@@ -214,13 +185,6 @@ const CreateBulletinPage = () => {
                 </Box>
 
             </form>
-            <div className={classes.snack}>
-                <Snackbar open={snack.open} autoHideDuration={2000} onClose={handleSnackClose}>
-                    <Alert onClose={handleSnackClose} severity={snack.severity}>
-                        {snack.message}
-                    </Alert>
-                </Snackbar>
-            </div>
         </div>
     )
 
