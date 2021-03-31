@@ -1,12 +1,11 @@
-import EventNavigationBar from "../components/navigation/EventNavigationBar";
 import React, { useState, useEffect } from "react";
 import BackendAPI from "../api/BackendAPI";
-import AddCircleSharpIcon from '@material-ui/icons/AddCircleSharp';
+import AddCircleSharpIcon from "@material-ui/icons/AddCircleSharp";
 import { navigate } from "hookrouter";
+import Moment from "react-moment";
 import {
   Button,
   Card,
-  CardHeader,
   CardContent,
   CardActionArea,
   Dialog,
@@ -16,161 +15,193 @@ import {
   Grid,
   makeStyles,
   Typography,
-} from '@material-ui/core';
-import "../App.css"
+  ThemeProvider,
+  createMuiTheme,
+  Box,
+} from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import "../App.css";
 
-const {
-  fetchEventsAsync,
-} = BackendAPI();
+const { fetchEventsAsync, deleteEventAsync } = BackendAPI();
 
 const Events = () => {
-  const [sorted, setSorted] = useState('all');
+  const [sorted, setSorted] = useState("all");
   const [events, setEvents] = useState([]);
-
-
   const getEvents = async () => {
     try {
       const response = await fetchEventsAsync();
-      console.log(response);
       setEvents(response);
     } catch (e) {
       console.log("error fetching bulletins");
-      console.log(e);
     }
   };
-
-
+  
   useEffect(() => {
     getEvents();
-  }, [])
+  }, []);
 
   const handleSorted = (event) => {
-    if (event !== 'all') {
-      const toString = event.category
+    if (event !== "all") {
+      const toString = event.category;
       setSorted(toString);
     } else {
-      setSorted(event)
+      setSorted(event);
     }
   };
 
   const createEventsNav = () => {
-    navigate("/event-create")
-  }
+    navigate("/event-create");
+  };
 
   const useStyles = makeStyles({
-    root: {
-      flexGrow: 1,
+    eventCard: {
+      border: '2px solid blue',
+      borderRadius: 4,
     },
-    eventButton: {
-      marginTop: '2%',
-      marginLeft: '1%',
-      marginRight: '1%',
-      borderRadius: '50%',
-      maxWidth: '5%',
-    },
-    cardContent: {
-      padding: '0',
-      marginLeft: 20,
-      marginRight: 20,
-      marginBottom: 10,
-    },
-    cardStyle: {
-      border: 'solid 1px blue',
-    },
-    cardTitle: {
-      marginTop: 10,
-      marginRight: 20,
-      marginBottom: 10,
-      padding: 0,
-    },
-    cardTopRow: {
-      marginTop: 10,
-      marginLeft: 5,
-      marginRight: 10
-    },
-    cardCategory: {
-      textAlign: 'end',
-      marginTop: 10,
+  });
 
-    },
-    dateTime: {
-      marginTop: '50%',
-      textAlign: 'end',
-    },
-    likes: {
-    },
-    info: {
-      justifyContent: 'left',
-    },
-
-
-    events: {
-      width: '100%',
+  const categoryButtonTheme = createMuiTheme({
+    overrides: {
+      MuiButton: {
+        // category button
+        outlinedPrimary: {
+          color: 'blue',
+          borderRadius: 20,
+        },
+      },
     }
+  }
+  );
+
+  const eventCardTheme = createMuiTheme({
+    spacing: 5,
+    breakpoints: {
+      values: {
+        // not applied
+        xsm: 280,
+        sm: 360,
+        lg: 768,
+        xl: 1024,
+        xxl: 1920,
+      },
+      MuiPaper: {
+        root: {
+          width: "100%",
+        },
+        rounded: {
+          //textcolor
+          color: "black",
+          borderRadius: 5,
+        },
+      },
+      // card
+      MuiButtonBase: {
+        root: {
+          // text color
+          color: "black",
+        },
+      },
+      MuiCardContent: {
+        root: {
+          padding: "20px",
+          marginLeft: "0",
+          marginRight: "0",
+        },
+      },
+    },
   });
 
   // Just a list of things for testing purposes
   const CategoryChoose = (props) => {
-    const styles = useStyles();
-    const { category } = props.buttonData;
+    const category = props.buttonData;
+    
 
     return (
-      <Button className={styles.eventButton} onClick={() => handleSorted({ category })} variant="outlined" color="primary">{category}</Button>
-    )
+      <ThemeProvider theme={categoryButtonTheme}>
+        <Button
+          onClick={() => handleSorted({ category })}
+          variant="outlined"
+          color="primary"
+        >
+          {category}
+        </Button>
+      </ThemeProvider>
+    );
   };
 
-
   const EventsPage = (props) => {
-    const { title, info, category, date, time } = props.data;
-    const styles = useStyles();
+    const { title, body, category, date, id } = props.data;
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const styles = useStyles();
+
+    const deleteEvent = (id, category) => {
+      deleteEventAsync(id, category).then((res) => {
+        // creates a new state without the deleted object
+      const newState = events.filter(item => item.id !== id)
+      // sets the new state "newState" as the current "events" state
+      setEvents(newState);
+      if (res.status === 200) {
+        // removes event if 
+        handleClose();
+        } else if (res.status === 400)
+        {
+          console.log("ERROR status:", res.status);
+        }
+          console.log("ERROR STATUS", res.status)
+      })
+    }
 
     return (
       // Card for event details and dialog for more info
-      <div className={styles.events} >
-        <Card className={styles.cardStyle} onClick={() => handleShow()}>
-          <CardActionArea>
-            <CardContent className={styles.cardContent}>
-              <Grid container spacing={2}>
-                <Grid item>
-                  <CardHeader className={styles.cardTitle} title={title} />
-                </Grid>
-                <Grid item xs container className={styles.cardTopRow} direction="column" spacing={2}>
-                  {info}
-                </Grid>
-                <Grid item xs>
-                  <Grid container spacing={0} direction="column">
-                    <Typography className={styles.cardCategory}>
-                      {category}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs>
-                    <Typography className={styles.dateTime}>
-                      {date}{" "}{time}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-        <Dialog open={show} onClose={handleClose} fullWidth={true}>
-          <Grid container justify="flex-end" xl={2} direction="row">
-            <IconButton className="open event" onClick={handleClose}>
-              X
-            </IconButton>
-          </Grid>
-          <DialogTitle id="max-width-dialog-title">{title}</DialogTitle>
-          <DialogContent>{category}</DialogContent>
-          <DialogContent>{info}</DialogContent>
-          <DialogContent>{date}</DialogContent>
-          <DialogContent>{time}</DialogContent>
-        </Dialog>
-
-      </div >
-
+        <ThemeProvider theme={eventCardTheme}>
+          <Card onClick={() => handleShow()}>
+            <CardActionArea >
+              <CardContent className={styles.eventCard}>
+                <Box display="flex" flexDirection="row" minWidth="200px">
+                  <Box width="100%">
+                    <Typography variant="h6" component="h6">{title}</Typography>
+                  </Box>
+                  <Box flexShrink={0}>
+                    <Typography variant="body1" component="body1">{category}</Typography>
+                  </Box>
+                </Box>
+                <Box width="100%" justifyContent="flex-start">
+                  <Box minHeight="100px" marginTop="1%" marginBottom="1%">
+                    <Typography variant="body2" component="body2">{body}</Typography>
+                  </Box>           
+                </Box>     
+                <Box display="flex" justifyContent="flex-end">
+                 <Typography variant="subtitle" component="subtitle">
+                  <Moment format="DD-MM-YYYY" date={date} />{" "}
+                  <Moment format="HH:mm:ss" date={date} />
+                </Typography>
+                </Box>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+          <Dialog open={show} onClose={handleClose} fullWidth={true}>
+            <Grid container justify="flex-end" xl={2} direction="row">
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => deleteEvent(id, category)}
+                startIcon={<DeleteIcon />}
+              ></Button>
+              <IconButton className="open event" onClick={handleClose}>
+                X
+              </IconButton>
+            </Grid>
+            <DialogTitle id="max-width-dialog-title">{title}</DialogTitle>
+            <DialogContent>{category}</DialogContent>
+            <DialogContent>{body}</DialogContent>
+            <DialogContent>
+              <Moment format="DD-MM-YYYY" date={date} />{" "}
+              <Moment format="HH:mm:ss" date={date} />
+            </DialogContent>
+          </Dialog>
+        </ThemeProvider>
     );
   };
 
@@ -180,40 +211,54 @@ const Events = () => {
     // Two separate arrays, all items or sorted items depending on user choice (all or specific category)
     // Not optimal, but works as intended for now
 
-    const allArray = events.map((details) => <li key={details.senderId}><EventsPage data={details} /></li>)
-    const sortedCategoryArray = events.filter((item) => {
-      return item.category === sorted;
-    }).map(({ title, info, likes, category, date, time }) => {
-      return { title, info, likes, category, date, time }
-    });
-    const sortedArray = sortedCategoryArray.map((item) => <li key={item.uniqueID}><EventsPage data={item} /></li>)
-    const categoryList = events.map((item) => <CategoryChoose buttonData={item} />);
+    const allArray = events.map((data) => (
+      <EventsPage key={data.senderId} data={data} />
+    ));
+    console.log(events);
+    const sortedArray = events
+      .filter((item) => item.category === sorted)
+      .map(({ title, body, category, date, senderId, id }) => {
+        return { title, body, category, date, senderId, id };
+      })
+      .map((data) => <EventsPage data={data} />);
+    const returnSingleCategory = (value, index, self) => {
+      return self.indexOf(value) === index;
+    };
+    const filteredCategory = events
+      .filter((item) => item)
+      .map(({ category }) => {
+        return { category };
+      })
+      .map((data) => data.category);
+    const categoryList = filteredCategory
+      .filter(returnSingleCategory)
+      .map((data) => <CategoryChoose buttonData={data} />);
 
     return (
       <div>
         <div>
-          <Button className={styles.eventButton} onClick={() => handleSorted('all')} variant="outlined" color="primary">Show All</Button>
+          <Button
+            className={styles.eventButton}
+            onClick={() => handleSorted("all")}
+            variant="outlined"
+            color="primary"
+          >
+            Show All
+          </Button>
           {categoryList}
-          <IconButton onClick={() => createEventsNav()} className={styles.postEventButton} aria-label="open"><AddCircleSharpIcon /></IconButton>
+          <IconButton
+            onClick={() => createEventsNav()}
+            className={styles.postEventButton}
+            aria-label="open"
+          >
+            <AddCircleSharpIcon />
+          </IconButton>
         </div>
-        {sorted === 'all' ?
-          <ul>{allArray}</ul> :
-          <ul>{sortedArray}</ul>}
-
+        {sorted === "all" ? <ul>{allArray}</ul> : <ul>{sortedArray}</ul>}
       </div>
     );
   };
-  return (
-    <div>
-      <EventNavigationBar></EventNavigationBar>
-      <p>Events</p>
-    </div>
-
-  );
-}
+  return <Event />;
+};
 
 export default Events;
-
-
-
-
