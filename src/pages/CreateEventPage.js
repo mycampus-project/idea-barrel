@@ -9,7 +9,6 @@ import BackendAPI from "../api/BackendAPI";
 import { navigate } from "hookrouter";
 
 
-
 const CreateEventPage = () => {
     const [eventData, setEventData] = useState({
         senderId: "",
