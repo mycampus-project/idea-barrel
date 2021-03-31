@@ -2,8 +2,9 @@ import React from "react";
 import {Inject, ScheduleComponent,Day,Week,WorkWeek, Month, Agenda, EventSettingsModel,ViewsDirective,ViewDirective,TimelineViews,TimelineMonth} from "@syncfusion/ej2-react-schedule";
 import {DataManager, WebApiAdaptor} from "@syncfusion/ej2-data";
 
-class CalendarPage extends React.Component{
-  private localData : EventSettingsModel = {
+
+const CalendarPage = () => {
+  const localData  = {
     dataSource: [{
       Id: 1,
       End: new Date(2021,3,1,6,30),
@@ -68,14 +69,15 @@ class CalendarPage extends React.Component{
       endTime: {name: 'End'}
     }
   }
-  private remoteData = new DataManager({
+  const remoteData = new DataManager({
     url : 'https://js.syncfusion.com/demos/ejservices/api/Schedule/LoadData',
     adaptor: new WebApiAdaptor(),
     crossDomain: true
   });
 
-  public render(){
-    return <ScheduleComponent currentView = 'Week' eventSettings = { this.localData} >
+  return (
+    <div>
+      <ScheduleComponent currentView = 'Week' eventSettings = {localData}>
       <ViewsDirective>
         <ViewDirective option = 'Day' interval = {3}></ViewDirective>
         <ViewDirective option = 'Week'></ViewDirective>
@@ -85,9 +87,10 @@ class CalendarPage extends React.Component{
         <ViewDirective option = 'TimelineDay'></ViewDirective>
         <ViewDirective option = 'TimelineMonth'></ViewDirective>
       </ViewsDirective>
-    <Inject services = {[Day, Week, WorkWeek, Month, Agenda,TimelineViews,TimelineMonth ]} />
-  </ScheduleComponent>
-  }
-}
+      <Inject services = {[Day, Week, WorkWeek, Month, Agenda,TimelineViews,TimelineMonth ]} />
+      </ScheduleComponent>
+    </div>
+  );
+};
 
 export default CalendarPage;
