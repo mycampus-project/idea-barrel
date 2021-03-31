@@ -5,9 +5,6 @@ import {Inject, ScheduleComponent,Day,Week,WorkWeek, Month, Agenda} from "@syncf
 const CalendarPage = () => {
   return (
     <div>
-      <EventNavigationBar></EventNavigationBar>
-      <p>Calendar</p>
-      {/* <ScheduleComponent /> */}
       <ScheduleComponent>
         <Inject services = {[Day, Week, WorkWeek, Month, Agenda]} />
       </ScheduleComponent>

@@ -79,6 +79,7 @@ const NavigationBar = () => {
                 <MenuItem onClick={() => handleNavigate("/")}>Home</MenuItem>
                 <MenuItem onClick={() => handleNavigate("/idea-barrel")}>Idea Barrel</MenuItem>
                 <MenuItem onClick={() => handleNavigate("/events")}>Events</MenuItem>
+                <MenuItem onClick={() => handleNavigate("/calendar")}>Calendar</MenuItem>
                 <MenuItem onClick={() => handleNavigate("/bulletin")}>Bulletin Board</MenuItem>
               </Menu>
             </div>
@@ -86,6 +87,7 @@ const NavigationBar = () => {
               <Button className={classes.desktopNav} onClick={() => handleNavigate("/")}>Home</Button>
               <Button className={classes.desktopNav} onClick={() => handleNavigate("/idea-barrel")}>Idea Barrel</Button>
               <Button className={classes.desktopNav} onClick={() => handleNavigate("/events")}>Events</Button>
+              <Button className={classes.desktopNav} onClick={() => handleNavigate("/calendar")}>Calendar</Button>
               <Button className={classes.desktopNav} onClick={() => handleNavigate("/bulletin")}>Bulletin Board</Button>
             </div>}
         </Toolbar>
