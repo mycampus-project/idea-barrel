@@ -15,10 +15,50 @@ class CalendarPage extends React.Component{
     },
     {
       Id: 2,
-      End: new Date(2021,2,31,3,30),
-      Start: new Date(2021,2,31,1,0),
+      End: new Date(2021,3,2,3,30),
+      Start: new Date(2021,3,2,1,0),
       Summary: 'Test id2',
       // IsBlock: true
+      IsAllDay: true,
+      RecurrenceRule: 'FREQ=DAILY;INTERVAL=1;COUNT=2',
+    },
+    {
+      Id: 3,
+      End: new Date(2021,3,4,3,30),
+      Start: new Date(2021,3,4,1,0),
+      Summary: 'Test id2',
+      // IsBlock: true
+      IsAllDay: true,
+    },
+    {
+      Id: 4,
+      End: new Date(2021,3,5,3,30),
+      Start: new Date(2021,3,5,1,0),
+      Summary: 'Test id2',
+      // IsBlock: true
+      IsAllDay: true,
+    },
+    {
+      Id: 5,
+      End: new Date(2021,3,6,3,30),
+      Start: new Date(2021,3,6,1,0),
+      Summary: 'Test id2',
+      // IsBlock: true
+      // IsAllDay: true,
+    },{
+      Id: 6,
+      End: new Date(2021,3,7,3,30),
+      Start: new Date(2021,3,7,1,0),
+      Summary: 'Test id2',
+      IsBlock: true
+      // IsAllDay: true,
+    },
+    {
+      Id: 7,
+      End: new Date(2021,3,8,3,30),
+      Start: new Date(2021,3,8,1,0),
+      Summary: 'Test id2',
+      IsBlock: true,
       IsAllDay: true,
     }
   ],
@@ -30,7 +70,7 @@ class CalendarPage extends React.Component{
   }
   private remoteData = new DataManager({
     url : 'https://js.syncfusion.com/demos/ejservices/api/Schedule/LoadData',
-    adaptor: new WebApiAdaptor,
+    adaptor: new WebApiAdaptor(),
     crossDomain: true
   });
 
