@@ -87,6 +87,8 @@ const Events = () => {
       MuiPaper: {
         root: {
           width: "100%",
+          marginTop: '5',
+          
         },
         rounded: {
           //textcolor
@@ -115,7 +117,6 @@ const Events = () => {
   const CategoryChoose = (props) => {
     const category = props.buttonData;
     
-
     return (
       <ThemeProvider theme={categoryButtonTheme}>
         <Button
@@ -135,7 +136,6 @@ const Events = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const styles = useStyles();
-
     const deleteEvent = (id, category) => {
       deleteEventAsync(id, category).then((res) => {
         // creates a new state without the deleted object
@@ -182,13 +182,8 @@ const Events = () => {
             </CardActionArea>
           </Card>
           <Dialog open={show} onClose={handleClose} fullWidth={true}>
+          
             <Grid container justify="flex-end" xl={2} direction="row">
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => deleteEvent(id, category)}
-                startIcon={<DeleteIcon />}
-              ></Button>
               <IconButton className="open event" onClick={handleClose}>
                 X
               </IconButton>
@@ -200,6 +195,12 @@ const Events = () => {
               <Moment format="DD-MM-YYYY" date={date} />{" "}
               <Moment format="HH:mm:ss" date={date} />
             </DialogContent>
+            <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => deleteEvent(id, category)}
+                startIcon={<DeleteIcon />}
+              ></Button>
           </Dialog>
         </ThemeProvider>
     );
