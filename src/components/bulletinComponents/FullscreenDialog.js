@@ -1,6 +1,7 @@
-import { makeStyles, Dialog, AppBar, Toolbar, Slide, IconButton, Typography } from "@material-ui/core"; //eslint-disable-line
+import { makeStyles, Dialog, AppBar, Toolbar, Slide, IconButton, Typography, Button } from "@material-ui/core"; //eslint-disable-line
 import React from "react";
 import CloseIcon from "@material-ui/icons/Close"
+import DeleteIcon from '@material-ui/icons/Delete';
 
 // Slide Transition for the dialog
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -10,8 +11,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const FullscreenDialog = (props) => {
 
   const { open, handleDialogClose, data } = props
+  const { title, body, category, date, senderId, image, id } = data //eslint-disable-line
+  const admin = true // Placeholder!!!
 
-  const {title, body, category, date, senderId, image, id} = data //eslint-disable-line
 
   const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -26,14 +28,14 @@ const FullscreenDialog = (props) => {
     image: {
       width: "100%",
       hieght: undefined,
-      aspectRatio: 2/1,
+      aspectRatio: 2 / 1,
       overflow: "hidden",
     },
     padding: {
       padding: theme.spacing(1)
-    }, 
+    },
     content: {
-      flex:1,
+      flex: 1,
       paddingLeft: theme.spacing(1),
       paddingTop: theme.spacing(2)
     }
@@ -53,11 +55,19 @@ const FullscreenDialog = (props) => {
             <Typography variant="h5" className={classes.title}>
               {category}
             </Typography>
+            {admin ? <Button
+              variant="contained"
+              color="secondary"
+              className={classes.iconBtn}
+              onClick={() => props.handleDelete(id, category)}
+              startIcon={<DeleteIcon />}
+            >Delete</Button> : null}
+
           </Toolbar>
         </AppBar>
         <div >
           {data.image != null
-            ? <img src={image} className={classes.image}  alt={title}/>
+            ? <img src={image} className={classes.image} alt={title} />
             : null
           }
           <Typography component="h4" variant="h4" className={classes.title}>

@@ -1,7 +1,8 @@
-import { makeStyles, Select, TextField, Typography, Button, FormControl, InputLabel, Box, Snackbar } from "@material-ui/core"
-import MuiAlert from '@material-ui/lab/Alert';
-import React, { useState } from "react"
+import { makeStyles, Select, TextField, Typography, Button, FormControl, InputLabel, Box,  } from "@material-ui/core"
+import React, { useState, useContext } from "react"
 import BackendAPI from "../api/BackendAPI"
+import { SnackbarContext} from "../contexts/SnackbarContext"
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -11,51 +12,38 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: "column",
     },
     item: {
-        paddingTop: theme.spacing(2)
+        paddingTop: theme.spacing(2),
+        width: "300dp",
+        textAlign: "center"
     },
-    form: {
-
+    formItem: {
+        width: "80%"
     },
     FormControl: {
-        margin: theme.spacing(1),
-        minWidth: 120
-    },
-    snack: {
-        width: "100%",
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-        },
-    }
-}))
+        paddingTop: theme.spacing(1),
 
-const Alert = (props) => {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+    },
+    imagePreview: {
+        maxWidth: "200px",
+        height: "auto",
+        aspectRatio: 3 / 2
+
+    },
+}))
 
 
 const CreateBulletinPage = () => {
-
     const {
         postBulletinsAsync,
     } = BackendAPI();
 
-    const [snack, setSnack] = useState({ open: false, severity: "success", message: "" })
+    const { setSnackbar } = useContext(SnackbarContext)
+    const hiddenFileInput = React.useRef(null)
     const [errors, setErrors] = useState({ title: false, body: false })
     const [helpers, setHelpers] = useState({ title: "", body: "" })
     const [formState, setFormState] = useState({ title: "", body: "", category: "Announcement", image: null, senderId: "Arttu" }) // Category set to Annoucement since is the automatically selected item in the selector
     const classes = useStyles()                                                                                       // Remember to Change if selectors first option changes!
 
-    const openSnack = (severity, message) => {
-        console.log("open snack")
-        setSnack({ open: true, severity: severity, message: message })
-    }
-
-    const handleSnackClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return
-        }
-        updateSnack("open", false)
-    }
 
     const hadnleFormSubmit = async (data, url) => {
         try {
@@ -63,9 +51,9 @@ const CreateBulletinPage = () => {
                 console.log(res)
                 if (res.status === 200) {
                     console.log("POST EVENT SUCCESS")
-                    openSnack("success", "Bulletin posted!")
+                    setSnackbar("Succesfully created a new bulletin!", 3, 3000)
                 } else {
-                    openSnack("error", res.statusText)
+                    
                 }
             })
         } catch (e) {
@@ -77,13 +65,6 @@ const CreateBulletinPage = () => {
         setHelpers({
             ...helpers,
             [helper]: message
-        })
-    }
-
-    const updateSnack = (field, value) => {
-        setSnack({
-            ...snack,
-            [field]: value
         })
     }
 
@@ -99,6 +80,17 @@ const CreateBulletinPage = () => {
             ...formState,
             [e.target.id]: e.target.value
         })
+    }
+
+    const updateImage = (event) => {
+        setFormState({
+            ...formState,
+            "image": URL.createObjectURL(event.target.files[0])
+        })
+    }
+
+    const handleImageSelectClick = e => {
+        hiddenFileInput.current.click()
     }
 
 
@@ -149,6 +141,7 @@ const CreateBulletinPage = () => {
                         onChange={updateField}
                         error={errors.title}
                         helperText={helpers.title}
+                        className={classes.formItem}
                     />
                 </Box>
                 <Box className={classes.item}>
@@ -164,8 +157,18 @@ const CreateBulletinPage = () => {
                         rows={4}
                         error={errors.body}
                         helperText={helpers.body}
+                        className={classes.formItem}
                     />
                 </Box>
+                <Box className={classes.item}>
+                    <Button type="button" className={classes.formItem} formControl={false} variant="contained" color="primary" onClick={handleImageSelectClick}>Choose Image</Button>
+                    <input type="file" onChange={updateImage} style={{ display: "none" }} ref={hiddenFileInput} />
+                </Box>
+                {formState.image == null
+                    ? null
+                    : <Box className={classes.item}>
+                        <img src={formState.image} className={classes.imagePreview} alt={formState.title} />
+                    </Box>}
                 <Box className={classes.item}>
                     <FormControl variant="outlined" className={classes.formControl}>
                         <InputLabel htmlFor="filled-category-native-simple">Category</InputLabel>
@@ -182,13 +185,6 @@ const CreateBulletinPage = () => {
                 </Box>
 
             </form>
-            <div className={classes.snack}>
-                <Snackbar open={snack.open} autoHideDuration={2000} onClose={handleSnackClose}>
-                    <Alert onClose={handleSnackClose} severity={snack.severity}>
-                        {snack.message}
-                    </Alert>
-                </Snackbar>
-            </div>
         </div>
     )
 
