@@ -4,8 +4,6 @@ import React, { useState, useContext } from "react"
 import BackendAPI from "../api/BackendAPI"
 import { SnackbarContext} from "../contexts/SnackbarContext"
 
-
-
 const useStyles = makeStyles((theme) => ({
     root: {
         alignItems: "center",

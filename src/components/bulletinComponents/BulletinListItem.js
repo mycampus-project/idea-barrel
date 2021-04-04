@@ -29,6 +29,14 @@ const BulletinListItem = (props) => {
       backgroundColor: "#80d2ff",
       display: "flex",
       flexDirection: "row",
+    },
+    pinPos: {
+      margin: 0,
+      top: "auto",
+      right: theme.spacing(1),
+      bottom: theme.spacing(1),
+      left: "auto",
+      position: "absolute"
     }
   }))
 
@@ -37,7 +45,7 @@ const BulletinListItem = (props) => {
   const { title, image, body, category, date, senderId, id, pinned } = props.data //eslint-disable-line
 
   return (
-    <div>
+    <div style={{position:"relative"}}>
       <Card className={!pinned ? classes.row : classes.highlighted} >
         {image != null
           ? <CardMedia className={classes.cover} image={image} />
@@ -57,8 +65,8 @@ const BulletinListItem = (props) => {
             {date}
           </Typography>
         </div>
-        <div>
-          {!pinned? null : <RoomIcon/> }
+        <div className={classes.pinPos}>
+          {!pinned ? null : <RoomIcon />}
         </div>
       </Card>
     </div>

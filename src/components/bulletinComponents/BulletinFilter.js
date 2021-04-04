@@ -1,30 +1,43 @@
 import React from "react"
 import {
     Button,
-    makeStyles
-  } from "@material-ui/core";
+    makeStyles,
+} from "@material-ui/core";
 
 
-  const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
     buttonMargin: {
         margin: theme.spacing(1)
     },
     center: {
-        textAlign: "center",
-        paddingTop: theme.spacing(1)
-    }
-  }))
+        marginTop: theme.spacing(1),
+        flex: 1,
+    },
+}))
 
 const BulletinFilter = (props) => {
-
+    const { handleFilterClick } = props
     const classes = useStyles()
 
     return (
         <div className={classes.center}>
-            <Button variant="contained" color="primary" className={classes.buttonMargin}>Announcnement</Button>
-            <Button variant="contained" color="primary" className={classes.buttonMargin}>Info</Button>
-            <Button variant="contained" color="primary" className={classes.buttonMargin}>Selling</Button>
-            <Button variant="contained" color="primary" className={classes.buttonMargin}>Renting</Button>
+            <h1 style={{ textAlign: "center" }}>Filter</h1>
+            <Button onClick={handleFilterClick} variant="contained" color="primary" className={classes.buttonMargin} value="Announcement">
+                Announcement
+                </Button>
+            <Button onClick={handleFilterClick} variant="contained" color="primary" className={classes.buttonMargin} value="Info">
+                Info
+                </Button>
+            <Button onClick={handleFilterClick} variant="contained" color="primary" className={classes.buttonMargin} value="Selling">
+                Selling
+                </Button>
+            <Button onClick={handleFilterClick} variant="contained" color="primary" className={classes.buttonMargin} value="Renting">
+                Renting
+                </Button>
+
+            <Button onClick={handleFilterClick} variant="contained" color="primary" className={classes.buttonMargin} value="None">
+                No Filter
+                </Button>
         </div>
     )
 }

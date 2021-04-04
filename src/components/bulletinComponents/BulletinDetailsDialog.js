@@ -29,6 +29,14 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     paddingLeft: theme.spacing(1),
     paddingTop: theme.spacing(2)
+  },
+  pinDeletePos:{
+    margin: 0,
+    top:"auto",
+    right: theme.spacing(2),
+    bottom: theme.spacing(2),
+    left: "auto",
+    position: "absolute"
   }
 }))
 
@@ -37,7 +45,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const FullscreenDialog = (props) => {
+const BulletinDetailsDialog = (props) => {
   const { open, handleDialogClose, data, handleDelete, handlePin } = props
   const { title, body, category, date, senderId, image, id, pinned } = data //eslint-disable-line
   const admin = true // Placeholder!!!
@@ -45,7 +53,7 @@ const FullscreenDialog = (props) => {
 
   const PinAndDelete = () => {
     return( 
-      <div>
+      <div className={classes.pinDeletePos}>
         <Button
          variant="contained" 
          color="secondary" 
@@ -63,7 +71,7 @@ const FullscreenDialog = (props) => {
   }
 
   return (
-    <div>
+    <div style={{position:"relative"}}>
       <Dialog fullScreen open={open} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
           <Toolbar>
@@ -73,7 +81,7 @@ const FullscreenDialog = (props) => {
             <Typography variant="h5" className={classes.title}>
               {category}
             </Typography>
-            {admin ?  <PinAndDelete/> : null }
+            
           </Toolbar>
         </AppBar>
         <div >
@@ -86,10 +94,11 @@ const FullscreenDialog = (props) => {
           <Typography className={classes.content}>
             {body}
           </Typography>
+          {admin ?  <PinAndDelete/> : null }
         </div>
       </Dialog>
     </div>
   )
 }
 
-export default FullscreenDialog
+export default BulletinDetailsDialog

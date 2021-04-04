@@ -1,11 +1,11 @@
 import { Fab } from "@material-ui/core"; //eslint-disable-line
 import React, { useContext, useEffect, useState } from "react";
 import AddIcon from '@material-ui/icons/Add';
-import { navigate } from "hookrouter";
 import BackendAPI from "../api/BackendAPI"
-import FullscreenDialog from "../components/bulletinComponents/FullscreenDialog.js"
+import BulletinDetailsDialog from "../components/bulletinComponents/BulletinDetailsDialog.js"
 import BulletinListItem from "../components/bulletinComponents/BulletinListItem"
 import BulletinFilter from "../components/bulletinComponents/BulletinFilter"
+import CreateBulletinDialog from "../components/bulletinComponents/CreateBulletinDialog"
 import { SnackbarContext } from "../contexts/SnackbarContext"
 
 const {
@@ -19,14 +19,20 @@ const BulletinPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [dialogData, setDialogData] = useState("")
   const [bulletins, setBulletins] = useState([])
-  const [sorted, setSorted] = useState() //eslint-disable-line
+  const [filter, setFilter] = useState("None") //eslint-disable-line
+  const [createDialog, setCreateDialog] = useState(false)
+
+  const sortBulletinArray = (data) => {
+    const pins = data.filter(item => item.pinned === true)
+    const rest = data.filter(item => item.pinned === false)
+    const complete = [...pins, ...rest] // Sets the pinned items to the start of the array first
+    return complete
+  }
 
   const getBulletins = async () => {
     try {
       const response = await fetchBulletinsAsync(); // Data array
-      const pins = response.filter(item => item.pinned === true)
-      const rest = response.filter(item => item.pinned === false)
-      const complete = [...pins, ...rest]
+      const complete = sortBulletinArray(response)
       setBulletins(complete);
     } catch (e) {
       setSnackbar("There was an error fetching bulletins", 0, 5000)
@@ -42,13 +48,15 @@ const BulletinPage = () => {
     setDialogOpen(true)
   }
 
-  const handleDialogClose = () => {
-    setDialogOpen(false)
+  const handleCreateDialogOpen = () => {
+    setCreateDialog(true)
   }
 
-  const createBulletinNav = () => {
-    navigate("/bulletin-create")
-  }
+  const handleDialogClose = () => setDialogOpen(false)
+  const handleCreateClose = () => setCreateDialog(false)
+  //const createBulletinNav = () => navigate("/bulletin-create")
+  const createBulletinNav = () => handleCreateDialogOpen()
+
   // Handle bulletin delete
   const handleDelete = async (id, category) => {
     try {
@@ -56,16 +64,14 @@ const BulletinPage = () => {
         if (res.status === 200) {
           setSnackbar("Bulletin Deleted!", 3, 5000)
           const newArray = bulletins.filter(item => item.id !== id)
-          const pins = newArray.filter(item => item.pinned === true)
-          const rest = newArray.filter(item => item.pinned === false)
-          const complete = [...pins, ...rest]
+          const complete = sortBulletinArray(newArray)
           setBulletins(complete)
           setDialogOpen(false)
         }
       })
-      ;
+        ;
     } catch (e) {
-        setSnackbar(e,0, 5000)
+      setSnackbar(e, 0, 5000)
     }
   }
   // Handles the pinning event. Have to use location.reload() since updating states
@@ -103,24 +109,33 @@ const BulletinPage = () => {
     }
   }
 
+  // Just sets the filter to the clicked button
+  const handleFilterClick = (event) => {
+    setFilter(event.currentTarget.value)
+  }
+  const filteredList = bulletins.filter((item) => item.category === filter).map((d) =>
+    <li onClick={() => handleDialogOpen(d)} key={d.id}><BulletinListItem data={d} handleDelete={handleDelete} /></li>)
+
   const listItem = bulletins.map((d) =>
     <li onClick={() => handleDialogOpen(d)} key={d.id}><BulletinListItem data={d} handleDelete={handleDelete} /></li>)
 
   return (
     <div>
       <div>
-        <BulletinFilter />
+        <BulletinFilter handleFilterClick={handleFilterClick} />
       </div>
       <div>
         <h1 style={{ textAlign: "center" }}>Bulletins</h1>
       </div>
-      <ul>
-        {listItem}
-      </ul>
+      <div>
+        {filter === "None" ? <ul>{listItem}</ul> : <ul>{filteredList}</ul>}
+
+      </div>
       <Fab color="primary" aria-label="add" style={{ margin: 0, top: "auto", right: 16, bottom: 16, left: "auto", position: "fixed" }} onClick={() => createBulletinNav()}>
         <AddIcon />
       </Fab>
-      <FullscreenDialog open={dialogOpen} handlePin={handlePin} handleDialogClose={handleDialogClose} data={dialogData} handleDelete={handleDelete} ></FullscreenDialog>
+      <BulletinDetailsDialog open={dialogOpen} handlePin={handlePin} handleDialogClose={handleDialogClose} data={dialogData} handleDelete={handleDelete} />
+      <CreateBulletinDialog open={createDialog} handleCreateClose={handleCreateClose} />
     </div>
   );
 };
