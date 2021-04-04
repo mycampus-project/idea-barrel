@@ -1,4 +1,5 @@
 import { makeStyles, Select, TextField, Typography, Button, FormControl, InputLabel, Box,  } from "@material-ui/core"
+import { navigate } from "hookrouter"
 import React, { useState, useContext } from "react"
 import BackendAPI from "../api/BackendAPI"
 import { SnackbarContext} from "../contexts/SnackbarContext"
@@ -33,18 +34,15 @@ const useStyles = makeStyles((theme) => ({
 
 
 const CreateBulletinPage = () => {
-    const {
-        postBulletinsAsync,
-    } = BackendAPI();
-
+    const { postBulletinsAsync } = BackendAPI();
     const { setSnackbar } = useContext(SnackbarContext)
     const hiddenFileInput = React.useRef(null)
     const [errors, setErrors] = useState({ title: false, body: false })
     const [helpers, setHelpers] = useState({ title: "", body: "" })
-    const [formState, setFormState] = useState({ title: "", body: "", category: "Announcement", image: null, senderId: "Arttu" }) // Category set to Annoucement since is the automatically selected item in the selector
+    const [formState, setFormState] = useState({ title: "", body: "", category: "Announcement", image: null, senderId: "Arttu", pinned: false }) // Category set to Annoucement since is the automatically selected item in the selector
     const classes = useStyles()                                                                                       // Remember to Change if selectors first option changes!
 
-
+    // Handles data submission 
     const hadnleFormSubmit = async (data, url) => {
         try {
             await postBulletinsAsync(data).then((res) => {
@@ -52,12 +50,13 @@ const CreateBulletinPage = () => {
                 if (res.status === 200) {
                     console.log("POST EVENT SUCCESS")
                     setSnackbar("Succesfully created a new bulletin!", 3, 3000)
+                    navigate("/bulletin")
                 } else {
                     
                 }
             })
         } catch (e) {
-
+            setSnackbar(e, 0 ,5000)
         }
     }
 

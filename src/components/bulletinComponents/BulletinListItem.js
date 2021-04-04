@@ -1,8 +1,6 @@
 import { Card, CardMedia, Typography, makeStyles } from "@material-ui/core"; //eslint-disable-line
 import React from "react";
 
-
-
 const BulletinListItem = (props) => {
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,10 +39,10 @@ const BulletinListItem = (props) => {
         }
         <div className={classes.details}>
           <Typography component="h4" variant="h4" className={classes.posiotion}>
-            {category}
+            {title}
           </Typography>
           <Typography component="h6" variant="h6" className={classes.posiotion}>
-            {title}
+            {category}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
             By: {senderId}
