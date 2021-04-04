@@ -5,7 +5,7 @@ import { navigate } from "hookrouter";
 import BackendAPI from "../api/BackendAPI"
 import FullscreenDialog from "../components/bulletinComponents/FullscreenDialog.js"
 import BulletinListItem from "../components/bulletinComponents/BulletinListItem"
-import PinnedItemsList from "../components/bulletinComponents/PinnedItemsList"
+import BulletinFilter from "../components/bulletinComponents/BulletinFilter"
 import { SnackbarContext } from "../contexts/SnackbarContext"
 
 const {
@@ -19,21 +19,17 @@ const BulletinPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [dialogData, setDialogData] = useState("")
   const [bulletins, setBulletins] = useState([])
-  const [pinned, setPinned] = useState([])
+  const [sorted, setSorted] = useState() //eslint-disable-line
 
   const getBulletins = async () => {
     try {
       const response = await fetchBulletinsAsync(); // Data array
-      console.log(response);
       const pins = response.filter(item => item.pinned === true)
       const rest = response.filter(item => item.pinned === false)
-      console.log(pins)
-      setPinned(pins)
-      setBulletins(rest);
+      const complete = [...pins, ...rest]
+      setBulletins(complete);
     } catch (e) {
-      console.log("error fetching bulletins");
       setSnackbar("There was an error fetching bulletins", 0, 5000)
-      console.log(e);
     }
   };
 
@@ -53,19 +49,23 @@ const BulletinPage = () => {
   const createBulletinNav = () => {
     navigate("/bulletin-create")
   }
+  // Handle bulletin delete
   const handleDelete = async (id, category) => {
     try {
-      const del = await deleteBulletinAsync(id, category).then((res) => {
+      await deleteBulletinAsync(id, category).then((res) => {
         if (res.status === 200) {
           setSnackbar("Bulletin Deleted!", 3, 5000)
           const newArray = bulletins.filter(item => item.id !== id)
-          setBulletins(newArray)
+          const pins = newArray.filter(item => item.pinned === true)
+          const rest = newArray.filter(item => item.pinned === false)
+          const complete = [...pins, ...rest]
+          setBulletins(complete)
           setDialogOpen(false)
         }
       })
-      console.log(del);
+      ;
     } catch (e) {
-      console.log(e);
+        setSnackbar(e,0, 5000)
     }
   }
   // Handles the pinning event. Have to use location.reload() since updating states
@@ -109,10 +109,10 @@ const BulletinPage = () => {
   return (
     <div>
       <div>
-        {pinned.length > 0 ? <PinnedItemsList pinnedItems={pinned} handleDelete={handleDelete} handleDialogOpen={handleDialogOpen} /> : null}
+        <BulletinFilter />
       </div>
       <div>
-        <h1 style={{textAlign:"center"}}>Bulletins</h1>
+        <h1 style={{ textAlign: "center" }}>Bulletins</h1>
       </div>
       <ul>
         {listItem}

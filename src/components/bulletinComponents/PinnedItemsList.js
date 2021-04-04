@@ -1,6 +1,6 @@
 import React from "react"
 import BulletinListItem from "../bulletinComponents/BulletinListItem"
-
+// THIS IS NOT IN USE ATM
 const PinnedItemsList = (props) => {
 
     const { pinnedItems, handleDelete, handleDialogOpen } = props
