@@ -1,22 +1,19 @@
 import { Fab } from "@material-ui/core"; //eslint-disable-line
 import React, { useContext, useEffect, useState } from "react";
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from "@material-ui/icons/Add";
 import { navigate } from "hookrouter";
-import BackendAPI from "../api/BackendAPI"
-import FullscreenDialog from "../components/bulletinComponents/FullscreenDialog.js"
-import BulletinListItem from "../components/bulletinComponents/BulletinListItem"
-import { SnackbarContext} from "../contexts/SnackbarContext"
+import BackendAPI from "../api/BackendAPI";
+import FullscreenDialog from "../components/bulletinComponents/FullscreenDialog.js";
+import BulletinListItem from "../components/bulletinComponents/BulletinListItem";
+import { SnackbarContext } from "../contexts/SnackbarContext";
 
-const {
-  fetchBulletinsAsync, 
-  deleteBulletinAsync,
-} = BackendAPI();
+const { fetchBulletinsAsync, deleteBulletinAsync } = BackendAPI();
 
 const BulletinPage = () => {
-  const { setSnackbar } = useContext(SnackbarContext)
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [dialogData, setDialogData] = useState("")
-  const [bulletins, setBulletins] = useState([])
+  const { setSnackbar } = useContext(SnackbarContext);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogData, setDialogData] = useState("");
+  const [bulletins, setBulletins] = useState([]);
 
   const getBulletins = async () => {
     try {
@@ -30,47 +27,64 @@ const BulletinPage = () => {
   };
 
   useEffect(() => {
-    getBulletins()
-  }, [])
+    getBulletins();
+  }, []);
 
   const handleDialogOpen = (data) => {
-    setDialogData(data)
-    setDialogOpen(true)
-  }
+    setDialogData(data);
+    setDialogOpen(true);
+  };
 
   const handleDialogClose = () => {
-    setDialogOpen(false)
-  }
+    setDialogOpen(false);
+  };
 
   const createBulletinNav = () => {
-    navigate("/bulletin-create")
-  }
-  const handleDelete = async(id, category) => {
+    navigate("/bulletin-create");
+  };
+  const handleDelete = async (id, category) => {
     try {
-      const del = await deleteBulletinAsync(id, category).then((res)=>{
-        if(res.status===200){
-          setSnackbar("Bulletin Deleted!", 3,5000)
-
+      const del = await deleteBulletinAsync(id, category).then((res) => {
+        if (res.status === 200) {
+          setSnackbar("Bulletin Deleted!", 3, 5000);
         }
-      })
+      });
       console.log(del);
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
-  const listItem = bulletins.map((d) =>
-    <li onClick={() => handleDialogOpen(d)} key={d.id}><BulletinListItem data={d} handleDelete={handleDelete} /></li>)
+  const listItem = bulletins.map((d) => (
+    <li onClick={() => handleDialogOpen(d)} key={d.id}>
+      <BulletinListItem data={d} handleDelete={handleDelete} />
+    </li>
+  ));
 
   return (
     <div>
-      <ul>
-        {listItem}
-      </ul>
-      <Fab color="primary" aria-label="add" style={{ margin: 0, top: "auto", right: 16, bottom: 16, left: "auto", position: "fixed" }} onClick={() => createBulletinNav()}>
+      <ul>{listItem}</ul>
+      <Fab
+        color="primary"
+        aria-label="add"
+        style={{
+          margin: 0,
+          top: "auto",
+          right: 16,
+          bottom: 16,
+          left: "auto",
+          position: "fixed",
+        }}
+        onClick={() => createBulletinNav()}
+      >
         <AddIcon />
       </Fab>
-      <FullscreenDialog open={dialogOpen} handleDialogClose={handleDialogClose} data={dialogData}handleDelete={handleDelete} ></FullscreenDialog>
+      <FullscreenDialog
+        open={dialogOpen}
+        handleDialogClose={handleDialogClose}
+        data={dialogData}
+        handleDelete={handleDelete}
+      ></FullscreenDialog>
     </div>
   );
 };
