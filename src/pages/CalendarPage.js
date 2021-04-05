@@ -5,9 +5,8 @@ import {Inject, ScheduleComponent,Day,Week,WorkWeek, Month, Agenda, EventSetting
 import BackendAPI from "../api/BackendAPI";
 import { FormatListNumberedRtlOutlined } from "@material-ui/icons";
 
-const { fetchEventsAsync, deleteEventAsync } = BackendAPI();
+const { fetchEventsAsync, fetchUsersAsync } = BackendAPI();
 const CalendarPage = () => {
-  const [sorted, setSorted] = useState("all");
   const [localData, setLocalData] = useState(null);
   const getEvents = async () => {
     try {
@@ -15,14 +14,16 @@ const CalendarPage = () => {
       console.log("response :", response)
       let temp = [...response];
       temp = temp.map(el=>{
-        return {
-          Id: el._rid,
-          End: new Date(el.date),
-          Start: new Date(el.date),
-          Summary: el.title,
-          IsReadonly: true,
-          //IsAllDay: true,
-        }
+        if (el.visibleTo == null || el.visibleTo == "owneruserid"){ //update owneruserid later
+          return {
+            Id: el._rid,
+            End: new Date(el.date),
+            Start: new Date(el.date),
+            Summary: el.title,
+            IsReadonly: true,
+            //IsAllDay: true,
+          }
+       }
       });
       setLocalData(
         {
@@ -43,7 +44,12 @@ const CalendarPage = () => {
   useEffect(() => {
     getEvents();
   }, []);
-
+  // const [eventData, setEventData] = useState({
+  //   senderId: "",
+  //   title: "",
+  //   body: "",
+  //   category: "",
+  // }); 
 
   // const localData  = {
   //   dataSource: [{
