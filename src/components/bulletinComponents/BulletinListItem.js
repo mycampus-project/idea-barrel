@@ -1,7 +1,6 @@
 import { Card, CardMedia, Typography, makeStyles } from "@material-ui/core"; //eslint-disable-line
+import RoomIcon from '@material-ui/icons/Room';
 import React from "react";
-
-
 
 const BulletinListItem = (props) => {
   const useStyles = makeStyles((theme) => ({
@@ -26,25 +25,38 @@ const BulletinListItem = (props) => {
     boxPadding: {
       marginLeft: 25
     },
+    highlighted: {
+      backgroundColor: "#80d2ff",
+      display: "flex",
+      flexDirection: "row",
+    },
+    pinPos: {
+      margin: 0,
+      top: "auto",
+      right: theme.spacing(1),
+      bottom: theme.spacing(1),
+      left: "auto",
+      position: "absolute"
+    }
   }))
 
   const classes = useStyles()
 
-  const { title, image, body, category, date, senderId, id } = props.data //eslint-disable-line
+  const { title, image, body, category, date, senderId, id, pinned } = props.data //eslint-disable-line
 
   return (
-    <div>
-      <Card className={classes.row}>
+    <div style={{position:"relative"}}>
+      <Card className={!pinned ? classes.row : classes.highlighted} >
         {image != null
           ? <CardMedia className={classes.cover} image={image} />
           : <div></div>
         }
         <div className={classes.details}>
           <Typography component="h4" variant="h4" className={classes.posiotion}>
-            {category}
+            {title}
           </Typography>
           <Typography component="h6" variant="h6" className={classes.posiotion}>
-            {title}
+            {category}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
             By: {senderId}
@@ -52,6 +64,9 @@ const BulletinListItem = (props) => {
           <Typography variant="subtitle2" color="textSecondary">
             {date}
           </Typography>
+        </div>
+        <div className={classes.pinPos}>
+          {!pinned ? null : <RoomIcon />}
         </div>
       </Card>
     </div>
