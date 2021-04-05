@@ -25,6 +25,7 @@ import "../App.css";
 const { fetchEventsAsync, deleteEventAsync } = BackendAPI();
 
 const Events = () => {
+  
   const [sorted, setSorted] = useState("all");
   const [events, setEvents] = useState([]);
   const getEvents = async () => {
