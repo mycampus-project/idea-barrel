@@ -1,11 +1,10 @@
-import {React,useContext,useState,useEffect}  from "react";
+import {React,useState,useEffect}  from "react";
 // eslint-disable-next-line
 import { SnackbarContext} from "../contexts/SnackbarContext"
-import {Inject, ScheduleComponent,Day,Week,WorkWeek, Month, Agenda, EventSettingsModel,ViewsDirective,ViewDirective,TimelineViews,TimelineMonth} from "@syncfusion/ej2-react-schedule";
+import {Inject, ScheduleComponent,Day,Week,WorkWeek, Month, Agenda,ViewsDirective,ViewDirective,TimelineViews,TimelineMonth} from "@syncfusion/ej2-react-schedule";
 import BackendAPI from "../api/BackendAPI";
-import { FormatListNumberedRtlOutlined } from "@material-ui/icons";
 
-const { fetchEventsAsync, fetchUsersAsync } = BackendAPI();
+const { fetchEventsAsync /*,fetchUsersAsync*/ } = BackendAPI();
 const CalendarPage = () => {
   const [localData, setLocalData] = useState(null);
   const getEvents = async () => {
@@ -14,7 +13,7 @@ const CalendarPage = () => {
       console.log("response :", response)
       let temp = [...response];
       temp = temp.map(el=>{
-        if (el.visibleTo == null || el.visibleTo == "owneruserid"){ //update owneruserid later
+        if (el.visibleTo === null || el.visibleTo === "owneruserid"){ //update owneruserid later
           return {
             Id: el._rid,
             End: new Date(el.date),
