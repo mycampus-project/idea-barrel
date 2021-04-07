@@ -24,7 +24,10 @@ class IdeaList extends React.Component {
     render() {
         let ideas = this.props.data;
 
+
         const listItems = ideas.map((item) => (
+          //console.log(item)
+
             <IdeaCard key={item} data={item}></IdeaCard>
         ));
       
