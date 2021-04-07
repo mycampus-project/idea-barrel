@@ -195,7 +195,7 @@ const APIDemo = () => {
 
   return (
     <div>
-      <img width="200px" height="200px" src={getImageUrl("file-1617647556948-285902930.jpg")}>
+      <img width="200px" height="200px" src={getImageUrl("file-1617824580980-67480825.jpg")}>
       </img>
       <div style={dataStyle}>
         <h4>
