@@ -11,7 +11,8 @@ const HomePage = () => {
         </h3>
         <p>
           Do -- <span style={{ color: "red" }}>npm run db</span> -- in another
-          terminal if you want to start the json server (given that you have done npm install first).
+          terminal if you want to start the json server (given that you have
+          done npm install first).
         </p>
       </div>
       <div>
