@@ -16,7 +16,6 @@ import "../App.css";
 const { fetchEventsAsync, deleteEventAsync } = BackendAPI();
 
 const Events = () => {
-  
   const [sorted, setSorted] = useState("all");
   const [show, setShow] = useState(false);
   const [dialogData, setDialogData] = useState("");

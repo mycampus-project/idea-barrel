@@ -52,12 +52,12 @@ const EventCard = (props) => {
       },
     },
   });
-  const useStyles = makeStyles({
+  const useStyles = makeStyles((theme) => ({
     eventCard: {
       border: "2px solid blue",
       borderRadius: 4,
     },
-  });
+  }));
   const styles = useStyles();
 
   return (

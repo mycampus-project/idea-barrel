@@ -2,7 +2,6 @@
 // import { Schedule, ScheduleModel } from '@syncfusion/ej2-schedule';
 // import { ComponentBase, applyMixins, DefaultHtmlAttributes } from '@syncfusion/ej2-react-base';
 
-
 // export interface ScheduleTypecast {
 //     dateHeaderTemplate?: string | Function | any;
 //     cellTemplate?: string | Function | any;
@@ -25,7 +24,7 @@
 //  * ```
 //  */
 // export class ScheduleComponent extends Schedule {
-//     public state: Readonly<{ children?: React.ReactNode | React.ReactNode[] }> 
+//     public state: Readonly<{ children?: React.ReactNode | React.ReactNode[] }>
 //     & Readonly<ScheduleModel & DefaultHtmlAttributes| ScheduleTypecast>;
 //     public setState: any;
 //     private getDefaultAttributes: Function;
