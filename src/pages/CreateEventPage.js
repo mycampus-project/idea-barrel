@@ -9,7 +9,7 @@ import { SnackbarContext } from "../contexts/SnackbarContext";
 const CreateEventPage = () => {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
-  const [submitEnabled, setSubmitEnabled] = useState(true);
+  const [submitEnabled, setSubmitEnabled] = useState(false);
   const { setSnackbar } = useContext(SnackbarContext);
   const [errors, setErrors] = useState({
     senderId: true,
@@ -42,9 +42,9 @@ const CreateEventPage = () => {
       (errors.bodyError === null) &
       (errors.categoryError === null)
     ) {
-      setSubmitEnabled(false);
-    } else {
       setSubmitEnabled(true);
+    } else {
+      setSubmitEnabled(false);
     }
   };
 
