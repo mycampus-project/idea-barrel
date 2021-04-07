@@ -171,8 +171,8 @@ const Events = () => {
         show={show}
         handleClose={handleClose}
         data={dialogData}
-        handleDelete={deleteEvent}
-      ></EventDialog>
+        deleteEvent={deleteEvent}
+      />
     </div>
   );
 };

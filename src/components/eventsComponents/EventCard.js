@@ -12,7 +12,7 @@ import Moment from "react-moment";
 
 const EventCard = (props) => {
   const { data } = props;
-  const { title, body, category, date } = data; //eslint-disable-line
+  const { title, body, category, date, startTime, endTime } = data; //eslint-disable-line
 
   const eventCardTheme = createMuiTheme({
     spacing: 5,
@@ -52,12 +52,12 @@ const EventCard = (props) => {
       },
     },
   });
-  const useStyles = makeStyles((theme) => ({
+  const useStyles = makeStyles({
     eventCard: {
       border: "2px solid blue",
       borderRadius: 4,
     },
-  }));
+  });
   const styles = useStyles();
 
   return (
@@ -86,8 +86,16 @@ const EventCard = (props) => {
                   </Typography>
                 </Box>
               </Box>
+              <p>
+                start time:{" "}
+                <Moment format="DD-MM-YYYY HH:mm:ss" date={startTime} />
+              </p>
+              <p>
+                end time: <Moment format="DD-MM-YYYY HH:mm:ss" date={endTime} />
+              </p>
               <Box display="flex" justifyContent="flex-end">
                 <Typography variant="subtitle" component="subtitle">
+                  Posted {""}
                   <Moment format="DD-MM-YYYY" date={date} />{" "}
                   <Moment format="HH:mm:ss" date={date} />
                 </Typography>

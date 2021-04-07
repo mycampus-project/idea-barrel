@@ -1,39 +1,130 @@
 import { Button, Grid, TextField, Typography } from "@material-ui/core";
-import React, { useState } from "react";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+import React, { useState, useContext } from "react";
 import BackendAPI from "../api/BackendAPI";
 import { navigate } from "hookrouter";
+import { SnackbarContext } from "../contexts/SnackbarContext";
 
 const CreateEventPage = () => {
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
+  const [submitEnabled, setSubmitEnabled] = useState(true);
+  const { setSnackbar } = useContext(SnackbarContext);
+  const [errors, setErrors] = useState({
+    senderId: true,
+    senderIdError: "Cant be empty",
+    title: true,
+    titleError: "Cant be empty",
+    body: true,
+    bodyError: "Cant be empty",
+    category: true,
+    categoryError: "Cant be empty",
+  });
   const [eventData, setEventData] = useState({
     senderId: "",
     title: "",
     body: "",
     category: "",
+    startTime: "",
+    endTime: "",
   });
+  const updateErrors = (error, boolean) => {
+    setErrors({
+      ...errors,
+      [error]: boolean,
+    });
+  };
+  const validateErrors = () => {
+    if (
+      (errors.senderIdError === null) &
+      (errors.titleError === null) &
+      (errors.bodyError === null) &
+      (errors.categoryError === null)
+    ) {
+      setSubmitEnabled(false);
+    } else {
+      setSubmitEnabled(true);
+    }
+  };
 
   const { postEventAsync } = BackendAPI();
 
-  const updateField = (event) => {
+  // check that form does not have empty fields
+  const handleForm = (event) => {
     setEventData({
       ...eventData,
       [event.target.name]: event.target.value,
     });
+    switch (event.target.name) {
+      case "senderId":
+        errors.senderId =
+          eventData.senderId.length === 0
+            ? updateErrors("senderId", true) &
+              updateErrors("senderIdError", "Cant be empty")
+            : updateErrors("senderId", false) &
+              updateErrors("senderIdError", null);
+        break;
+      case "title":
+        errors.title =
+          eventData.title.length === 0
+            ? updateErrors("title", true) &
+              updateErrors("titleError", "Cant be empty")
+            : updateErrors("title", false) & updateErrors("titleError", null);
+        break;
+      case "body":
+        errors.body =
+          eventData.body.length === 0
+            ? updateErrors("body", true) &
+              updateErrors("bodyError", "Cant be empty")
+            : updateErrors("body", false) & updateErrors("bodyError", null);
+        break;
+      case "category":
+        errors.category =
+          eventData.category.length === 0
+            ? updateErrors("category", true) &
+              updateErrors("categoryError", "Cant be empty")
+            : updateErrors("category", false) &
+              updateErrors("categoryError", null);
+        break;
+      default:
+        break;
+    }
   };
+
+  const filterPassedTime = (time) => {
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() - 1);
+    const selectedDate = new Date(time);
+
+    return currentDate.getTime() < selectedDate.getTime();
+  };
+  const filterSelectedTime = (time) => {
+    const selectedDate = new Date(time);
+    selectedDate.setDate(selectedDate.getDate() + 1);
+
+    return startTime.getTime() < selectedDate.getTime();
+  };
+
   const postEvent = async () => {
     const data = {
       senderId: eventData.senderId,
       title: eventData.title,
       body: eventData.body,
       category: eventData.category,
+      startTime: startTime,
+      endTime: endTime,
     };
 
     const res = await postEventAsync(data);
-    if (res.status === 200) {
+    validateErrors();
+    if (res.status === 200 && { submitEnabled }) {
+      setSnackbar("Event added", 3, 2000);
       navigate("/events");
     } else if (res.status === 400) {
-      console.log("Cant send", res);
+      setSnackbar("Cannot add event: status 400", 1, 2000);
     } else {
-      console.log("different error");
+      console.log("different error", { submitEnabled });
     }
   };
   const onSubmit = (event) => {
@@ -59,7 +150,8 @@ const CreateEventPage = () => {
               fullWidth
               value={eventData.senderId}
               label="Insert sender id"
-              onChange={updateField}
+              onChange={handleForm}
+              onBlur={handleForm}
             />
           </Grid>
           <Grid item xs={12}>
@@ -73,7 +165,8 @@ const CreateEventPage = () => {
               required
               value={eventData.title}
               label="Insert event title"
-              onChange={updateField}
+              onChange={handleForm}
+              onBlur={handleForm}
             />
           </Grid>
           <Grid item xs={12}>
@@ -89,7 +182,8 @@ const CreateEventPage = () => {
               required
               value={eventData.body}
               label="Insert event info"
-              onChange={updateField}
+              onChange={handleForm}
+              onBlur={handleForm}
             />
           </Grid>
           <Grid item xs={12}>
@@ -102,10 +196,41 @@ const CreateEventPage = () => {
               value={eventData.category}
               fullWidth
               label="Insert event info"
-              onChange={updateField}
+              onChange={handleForm}
+              onBlur={handleForm}
             />
           </Grid>
         </Grid>
+        <Typography component="p" variant="p">
+          Start time
+        </Typography>
+        <DatePicker
+          selected={startTime}
+          showTimeSelect
+          showWeekNumbers
+          filterDate={filterPassedTime}
+          filterTime={filterPassedTime}
+          shouldCloseOnSelect={false}
+          timeFormat="HH:mm"
+          dateFormat="dd/MM/yyyy HH:mm"
+          onChange={(date) => setStartTime(date)}
+        />
+        <Typography component="p" variant="p">
+          End time
+        </Typography>
+        <DatePicker
+          selected={endTime}
+          showTimeSelect
+          showWeekNumbers
+          filterDate={filterSelectedTime}
+          filterTime={filterSelectedTime}
+          shouldCloseOnSelect={false}
+          timeFormat="HH:mm"
+          dateFormat="dd/MM/yyyy HH:mm"
+          onChange={(date) => setEndTime(date)}
+        />
+        <br />
+        <br />
         <Button
           onClick={() => postEvent()}
           type="create event"

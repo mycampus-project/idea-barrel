@@ -11,16 +11,15 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import CloseIcon from "@material-ui/icons/Close";
 
 const EventDialog = (props) => {
-  const { data, handleClose, show, isAdmin } = props;
+  const { data, handleClose, deleteEvent, show, isAdmin } = props;
   const { title, body, category, date, id } = data;
-
   console.log("isAdmin eventDialog:", isAdmin);
 
+  // if not admin, delete button is disabled
   const adminPrivileges = {
     ...(isAdmin && { disabled: false }),
   };
-  const toString = adminPrivileges.disabled.toString();
-  console.log(toString);
+  const admin = adminPrivileges.disabled;
 
   const useStyles = makeStyles({
     dialogGrid: {
@@ -77,10 +76,12 @@ const EventDialog = (props) => {
       </DialogContent>
       <Button
         className={styles.dialogDeleteButton}
-        disabled="{toString}"
+        disabled={admin}
         variant="contained"
         color="secondary"
-        onClick={() => props.deleteEvent(id, category)}
+        onClick={() => {
+          deleteEvent(id, category);
+        }}
         startIcon={<DeleteIcon />}
       ></Button>
     </Dialog>
