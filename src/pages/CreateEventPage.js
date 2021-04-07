@@ -1,10 +1,17 @@
-import { Button, Grid, TextField, Typography } from "@material-ui/core";
+import {
+  Button,
+  Grid,
+  TextField,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import React, { useState, useContext } from "react";
 import BackendAPI from "../api/BackendAPI";
 import { navigate } from "hookrouter";
 import { SnackbarContext } from "../contexts/SnackbarContext";
+import { findByLabelText } from "@testing-library/dom";
 
 const CreateEventPage = () => {
   const [startTime, setStartTime] = useState(new Date());
@@ -130,24 +137,112 @@ const CreateEventPage = () => {
   const onSubmit = (event) => {
     event.preventDefault();
   };
+  const useStyles = makeStyles({
+    createEvent: {
+      marginTop: 0,
+      marginBottom: "2vw",
+    },
+    pageTitle: {
+      textAlign: "center",
+      marginTop: "5%",
+    },
+    formStyle: {
+      width: "100%",
+      marginTop: "2%",
+    },
+    senderId: {
+      marginLeft: "2%",
+    },
+    senderIdField: {
+      marginLeft: "2%",
+      width: "100%",
+    },
+    fieldContainer: {
+      marginLeft: "2%",
+      marginRight: "2%",
+      width: "94%",
+    },
+    titleField: {
+      marginLeft: "2%",
+      marginRight: "2%",
+      width: "100%",
+    },
+    title: {
+      marginLeft: "2%",
+      marginRight: "2%",
+      width: "94%",
+    },
+    infoField: {
+      marginLeft: "2%",
+      marginRight: "2%",
+      width: "100%",
+    },
+    info: {
+      marginLeft: "2%",
+      marginRight: "2%",
+      width: "94%",
+    },
+    categoryField: {
+      marginLeft: "2%",
+      marginRight: "2%",
+      width: "100%",
+    },
+    category: {
+      marginLeft: "2%",
+      marginRight: "2%",
+      width: "94%",
+    },
+    startPicker: {
+      display: "flex",
+      width: "100%",
+      justifyContent: "center",
+    },
+    endPicker: {
+      display: "flex",
+      width: "100%",
+      justifyContent: "center",
+    },
+    pickerTitle: {
+      display: "flex",
+      width: "100%",
+      justifyContent: "center",
+    },
+    submitButtonBase: {
+      alignContent: "center",
+      width: "100%",
+    },
+    submitButton: {
+      alignContent: "center",
+      width: "40%",
+      marginLeft: "30%",
+      marginRight: "30%",
+    },
+    dateStartPicker: {
+      textAlign: "center",
+    },
+    dateEndPicker: {
+      textAlign: "center",
+    },
+  });
+  const style = useStyles();
 
   return (
-    <div>
-      <Typography component="h4" variant="h4">
+    <div className={style.createEvent}>
+      <Typography className={style.pageTitle} component="h4" variant="h4">
         Create event
       </Typography>
-      <form noValidate onSubmit={onSubmit}>
-        <Grid container spacing={2}>
+      <form noValidate onSubmit={onSubmit} className={style.formStyle}>
+        <Grid container spacing={2} className={style.fieldContainer}>
           <Grid item xs={12}>
-            <Typography component="h5" variant="h5">
+            <Typography className={style.senderId} component="h5" variant="h5">
               SenderId
             </Typography>
             <TextField
+              className={style.senderIdField}
               variant="outlined"
               name="senderId"
               autoFocus
               required
-              fullWidth
               value={eventData.senderId}
               label="Insert sender id"
               onChange={handleForm}
@@ -155,13 +250,13 @@ const CreateEventPage = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography component="h5" variant="h5">
+            <Typography component="h5" variant="h5" className={style.title}>
               Event title
             </Typography>
             <TextField
+              className={style.titleField}
               variant="outlined"
               name="title"
-              fullWidth
               required
               value={eventData.title}
               label="Insert event title"
@@ -170,15 +265,15 @@ const CreateEventPage = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography component="h5" variant="h5">
+            <Typography component="h5" variant="h5" className={style.info}>
               Event info
             </Typography>
             <TextField
+              className={style.infoField}
               variant="outlined"
               name="body"
               multiline
               rows={5}
-              fullWidth
               required
               value={eventData.body}
               label="Insert event info"
@@ -187,58 +282,67 @@ const CreateEventPage = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography component="h5" variant="h5">
+            <Typography component="h5" variant="h5" className={style.category}>
               Event category
             </Typography>
             <TextField
+              className={style.categoryField}
               variant="outlined"
               name="category"
               value={eventData.category}
-              fullWidth
               label="Insert event info"
               onChange={handleForm}
               onBlur={handleForm}
             />
           </Grid>
         </Grid>
-        <Typography component="p" variant="p">
+        <Typography component="p" variant="p" className={style.pickerTitle}>
           Start time
         </Typography>
-        <DatePicker
-          selected={startTime}
-          showTimeSelect
-          showWeekNumbers
-          filterDate={filterPassedTime}
-          filterTime={filterPassedTime}
-          shouldCloseOnSelect={false}
-          timeFormat="HH:mm"
-          dateFormat="dd/MM/yyyy HH:mm"
-          onChange={(date) => setStartTime(date)}
-        />
-        <Typography component="p" variant="p">
+        <div className={style.startPicker}>
+          <DatePicker
+            className={style.dateStartPicker}
+            selected={startTime}
+            showTimeSelect
+            showWeekNumbers
+            filterDate={filterPassedTime}
+            filterTime={filterPassedTime}
+            shouldCloseOnSelect={false}
+            timeFormat="HH:mm"
+            dateFormat="dd/MM/yyyy HH:mm"
+            onChange={(date) => setStartTime(date)}
+          />
+        </div>
+        <Typography component="p" variant="p" className={style.pickerTitle}>
           End time
         </Typography>
-        <DatePicker
-          selected={endTime}
-          showTimeSelect
-          showWeekNumbers
-          filterDate={filterSelectedTime}
-          filterTime={filterSelectedTime}
-          shouldCloseOnSelect={false}
-          timeFormat="HH:mm"
-          dateFormat="dd/MM/yyyy HH:mm"
-          onChange={(date) => setEndTime(date)}
-        />
+        <div className={style.endPicker}>
+          <DatePicker
+            className={style.dateEndPicker}
+            selected={endTime}
+            showTimeSelect
+            showWeekNumbers
+            filterDate={filterSelectedTime}
+            filterTime={filterSelectedTime}
+            shouldCloseOnSelect={false}
+            timeFormat="HH:mm"
+            dateFormat="dd/MM/yyyy HH:mm"
+            onChange={(date) => setEndTime(date)}
+          />
+        </div>
         <br />
         <br />
-        <Button
-          onClick={() => postEvent()}
-          type="create event"
-          variant="contained"
-          color="primary"
-        >
-          Submit event
-        </Button>
+        <div className={style.submitButtonBase}>
+          <Button
+            className={style.submitButton}
+            onClick={() => postEvent()}
+            type="create event"
+            variant="contained"
+            color="primary"
+          >
+            Submit event
+          </Button>
+        </div>
       </form>
     </div>
   );

@@ -45,3 +45,12 @@ ul {
 li {
   padding-bottom: 10px;
 }
+.input-container .react-datepicker-popper {
+  margin: 12px 0;
+  width: 100%;
+  position: relative;
+}
+
+.input-container .react-datepicker-wrapper input {
+  padding: 4px 12px;
+}
