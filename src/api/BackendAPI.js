@@ -16,6 +16,7 @@ const BackendAPI = () => {
   const delFromUrl = async (id, category, url) => {
     const res = await fetch(rootUrl + "/" + url + "/" + id + "/" + category, {
       method: "DELETE",
+      mode: "no-cors",
       headers: { dev_token },
     });
     return res;
@@ -51,6 +52,36 @@ const BackendAPI = () => {
     }
   };
 
+  const getImageUrl = (fileName) => {
+    return rootUrl + "/image/" + fileName;
+  }
+
+  const postBulletinForm = async (data) => {
+    // Multer from the backend API expects fieldname "file"
+    // for processing anything. Convert "image" to "file" here. 
+    if (data.image) {
+      data.file = data.image;
+      delete data.image;
+    }
+    const form = new FormData();
+    for (var key in data) {
+      form.append(key, data[key]);
+    }
+    const res = await fetch(rootUrl + "/bulletins/form", {
+      method: "POST",
+      headers: {
+        dev_token
+      },
+      body: form
+
+    });
+    return res;
+  }
+
+  const postBulletinRegular = async (data) => {
+    return postDataToUrl(data, "bulletins");
+  }
+
   const fetchUsersAsync = async () => {
     return fetchFromUrl("users");
   };
@@ -76,7 +107,11 @@ const BackendAPI = () => {
   };
 
   const postBulletinsAsync = async (data) => {
-    return postDataToUrl(data, "bulletins");
+    if (data.file || data.image) {
+      return postBulletinForm(data);
+    } else {
+      return postBulletinRegular(data);
+    }
   };
 
   const deleteEventAsync = async (id, category) => {
@@ -116,7 +151,8 @@ const BackendAPI = () => {
     deleteBulletinAsync,
     updateEventAsync,
     updateIdeaAsync,
-    updateBulletinAsync
+    updateBulletinAsync,
+    getImageUrl
   };
 };
 
