@@ -32,7 +32,7 @@ const IdeaBarrelPage = () => {
         const response = await fetchIdeasAsync();
         setIdeas(response);
       } catch (e) {
-        console.log("error fetching bulletins");
+        console.log("error fetching ideas");
       }
     };
     getUsers();

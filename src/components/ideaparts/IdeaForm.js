@@ -1,7 +1,7 @@
 import React from "react";
 import BackendAPI from "../../api/BackendAPI";
 import { Button, Container } from "@material-ui/core";
-import { navigate } from "hookrouter";
+//import { navigate } from "hookrouter";
 
 const {postIdeaAsync} = BackendAPI();
 
@@ -11,6 +11,7 @@ const postIdea = async (user, title, body, cat) => {
     category: cat,
     title: title,
     body: body,
+    upvotes: 0,
     //votes: 0,
     //user: user,
     
@@ -18,7 +19,9 @@ const postIdea = async (user, title, body, cat) => {
 
   const res = await postIdeaAsync(data)
   if (res.status === 200) {
-      navigate('/idea-barrel')
+      //navigate('/idea-barrel')
+      window.location.reload();
+
   } else if (res.status === 400) {
       console.log("Unable to submit idea", res.json())
   } else {
