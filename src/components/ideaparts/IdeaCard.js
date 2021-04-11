@@ -3,11 +3,9 @@ import {
   Button,
   Card,
   CardHeader,
-  CardContent,
   Typography,
-  CardActionArea,
   Container,
-  Grid,
+  Box,
 } from "@material-ui/core";
 import {
   withStyles,
@@ -43,7 +41,13 @@ const useStyles = (theme) => ({
     maxWidth: "5%",
   },
   card: {
+    display: "flex",
+    flexDirection: "column",
     border: "solid 3px blue",
+    height: "22.9em",
+    justifyContent: "space-between",
+    padding: "0.5em",
+    width: "100%"
   },
   date: {
     textAlign: "end",
@@ -53,8 +57,24 @@ const useStyles = (theme) => ({
     justifyContent: "left",
   },
   category: {
+    textAlign: "center",
     flexDirection: "row",
     fontSize: "15px",
+    margin: "0em",},
+  categoryCont: {
+    marginLeft: "0em",
+    justifyContent:"left",
+    border: "solid 1px black",
+    marginBottom:"0.6em",
+
+ backgroundColor:"yellow",
+    width : "12em",
+  },
+  bodyCont: {
+    justifyContent:"left",
+    border: "solid 1px black",
+    width : "100%",
+    height: "55%"
   },
   eventDetailButton: {
     position: "absolute",
@@ -89,6 +109,7 @@ const upvoteIdea = async (id, senderId, upvotes, category, title, body) => {
       title: title,
       body: body,
     };
+    // TODO  if current user = idea senderID...
     const res = await updateIdeaAsync(data);
     window.location.reload();
     if (res.status === 200) {
@@ -122,42 +143,38 @@ class IdeaCard extends React.Component {
       // Card for event details and dialog for more info
       <div className={this.props.classes.root}>
         <Card className={this.props.classes.card}>
-          <CardActionArea>
-            <CardContent>
-              <Grid
-                container
-                spacing={3}
-                direction="column"
-                alignItems="flex-start"
-                justify="flex-start"
-              >
+              <Box
+              display="flex"
+              flex="1"
+                flexDirection="column"
+justifyContent="space-between"              >
                 <CardHeader
                   title={title}
-                  titleTypographyProps={{ variant: "h4" }}
+                  titleTypographyProps={{ variant: "h5" }}
                 />
-                <Typography className={this.props.classes.category}>
+                <Container className={this.props.classes.categoryCont}>
+                <Typography variant="h6" className={this.props.classes.category}>
                   {category}
                 </Typography>
-
+                </Container>
+                
+                <Container className={this.props.classes.bodyCont}>
                 <Typography className={this.props.classes.body}>
                   {body}
                 </Typography>
-                {upvotes ? (
-                  <Typography className={this.props.classes.category}>
-                    Upvotes {upvotes}
-                  </Typography>
-                ) : null}
-              </Grid>
-            </CardContent>
-          </CardActionArea>
+                </Container>
+                
+             
+            
           <Container maxWidth="md" flexWrap="nowrap">
-            <Grid container direction="row" justify="space-between">
+            <Box display="flex" flexdirection="row" justifyContent="space-between">
               {/* <Typography className={this.props.classes.date}>
                   {date}
                 </Typography>
                 <Typography className={this.props.classes.time}>
                   {time}
                 </Typography> */}
+                
               <MuiThemeProvider theme={buttonTheme}>
                 <Button
                   variant="contained"
@@ -169,7 +186,13 @@ class IdeaCard extends React.Component {
                 >
                   Upvote
                 </Button>
+
               </MuiThemeProvider>
+              {upvotes ? (
+                  <Typography variant="h6" className={this.props.classes.category}>
+                    Upvotes: {upvotes}
+                  </Typography>
+                ) : null}
 
               {/* TODO: Conditional formatting. Flagging for users, delete for admin */}
 
@@ -177,14 +200,17 @@ class IdeaCard extends React.Component {
                 onClick={() => deleteIdea(id, category)}
                 style={{
                   cursor: "pointer",
-                  border: "solid 1px red",
+                  color:"white",
+                  backgroundColor:"red",
+                  border: "solid 1px black",
                   borderRadius: 90,
                   padding: "0.05em",
                   margin: "0.2em",
                 }}
               ></DeleteForever>
-            </Grid>
+            </Box>
           </Container>
+          </Box>
         </Card>
       </div>
     );
