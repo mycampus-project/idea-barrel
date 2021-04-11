@@ -16,7 +16,6 @@ const BackendAPI = () => {
   const delFromUrl = async (id, category, url) => {
     const res = await fetch(rootUrl + "/" + url + "/" + id + "/" + category, {
       method: "DELETE",
-      mode: "no-cors",
       headers: { dev_token },
     });
     return res;
