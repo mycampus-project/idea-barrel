@@ -64,7 +64,7 @@ const NavigationBar = () => {
         <Toolbar className={classes.toolbar}>
           <img src={logo} className={classes.image} onClick={() => handleNavigate("/")} alt="MyCampus Logo"/>
           <Typography variant="h6" className={classes.title}></Typography>
-          {width < 670 // Breakpoint for view width of 670px. Smaller width renders only harmburger menu 
+          {width < 720 // Breakpoint for view width of 720px. Smaller width renders only harmburger menu 
             ? <div>
               <IconButton className={classes.menuButton} onClick={handleMenuClick} aria-haspopup="true">
                 <MenuIcon />

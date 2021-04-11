@@ -12,8 +12,8 @@
 //     groupHeaderTooltipTemplate?: string | Function | any;
 // }
 // /**
-//  * `ViewsDirective` represent a view of the react Schedule. 
-//  * It must be contained in a Schedule component(`SchduleComponent`). 
+//  * `ViewsDirective` represent a view of the react Schedule.
+//  * It must be contained in a Schedule component(`SchduleComponent`).
 //  * ```tsx
 //  * <ScheduleComponent>
 //  * <ViewsDirective>

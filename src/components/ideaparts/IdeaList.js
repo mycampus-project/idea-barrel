@@ -1,7 +1,10 @@
 import React from 'react';
-import List from '@material-ui/core/List';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridList from '@material-ui/core/GridList';
 import Container from '@material-ui/core/Container';
 import IdeaCard from '../ideaparts/IdeaCard.js';
+import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+
 
 
 class IdeaList extends React.Component {
@@ -13,6 +16,25 @@ class IdeaList extends React.Component {
         cat: "",
       };
     }
+
+    MyComponent = (props) => {
+          
+      if (isWidthUp('xl', this.props.width)) {
+        return 2;
+      }
+  
+      if (isWidthUp('lg', this.props.width)) {
+        return 2;
+      }
+  
+      if (isWidthUp('md', this.props.width)) {
+        return 2;
+      }
+  
+      return 1;
+    };
+
+  
   
   
     myChangeHandler = (event) => {
@@ -24,18 +46,20 @@ class IdeaList extends React.Component {
     render() {
         let ideas = this.props.data;
 
-        const listItems = ideas.map((item) => (
-            <IdeaCard key={item} data={item}></IdeaCard>
-        ));
+        /* TODO: Sort by Date, upvotes (desc, asc) */
       
         return (
-            <Container maxWidth="md">
-            <List width="100%">
-                {listItems}
-            </List>
+            <Container maxWidth="lg">
+            <GridList cols={this.MyComponent()} cellHeight="320">
+                {ideas.map((tile) => (
+    <GridListTile key={tile.img} cols={tile.cols || 1} cellHeight="auto">
+      <IdeaCard key={tile} data={tile}></IdeaCard>
+    </GridListTile>
+  ))}
+            </GridList>
             </Container>
         );
     }
   }
   
-  export default IdeaList;
+  export default withWidth()(IdeaList);
