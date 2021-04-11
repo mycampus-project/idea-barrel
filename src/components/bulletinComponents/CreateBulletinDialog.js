@@ -62,7 +62,7 @@ const CreateBulletinDialog = (props) => {
                 if (res.status === 200) {
                     console.log("POST EVENT SUCCESS")
                     setSnackbar("Succesfully created a new bulletin!", 3, 3000)
-                   // window.location.reload()
+                    window.location.reload()
                 } else {
                     // Status not 200... so prolly an error
                     setSnackbar("There was an error creating bulletin",0 ,5000)
