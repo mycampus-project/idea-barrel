@@ -11,10 +11,6 @@ import React, { useState, useContext } from "react";
 import BackendAPI from "../api/BackendAPI";
 import { navigate } from "hookrouter";
 import { SnackbarContext } from "../contexts/SnackbarContext";
-<<<<<<< HEAD
-=======
-//import { findByLabelText } from "@testing-library/dom";
->>>>>>> 2f4c5257bce63eb3e4e2d3569ecf24f62470cfe7
 
 const CreateEventPage = () => {
   const [startTime, setStartTime] = useState(new Date());
