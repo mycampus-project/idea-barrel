@@ -45,20 +45,27 @@ const CreateBulletinDialog = (props) => {
     const hiddenFileInput = React.useRef(null)
     const [errors, setErrors] = useState({ title: false, body: false })
     const [helpers, setHelpers] = useState({ title: "", body: "" })
-    const [formState, setFormState] = useState({ title: "", body: "", category: "Announcement", image: null, senderId: "Arttu", pinned: false }) // Category set to Annoucement since is the automatically selected item in the selector
+    const [file, setFile] = useState()
+    const [preview, setPreview] = useState()
+    const [formState, setFormState] = useState({ title: "", body: "", category: "Announcement",  senderId: "Arttu", pinned: false }) // Category set to Annoucement since is the automatically selected item in the selector
     const classes = useStyles()                                                                                       // Remember to Change if selectors first option changes!
     const { open, handleCreateClose } = props
     // Handles data submission 
-    const hadnleFormSubmit = async (data, url) => {
+    const hadnleFormSubmit = async (data, url, image) => {
         try {
-            await postBulletinsAsync(data).then((res) => {
+            const image = file
+            const complete = {...data, image}
+            console.log("COMPLETE POST:")
+            console.log(complete)
+            await postBulletinsAsync(complete).then((res) => {
                 console.log(res)
                 if (res.status === 200) {
                     console.log("POST EVENT SUCCESS")
                     setSnackbar("Succesfully created a new bulletin!", 3, 3000)
                     window.location.reload()
                 } else {
-
+                    // Status not 200... so prolly an error
+                    setSnackbar("There was an error creating bulletin",0 ,5000)
                 }
             })
         } catch (e) {
@@ -88,10 +95,9 @@ const CreateBulletinDialog = (props) => {
     }
 
     const updateImage = (event) => {
-        setFormState({
-            ...formState,
-            "image": URL.createObjectURL(event.target.files[0])
-        })
+        setFile(event.target.files[0])
+        setPreview(URL.createObjectURL(event.target.files[0]))
+    
     }
 
     const handleImageSelectClick = e => {
@@ -179,10 +185,10 @@ const CreateBulletinDialog = (props) => {
                         <Button type="button" className={classes.formItem} formControl={false} variant="contained" color="primary" onClick={handleImageSelectClick}>Choose Image</Button>
                         <input type="file" onChange={updateImage} style={{ display: "none" }} ref={hiddenFileInput} />
                     </Box>
-                    {formState.image == null
+                    {preview == null
                         ? null
                         : <Box className={classes.item}>
-                            <img src={formState.image} className={classes.imagePreview} alt={formState.title} />
+                            <img src={preview} className={classes.imagePreview} alt={formState.title} />
                         </Box>}
                     <Box className={classes.item}>
                         <FormControl variant="outlined" className={classes.formControl}>
@@ -196,7 +202,7 @@ const CreateBulletinDialog = (props) => {
                         </FormControl>
                     </Box>
                     <Box className={classes.item}>
-                        <Button variant="contained" color="primary" onClick={() => hadnleFormSubmit(formState, "/bulletins")}>Submit</Button>
+                        <Button variant="contained" color="primary" onClick={() => hadnleFormSubmit(formState, "/bulletins",{file})}>Submit</Button>
                     </Box>
                 </form>
             </div>

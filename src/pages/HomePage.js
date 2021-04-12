@@ -4,7 +4,7 @@ import APIDemo from "../components/dev/APIDemo";
 
 const HomePage = () => {
   return (
-    <div>
+    <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
       <div>
         <h3>
           A temporary "home page" until we figure out the structure better

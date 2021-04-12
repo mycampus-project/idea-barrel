@@ -24,7 +24,7 @@ const BulletinPage = () => {
 
   const sortBulletinArray = (data) => {
     const pins = data.filter((item) => item.pinned === true);
-    const rest = data.filter((item) => item.pinned === false);
+    const rest = data.filter((item) => item.pinned === false || item.pinned === undefined); // fixes if the the pinned is property is missing
     const complete = [...pins, ...rest]; // Sets the pinned items to the start of the array first
     return complete;
   };
@@ -32,7 +32,9 @@ const BulletinPage = () => {
   const getBulletins = async () => {
     try {
       const response = await fetchBulletinsAsync(); // Data array
+      console.log(response)
       const complete = sortBulletinArray(response);
+      console.log(complete)
       setBulletins(complete);
     } catch (e) {
       setSnackbar("There was an error fetching bulletins", 0, 5000);
