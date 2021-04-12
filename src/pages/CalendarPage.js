@@ -37,6 +37,7 @@ const CalendarPage = () => {
             //IsAllDay: true,
           };
         }
+        return el;
       });
       setLocalData({
         dataSource: temp,
