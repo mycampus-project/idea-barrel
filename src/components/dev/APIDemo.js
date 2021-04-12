@@ -4,8 +4,8 @@ import BackendAPI from "../../api/BackendAPI";
 
 const dataStyle = {
   border: "1px solid black",
-  width: "400px",
-  padding: "4px",
+  width: "100%",
+  padding: "16px",
   marginTop: "4px",
 };
 
@@ -20,7 +20,8 @@ const {
   deleteEventAsync,
   //deleteIdeaAsync,
   //deleteBulletinAsync,
-  //postBulletinsAsync,
+  postBulletinsAsync,
+  getImageUrl
 } = BackendAPI();
 
 const APIDemo = () => {
@@ -29,6 +30,14 @@ const APIDemo = () => {
   const [bulletins, setBulletins] = useState([]);
   const [ideas, setIdeas] = useState(null);
   const [events, setEvents] = useState([]);
+  const [image, setImage] = useState(null);
+
+  const bulletin = {
+    title: "adeswfrrfgdrghtyfvgg",
+    body: "swertgfdtgyet5hgrst6fhydrs5ythsery5ht srty5dxfhcy",
+    category: "asdfsewgerhy5e",
+    senderId: "haista js vittu"
+  }
 
   useEffect(() => {
     const getUsers = async () => {
@@ -80,7 +89,7 @@ const APIDemo = () => {
 
   // All posts need a title, body, category and sender id.
   // These fields should be given to postWhaverAsync in the form of a single object.
-  
+
   // If any field is missing, you'll get an error response from the server with your input, 
   // so you can use that for troubleshooting.
 
@@ -172,8 +181,22 @@ const APIDemo = () => {
     );
   };
 
+  const postBulletin = async () => {
+    const data = {...bulletin, image}
+    console.log(data);
+    try {
+      const req = await postBulletinsAsync(data);
+      const json = await req.json();
+      console.log(json);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <div>
+      <img width="200px" height="200px" src={getImageUrl("file-1617824580980-67480825.jpg")} alt="steven">
+      </img>
       <div style={dataStyle}>
         <h4>
           Below is a backend API demo usage [Component from:
@@ -218,6 +241,13 @@ const APIDemo = () => {
       <button onClick={() => postEvent()}>Post event</button>
       <button onClick={() => deleteEvent()}>Delete event</button>
       <button onClick={() => updateEvent()}>Update idea</button>
+      <button onClick={() => postBulletin()}>Post bulletin with image</button>
+      <form>
+        <input type="file" onChange={(e) => {
+          const f = e.target.files[0];
+          setImage(f);
+        }}></input>
+      </form>
     </div>
   );
 };

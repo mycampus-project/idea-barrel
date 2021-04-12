@@ -1,8 +1,15 @@
 import { Card, CardMedia, Typography, makeStyles } from "@material-ui/core"; //eslint-disable-line
 import RoomIcon from '@material-ui/icons/Room';
-import React from "react";
+import React, { useEffect } from "react";
+import Moment from "react-moment";
+import BackendAPI from "../../api/BackendAPI";
+
+const {
+  getImageUrl
+} = BackendAPI();
 
 const BulletinListItem = (props) => {
+
   const useStyles = makeStyles((theme) => ({
     root: {
       display: "flex"
@@ -44,11 +51,14 @@ const BulletinListItem = (props) => {
 
   const { title, image, body, category, date, senderId, id, pinned } = props.data //eslint-disable-line
 
+  useEffect(() => {
+    console.log(props.data)
+  }, []); //eslint-disable-line
   return (
-    <div style={{position:"relative"}}>
+    <div style={{ position: "relative" }}>
       <Card className={!pinned ? classes.row : classes.highlighted} >
         {image != null
-          ? <CardMedia className={classes.cover} image={image} />
+          ? <CardMedia className={classes.cover} image={getImageUrl(image)} />
           : <div></div>
         }
         <div className={classes.details}>
@@ -62,7 +72,7 @@ const BulletinListItem = (props) => {
             By: {senderId}
           </Typography>
           <Typography variant="subtitle2" color="textSecondary">
-            {date}
+            <Moment format="DD/MM/YYYY" date={date} /> at <Moment format="HH:MM" date={date} />
           </Typography>
         </div>
         <div className={classes.pinPos}>

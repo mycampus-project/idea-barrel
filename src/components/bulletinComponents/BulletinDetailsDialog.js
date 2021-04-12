@@ -2,6 +2,12 @@ import { makeStyles, Dialog, AppBar, Toolbar, Slide, IconButton, Typography, But
 import React from "react";
 import CloseIcon from "@material-ui/icons/Close"
 import DeleteIcon from '@material-ui/icons/Delete';
+import BackendAPI from "../../api/BackendAPI";
+
+const {
+  getImageUrl
+} = BackendAPI();
+
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -86,7 +92,7 @@ const BulletinDetailsDialog = (props) => {
         </AppBar>
         <div >
           {data.image != null // Renders image on items that have one
-            ? <img src={image} className={classes.image} alt={title} />
+            ? <img src={getImageUrl(image)} className={classes.image} alt={title} />
             : null }
           <Typography component="h4" variant="h4" className={classes.title}>
             {title}
