@@ -1,6 +1,5 @@
 import {React,useState,useEffect}  from "react";
 // eslint-disable-next-line
-import { SnackbarContext} from "../contexts/SnackbarContext"
 import {Inject, ScheduleComponent,Day,Week,WorkWeek, Month, Agenda,ViewsDirective,ViewDirective,TimelineViews,TimelineMonth} from "@syncfusion/ej2-react-schedule";
 import BackendAPI from "../api/BackendAPI";
 import {WebApiAdaptor} from '@syncfusion/ej2-data';
