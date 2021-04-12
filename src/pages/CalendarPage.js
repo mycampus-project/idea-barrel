@@ -3,6 +3,8 @@ import {React,useState,useEffect}  from "react";
 import { SnackbarContext} from "../contexts/SnackbarContext"
 import {Inject, ScheduleComponent,Day,Week,WorkWeek, Month, Agenda,ViewsDirective,ViewDirective,TimelineViews,TimelineMonth} from "@syncfusion/ej2-react-schedule";
 import BackendAPI from "../api/BackendAPI";
+import {WebApiAdaptor} from '@syncfusion/ej2-data';
+
 
 const { fetchEventsAsync /*,fetchUsersAsync*/ } = BackendAPI();
 const CalendarPage = () => {
@@ -13,11 +15,11 @@ const CalendarPage = () => {
       console.log("response :", response)
       let temp = [...response];
       temp = temp.map(el=>{
-        if (el.visibleTo === null || el.visibleTo === "owneruserid"){ //update owneruserid later
+        //if (el.visibleTo == null || el.visibleTo == "owneruserid"){ //update owneruserid later
           return {
             Id: el._rid,
-            End: new Date(el.date),
-            Start: new Date(el.date),
+            End: new Date(el.endTime),
+            Start: new Date(el.startTime),
             Summary: el.title,
             IsReadonly: true,
             //IsAllDay: true,
@@ -31,7 +33,9 @@ const CalendarPage = () => {
             subject: { name: 'Summary', default: 'No title is provided'},
             startTime: {name: 'Start'},
             endTime: {name: 'End'}
-          }
+          },
+          adaptor : new WebApiAdaptor,
+          crossDomain: true
         }
       )
 
