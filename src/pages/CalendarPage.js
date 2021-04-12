@@ -14,7 +14,7 @@ const CalendarPage = () => {
       console.log("response :", response)
       let temp = [...response];
       temp = temp.map(el=>{
-        if (el.visibleTo == null || el.visibleTo == "owneruserid"){ //update owneruserid later
+        //if (el.visibleTo == null || el.visibleTo == "owneruserid"){ //update owneruserid later
           return {
             Id: el._rid,
             End: new Date(el.endTime),
@@ -24,7 +24,7 @@ const CalendarPage = () => {
             //IsAllDay: true,
           }
        }
-      });
+      );
       setLocalData(
         {
           dataSource: temp, 
