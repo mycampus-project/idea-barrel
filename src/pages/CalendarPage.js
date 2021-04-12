@@ -32,8 +32,21 @@ const CalendarPage = () => {
           adaptor : new WebApiAdaptor(),
           crossDomain: true
         }
+<<<<<<< HEAD
+        return el;
+      });
+      setLocalData({
+        dataSource: temp,
+        fields: {
+          subject: { name: "Summary", default: "No title is provided" },
+          startTime: { name: "Start" },
+          endTime: { name: "End" },
+        },
+      });
+=======
       )
 
+>>>>>>> 2f4c5257bce63eb3e4e2d3569ecf24f62470cfe7
     } catch (e) {
       console.log("error fetching bulletins");
     }
