@@ -51,7 +51,7 @@ const CreateBulletinDialog = (props) => {
     const classes = useStyles()                                                                                       // Remember to Change if selectors first option changes!
     const { open, handleCreateClose } = props
     // Handles data submission 
-    const hadnleFormSubmit = async (data, url, image) => {
+    const hadnleFormSubmit = async (data) => {
         try {
             const image = file
             const complete = {...data, image}
