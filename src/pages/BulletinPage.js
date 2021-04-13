@@ -7,6 +7,7 @@ import BulletinListItem from "../components/bulletinComponents/BulletinListItem"
 import BulletinFilter from "../components/bulletinComponents/BulletinFilter";
 import CreateBulletinDialog from "../components/bulletinComponents/CreateBulletinDialog";
 import { SnackbarContext } from "../contexts/SnackbarContext";
+import {  UserContext } from "../contexts/UserContext"
 
 const {
   fetchBulletinsAsync,
@@ -21,6 +22,7 @@ const BulletinPage = () => {
   const [bulletins, setBulletins] = useState([]);
   const [filter, setFilter] = useState("None"); //eslint-disable-line
   const [createDialog, setCreateDialog] = useState(false);
+  const { user } = useContext(UserContext)
 
   const sortBulletinArray = (data) => {
     const pins = data.filter((item) => item.pinned === true);
@@ -30,6 +32,8 @@ const BulletinPage = () => {
   };
 
   const getBulletins = async () => {
+    console.log("user")
+    console.log(user)
     try {
       const response = await fetchBulletinsAsync(); // Data array
       console.log(response)
