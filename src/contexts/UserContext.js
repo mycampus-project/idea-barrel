@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react" //eslint-disable-line
+import React, { createContext, useState, useContext } from "react" //eslint-disable-line
 
 export const UserContext = React.createContext({
     setUser: () =>{},
@@ -7,10 +7,21 @@ export const UserContext = React.createContext({
 
 export const UserContainer = ({children}) => {
 
-    const [user,setUser] = useState({userId: "default", admin: false})
+    const [user,setUser] = useState({email: "default",
+    fName: "default",
+    id: "defauly",
+    isAdmin: false,
+    lName: "default",
+    _attachments: "default",
+    _etag: "default",
+    _rid: "default",
+    _self: "default",
+    _ts: 1615660487})
 
-    const handleUserChange = (userId, admin) => {
-        setUser({userId: userId, admin: admin})
+    const handleUserChange = (user) => {
+        console.log("CTX setUser")
+        console.log(user)
+        setUser(user)
     }
 
     const contextValue = {
