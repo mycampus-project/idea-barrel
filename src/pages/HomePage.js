@@ -1,26 +1,12 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState} from "react";
 
 import APIDemo from "../components/dev/APIDemo";
 import UserDialog from "../components/UserDialog"
-import { UserContext } from "../contexts/UserContext"
 
 const HomePage = () => {
 
   const [userDlgOpen, setUserDlgOpen] = useState(false)
 
-  const localStorageUserGet = window.localStorage.getItem("user")
-
-
-  const { user, setUser } = useContext(UserContext) // eslint-disable-line
-
-  const userFromLocal = () => {
-    if (localStorageUserGet != null || undefined) {
-      console.log("User from local");
-      setUser(JSON.parse(localStorageUserGet))
-    } else {
-      console.log("not setting from local");
-    }
-  }
 
   const handleUserDlgClose = () => {
     setUserDlgOpen(false)
@@ -30,9 +16,6 @@ const HomePage = () => {
     setUserDlgOpen(true)
   }
 
-  useEffect(()=>{
-    userFromLocal()
-  },[]) //eslint-disable-line
 
   return (
     <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
