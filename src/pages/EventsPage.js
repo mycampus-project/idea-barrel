@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import BackendAPI from "../api/BackendAPI";
 import { navigate } from "hookrouter";
-import { SnackbarContext } from "../contexts/SnackbarContext";
 import ScrollMenu from "react-horizontal-scrolling-menu";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
@@ -11,11 +10,14 @@ import {
   ThemeProvider,
   createMuiTheme, //eslint-disable-line
 } from "@material-ui/core";
+import { SnackbarContext } from "../contexts/SnackbarContext";
+import { UserContext } from "../contexts/UserContext";
 import EventDialog from "../components/eventsComponents/EventDialog.js";
 import EventCard from "../components/eventsComponents/EventCard.js";
 import "../App.css";
 const { fetchEventsAsync, deleteEventAsync } = BackendAPI();
 
+// Event page, check components EventCard.js and EventDialog.js for their functionality
 const Events = () => {
   const [sorted, setSorted] = useState("all");
   const [show, setShow] = useState(false);
@@ -23,11 +25,13 @@ const Events = () => {
   const [events, setEvents] = useState([]);
   const [selected, setSelected] = useState("all");
   const { setSnackbar } = useContext(SnackbarContext);
-  const isAdmin = useState(true); // admin placeholder
+  const { user } = useContext(UserContext);
 
   const getEvents = async () => {
     try {
       const response = await fetchEventsAsync();
+      console.log("eventspage user:", user);
+      console.log("eventspage user:", user.isAdmin);
       setEvents(response);
     } catch (e) {
       console.log("error fetching bulletins");
@@ -36,38 +40,54 @@ const Events = () => {
 
   useEffect(() => {
     getEvents();
-  }, []);
+  }, []); //eslint-disable-line
 
+  // Handles event dialog window data
   const handleShow = (data) => {
     setDialogData(data);
     setShow(true);
   };
 
+  // Closes the event dialog
   const handleClose = () => {
     setShow(false);
   };
   // remove duplicate categories
 
+  // Scrollmenu select to show right text / category
   const onSelect = (text) => {
     setSelected({ selected: text });
     handleSorted(text);
   };
+
+  // sort the event list depending on scrollmenu choice
   const handleSorted = (event) => {
     if (event !== "all") {
       // separate category and id to enable sorting
-      console.log(event);
-      const toString = event.split(" ");
-      console.log("tostring:", toString);
-      setSorted(toString[0]);
+      console.log("EVENT:", event);
+
+      // split category text to separate category from id (stored in event)
+      const array = event.split(" ").map((data) => {
+        return data;
+      });
+      const id = array[array.length - 1];
+      // Slice array to remove id, string it, replace commas with spaces to return the whole original category name
+      const category = array.slice(0, -1).toString().replace(/,/g, " ");
+
+      // not used for anything but
+      console.log(id);
+      setSorted(category);
     } else {
       setSorted(event);
     }
   };
 
+  //go to create event page
   const createEventsNav = () => {
     navigate("/event-create");
   };
 
+  // handles deleting of event
   const deleteEvent = (id, category) => {
     deleteEventAsync(id, category).then((res) => {
       // creates a new state without the deleted object
@@ -94,16 +114,19 @@ const Events = () => {
     });
   };
 
+  // scrollmenu item populating
   const MenuItem = ({ text, selected }) => {
     return (
       <div className={`menu-item ${selected ? "active" : ""}`}>{text}</div>
     );
   };
 
+  // left and right arrows for scrollmenu
   const Arrow = ({ text, className }) => {
     return <div className={className}>{text}</div>;
   };
 
+  // left and right arrows
   const ArrowLeft = Arrow({ text: "<", className: "arrowprev" });
   const ArrowRight = Arrow({ text: ">", className: "arrownext" });
 
@@ -122,20 +145,30 @@ const Events = () => {
     },
   });
 
-  // Two separate arrays, all items or sorted items depending on user choice (all or specific category)
-  // Not optimal, but works as intended for now
-
+  // All events containing array
   const allArray = events.map((data) => (
     <li onClick={() => handleShow(data)} key={data.id}>
       <EventCard data={data} handleDelete={deleteEvent} />
     </li>
   ));
 
+  // events sorted by category choice
   const sortedArray = events
     .filter((item) => item.category === sorted)
-    .map(({ title, body, category, date, senderId, id }) => {
-      return { title, body, category, date, senderId, id };
-    })
+    .map(
+      ({ title, body, category, date, startTime, endTime, senderId, id }) => {
+        return {
+          title,
+          body,
+          category,
+          date,
+          startTime,
+          endTime,
+          senderId,
+          id,
+        };
+      }
+    )
     .map((data) => (
       <li onClick={() => handleShow(data)} key={data.id}>
         <EventCard data={data} handleDelete={deleteEvent} />
@@ -149,6 +182,7 @@ const Events = () => {
     ).values(),
   ];
 
+  // Scrollmenu items mapping
   const menuItems = obj.map(({ category, id }) => (
     <MenuItem
       text={category}
@@ -180,11 +214,12 @@ const Events = () => {
         wheel={true}
         selected={selected}
         onSelect={onSelect}
+        alignOnResize={true}
         translate={0}
       />
       {sorted === "all" ? <ul>{allArray}</ul> : <ul>{sortedArray}</ul>}
       <EventDialog
-        isAdmin={isAdmin} // admin privileges prop
+        isAdmin={user.isAdmin} // admin privileges prop
         show={show}
         handleClose={handleClose}
         data={dialogData}
