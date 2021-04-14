@@ -23,27 +23,6 @@ const CalendarPage = () => {
       const response = await fetchEventsAsync();
       console.log("response :", response);
       let temp = [...response];
-<<<<<<< HEAD
-      temp = temp.map((el) => {
-        return {
-          Id: el._rid,
-          End: new Date(el.endTime),
-          Start: new Date(el.startTime),
-          Summary: el.title,
-          IsReadonly: true,
-        };
-      });
-      setLocalData({
-        dataSource: temp,
-        fields: {
-          subject: { name: "Summary", default: "No title is provided" },
-          startTime: { name: "Start" },
-          endTime: { name: "End" },
-        },
-        adaptor: new WebApiAdaptor(),
-        crossDomain: true,
-      });
-=======
       temp = temp.map(el=>{
           return {
             Id: el._rid,
@@ -67,7 +46,6 @@ const CalendarPage = () => {
         }
       )
 
->>>>>>> 57a95197106263fd1fc08213cab18849ced573d0
     } catch (e) {
       console.log("error fetching bulletins");
     }
