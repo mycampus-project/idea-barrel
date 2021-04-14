@@ -249,7 +249,7 @@ const CreateEventPage = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography component="h5" variant="h5" className={style.title}>
+            <Typography component="h4" variant="h4" className={style.title}>
               Event title
             </Typography>
             <TextField
@@ -264,7 +264,7 @@ const CreateEventPage = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography component="h5" variant="h5" className={style.info}>
+            <Typography component="h4" variant="h4" className={style.info}>
               Event info
             </Typography>
             <TextField
@@ -281,7 +281,7 @@ const CreateEventPage = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography component="h5" variant="h5" className={style.category}>
+            <Typography component="h4" variant="h4" className={style.category}>
               Event category
             </Typography>
             <TextField

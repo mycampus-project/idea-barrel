@@ -69,7 +69,13 @@ const EventCard = (props) => {
             <CardContent className={styles.eventCard}>
               <Box display="flex" flexDirection="row" minWidth="200px">
                 <Box width="100%">
+<<<<<<< HEAD
                   <Typography>{title}</Typography>
+=======
+                  <Typography component={"span"} variant={"h4"}>
+                    {title}
+                  </Typography>
+>>>>>>> events
                 </Box>
                 <Box flexShrink={0}>
                   <Typography>{category}</Typography>
@@ -77,6 +83,7 @@ const EventCard = (props) => {
               </Box>
               <Box width="100%" justifyContent="flex-start">
                 <Box minHeight="100px" marginTop="1%" marginBottom="1%">
+<<<<<<< HEAD
                   <Typography>{body}</Typography>
                 </Box>
               </Box>
@@ -89,6 +96,33 @@ const EventCard = (props) => {
               </p>
               <Box display="flex" justifyContent="flex-end">
                 <Typography>
+=======
+                  <Typography component={"span"} variant={"body2"}>
+                    {body}
+                  </Typography>
+                </Box>
+              </Box>
+              <Box width="100%" justifyContent="flex-start">
+                <Typography component={"span"} variant={"subtitle"}>
+                  <p>
+                    start time:{" "}
+                    <Moment format="DD-MM-YYYY HH:mm:ss" date={startTime} />
+                  </p>
+                  <p>
+                    end time:{" "}
+                    <Moment format="DD-MM-YYYY HH:mm:ss" date={endTime} />
+                  </p>
+                </Typography>
+              </Box>
+              <Box
+                wid
+                display="flex"
+                justifyContent="flex-end"
+                width="100%"
+                margin="0"
+              >
+                <Typography component={"span"} variant={"subtitle"}>
+>>>>>>> events
                   Posted {""}
                   <Moment format="DD-MM-YYYY" date={date} />{" "}
                   <Moment format="HH:mm:ss" date={date} />
