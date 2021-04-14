@@ -55,15 +55,6 @@ li {
 .menu-item-wrapper.active {
   border: 1px blue solid;
 }
-<<<<<<< HEAD
-.menu-item.active {
-  border: 1px green solid;
-}
-
-.scroll-menu-arrow {
-  padding: 20px;
-  cursor: pointer;
-=======
 .menu-wrapper {
   width: 100%;
 }
@@ -74,5 +65,4 @@ li {
   padding: 20px;
   cursor: pointer;
   size: 3em;
->>>>>>> events
 }

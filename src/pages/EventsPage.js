@@ -3,21 +3,12 @@ import BackendAPI from "../api/BackendAPI";
 import { navigate } from "hookrouter";
 import { SnackbarContext } from "../contexts/SnackbarContext";
 import ScrollMenu from "react-horizontal-scrolling-menu";
-<<<<<<< HEAD
-import {
-  Button, //eslint-disable-line
-  IconButton,
-  Typography,
-  ThemeProvider,
-  makeStyles,
-=======
 import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import {
   Button, //eslint-disable-line
   Typography,
   ThemeProvider,
->>>>>>> events
   createMuiTheme, //eslint-disable-line
 } from "@material-ui/core";
 import EventDialog from "../components/eventsComponents/EventDialog.js";
@@ -113,13 +104,8 @@ const Events = () => {
     return <div className={className}>{text}</div>;
   };
 
-<<<<<<< HEAD
-  const ArrowLeft = Arrow({ text: "<", className: "arrow-prev" });
-  const ArrowRight = Arrow({ text: ">", className: "arrow-next" });
-=======
   const ArrowLeft = Arrow({ text: "<", className: "arrowprev" });
   const ArrowRight = Arrow({ text: ">", className: "arrownext" });
->>>>>>> events
 
   const categoryButtonTheme = createMuiTheme({
     overrides: {
@@ -135,19 +121,6 @@ const Events = () => {
       },
     },
   });
-<<<<<<< HEAD
-  const useStyles = makeStyles({
-    scrollMenuContainer: {
-      width: "90%",
-      marginLeft: "4vw",
-      marginRight: "4vw",
-      marginBottom: "2vw",
-      alignItems: "center",
-    },
-  });
-  const style = useStyles();
-=======
->>>>>>> events
 
   // Two separate arrays, all items or sorted items depending on user choice (all or specific category)
   // Not optimal, but works as intended for now
@@ -175,10 +148,6 @@ const Events = () => {
       events.map((item) => [JSON.stringify(item.category), item])
     ).values(),
   ];
-<<<<<<< HEAD
-  console.log(obj);
-=======
->>>>>>> events
 
   const menuItems = obj.map(({ category, id }) => (
     <MenuItem
@@ -204,27 +173,6 @@ const Events = () => {
           </Button>
         </Typography>
       </ThemeProvider>
-<<<<<<< HEAD
-      <div className={style.scrollMenuContainer}>
-        <ScrollMenu
-          data={menuItems}
-          arrowLeft={ArrowLeft}
-          arrowRight={ArrowRight}
-          selected={selected}
-          onSelect={onSelect}
-          translate={0}
-        />
-      </div>
-      <div className="CategoryDiv">
-        <IconButton
-          onClick={() => createEventsNav()}
-          className="postEventButton"
-          aria-label="open"
-        >
-          <AddCircleSharpIcon />
-        </IconButton>
-      </div>
-=======
       <ScrollMenu
         data={menuItems}
         arrowLeft={ArrowLeft}
@@ -234,7 +182,6 @@ const Events = () => {
         onSelect={onSelect}
         translate={0}
       />
->>>>>>> events
       {sorted === "all" ? <ul>{allArray}</ul> : <ul>{sortedArray}</ul>}
       <EventDialog
         isAdmin={isAdmin} // admin privileges prop
