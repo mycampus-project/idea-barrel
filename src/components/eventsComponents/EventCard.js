@@ -69,21 +69,15 @@ const EventCard = (props) => {
             <CardContent className={styles.eventCard}>
               <Box display="flex" flexDirection="row" minWidth="200px">
                 <Box width="100%">
-                  <Typography variant="h6" component="h6">
-                    {title}
-                  </Typography>
+                  <Typography>{title}</Typography>
                 </Box>
                 <Box flexShrink={0}>
-                  <Typography variant="body1" component="body1">
-                    {category}
-                  </Typography>
+                  <Typography>{category}</Typography>
                 </Box>
               </Box>
               <Box width="100%" justifyContent="flex-start">
                 <Box minHeight="100px" marginTop="1%" marginBottom="1%">
-                  <Typography variant="body2" component="body2">
-                    {body}
-                  </Typography>
+                  <Typography>{body}</Typography>
                 </Box>
               </Box>
               <p>
@@ -94,7 +88,7 @@ const EventCard = (props) => {
                 end time: <Moment format="DD-MM-YYYY HH:mm:ss" date={endTime} />
               </p>
               <Box display="flex" justifyContent="flex-end">
-                <Typography variant="subtitle" component="subtitle">
+                <Typography>
                   Posted {""}
                   <Moment format="DD-MM-YYYY" date={date} />{" "}
                   <Moment format="HH:mm:ss" date={date} />
