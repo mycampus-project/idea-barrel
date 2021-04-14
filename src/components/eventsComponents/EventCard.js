@@ -104,9 +104,12 @@ const EventCard = (props) => {
                 margin="0"
               >
                 <Typography component={"span"} variant={"subtitle"}>
-                  Posted {""}
-                  <Moment format="DD-MM-YYYY" date={date} />{" "}
-                  <Moment format="HH:mm:ss" date={date} />
+                  <p>Event starts at:</p>
+                  <Moment format="DD-MM-YYYY" date={startTime} />{" "}
+                  <Moment format="HH:mm:ss" date={startTime} />
+                  <p>Event ends at:</p>
+                  <Moment format="DD-MM-YYYY" date={endTime} />{" "}
+                  <Moment format="HH:mm:ss" date={endTime} />
                 </Typography>
               </Box>
             </CardContent>

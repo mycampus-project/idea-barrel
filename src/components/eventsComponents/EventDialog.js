@@ -16,12 +16,6 @@ const EventDialog = (props) => {
   const { title, body, category, startTime, endTime, id } = data;
   console.log("isAdmin eventDialog:", isAdmin);
 
-  // if not admin, delete button is disabled
-  const adminPrivileges = {
-    ...(isAdmin && { disabled: false }),
-  };
-  const admin = adminPrivileges.disabled;
-
   const useStyles = makeStyles({
     dialogGrid: {
       justifyContent: "flex-end",
@@ -84,7 +78,7 @@ const EventDialog = (props) => {
       </DialogContent>
       <Button
         className={styles.dialogDeleteButton}
-        disabled={admin}
+        disabled={!isAdmin}
         variant="contained"
         color="secondary"
         onClick={() => {
