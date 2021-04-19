@@ -3,6 +3,7 @@ import CloseIcon from "@material-ui/icons/Close"
 import React, { useState, useContext } from "react"
 import BackendAPI from "../../api/BackendAPI"
 import { SnackbarContext } from "../../contexts/SnackbarContext"
+import {  UserContext } from "../../contexts/UserContext"
 
 // Slide Transition for the dialog
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -41,15 +42,24 @@ const useStyles = makeStyles((theme) => ({
 
 const CreateBulletinDialog = (props) => {
     const { postBulletinsAsync } = BackendAPI();
+    const { user } = useContext(UserContext)
+
+    const formatUserString = () => {
+        return `${user.fName} ${user.lName}`
+    }
+
     const { setSnackbar } = useContext(SnackbarContext)
     const hiddenFileInput = React.useRef(null)
     const [errors, setErrors] = useState({ title: false, body: false })
     const [helpers, setHelpers] = useState({ title: "", body: "" })
     const [file, setFile] = useState()
     const [preview, setPreview] = useState()
-    const [formState, setFormState] = useState({ title: "", body: "", category: "Announcement",  senderId: "Arttu", pinned: false }) // Category set to Annoucement since is the automatically selected item in the selector
+    const [formState, setFormState] = useState({ title: "", body: "", category: "Announcement",  senderId: user.id, senderName: formatUserString(), pinned: false }) // Category set to Annoucement since is the automatically selected item in the selector
     const classes = useStyles()                                                                                       // Remember to Change if selectors first option changes!
     const { open, handleCreateClose } = props
+
+   
+
     // Handles data submission 
     const hadnleFormSubmit = async (data) => {
         try {

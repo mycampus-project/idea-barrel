@@ -7,7 +7,7 @@ const {postIdeaAsync} = BackendAPI();
 
 const postIdea = async (user, title, body, cat) => {
   const data = {
-    senderId: "matti", //user.fName + " " + user.Lname,
+    senderId: JSON.parse(window.localStorage.getItem("user")).fName +" "+ JSON.parse(window.localStorage.getItem("user")).lName,
     category: cat,
     title: title,
     body: body,
