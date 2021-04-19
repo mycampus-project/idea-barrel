@@ -76,7 +76,7 @@ const BulletinListItem = (props) => {
             By: {senderName}
           </Typography>
           <Typography variant="subtitle2" color="textSecondary" className={classes.position}>
-            <Moment format="DD/MM/YYYY" date={date} /> at <Moment format="HH:MM" date={date} />
+            <Moment format="DD/MM/YYYY" date={date} /> at <Moment format="HH:mm" date={date} />
           </Typography>
         </div>
         <div className={classes.pinPos}>
