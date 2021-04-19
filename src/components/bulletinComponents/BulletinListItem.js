@@ -44,6 +44,10 @@ const BulletinListItem = (props) => {
       bottom: theme.spacing(1),
       left: "auto",
       position: "absolute"
+    },
+    position: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1)
     }
   }))
 
@@ -62,16 +66,16 @@ const BulletinListItem = (props) => {
           : <div></div>
         }
         <div className={classes.details}>
-          <Typography component="h4" variant="h4" className={classes.posiotion}>
+          <Typography component="h4" variant="h4" className={classes.position}>
             {title}
           </Typography>
-          <Typography component="h6" variant="h6" className={classes.posiotion}>
+          <Typography component="h6" variant="h6" className={classes.position}>
             {category}
           </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
+          <Typography variant="subtitle1" color="textSecondary" className={classes.position}>
             By: {senderName}
           </Typography>
-          <Typography variant="subtitle2" color="textSecondary">
+          <Typography variant="subtitle2" color="textSecondary" className={classes.position}>
             <Moment format="DD/MM/YYYY" date={date} /> at <Moment format="HH:MM" date={date} />
           </Typography>
         </div>

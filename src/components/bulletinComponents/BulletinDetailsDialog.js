@@ -17,7 +17,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1)
   },
   title: {
-    marginLeft: theme.spacing(1),
+    marginLeft: theme.spacing(2),
+    marginTop: theme.spacing(2),
     flex: 1
   },
   image: {
@@ -34,8 +35,8 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flex: 1,
-    paddingLeft: theme.spacing(1),
-    paddingTop: theme.spacing(2)
+    marginLeft: theme.spacing(2),
+    marginTop: theme.spacing(2)
   },
   pinDeletePos: {
     margin: 0,
@@ -94,7 +95,7 @@ const BulletinDetailsDialog = (props) => {
             <IconButton edge="start" color="inherit" onClick={handleDialogClose} aria-label="close">
               <CloseIcon />
             </IconButton>
-            <Typography variant="h5" className={classes.title}>
+            <Typography variant="h5">
               {category}
             </Typography>
 
