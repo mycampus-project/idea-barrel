@@ -11,15 +11,15 @@ import React, { useState, useContext } from "react";
 import BackendAPI from "../api/BackendAPI";
 import { navigate } from "hookrouter";
 import { SnackbarContext } from "../contexts/SnackbarContext";
+import { UserContext } from "../contexts/UserContext";
 
 const CreateEventPage = () => {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const { setSnackbar } = useContext(SnackbarContext);
+  const { user } = useContext(UserContext);
   const [errors, setErrors] = useState({
-    senderId: true,
-    senderIdError: "Cant be empty",
     title: true,
     titleError: "Cant be empty",
     body: true,
@@ -28,7 +28,7 @@ const CreateEventPage = () => {
     categoryError: "Cant be empty",
   });
   const [eventData, setEventData] = useState({
-    senderId: "",
+    senderId: user.id,
     title: "",
     body: "",
     category: "",
@@ -114,13 +114,15 @@ const CreateEventPage = () => {
 
   const postEvent = async () => {
     const data = {
-      senderId: eventData.senderId,
+      senderId: user.id,
       title: eventData.title,
       body: eventData.body,
       category: eventData.category,
       startTime: startTime,
       endTime: endTime,
     };
+    console.log("DATA: ", data);
+    console.log("USER CREATEVENT:", user);
 
     const res = await postEventAsync(data);
     validateErrors();
@@ -232,22 +234,6 @@ const CreateEventPage = () => {
       </Typography>
       <form noValidate onSubmit={onSubmit} className={style.formStyle}>
         <Grid container spacing={2} className={style.fieldContainer}>
-          <Grid item xs={12}>
-            <Typography className={style.senderId} component="h5" variant="h5">
-              SenderId
-            </Typography>
-            <TextField
-              className={style.senderIdField}
-              variant="outlined"
-              name="senderId"
-              autoFocus
-              required
-              value={eventData.senderId}
-              label="Insert sender id"
-              onChange={handleForm}
-              onBlur={handleForm}
-            />
-          </Grid>
           <Grid item xs={12}>
             <Typography component="h4" variant="h4" className={style.title}>
               Event title

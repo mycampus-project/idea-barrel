@@ -22,10 +22,16 @@ const Events = () => {
   const [sorted, setSorted] = useState("all");
   const [show, setShow] = useState(false);
   const [dialogData, setDialogData] = useState("");
-  const [events, setEvents] = useState([]);
+
   const [selected, setSelected] = useState("all");
   const { setSnackbar } = useContext(SnackbarContext);
   const { user } = useContext(UserContext);
+  const [users, setUsers] = useState([]);
+  const { fetchUsersAsync } = BackendAPI();
+
+  const [sortedCategory, setSortedCategory] = useState("");
+  const [sortedTitle, setSortedTitle] = useState("");
+  const [events, setEvents] = useState([]);
 
   const getEvents = async () => {
     try {
@@ -37,11 +43,79 @@ const Events = () => {
       console.log("error fetching bulletins");
     }
   };
+  const dynamicSort = (property) => {
+    var sortOrder = 1;
+    if (property[0] === "-") {
+      sortOrder = -1;
+      property = property.substr(1);
+    } else {
+      return function (a, b) {
+        return a[property] < b[property]
+          ? -1
+          : a[property] > b[property]
+          ? 1
+          : 0 * sortOrder;
+      };
+    }
+    return function (a, b) {
+      return a[property] > b[property]
+        ? -1
+        : a[property] > b[property]
+        ? 1
+        : 0 * sortOrder;
+    };
+  };
+  console.log(events);
+
+  const sorter = (param) => {
+    console.log(sorted);
+    switch (param) {
+      case "-category":
+        if (sorted === "all") {
+          setSortedCategory("Descending");
+          setEvents(events.sort(dynamicSort(param)));
+          console.log(events);
+        }
+        break;
+      case "category":
+        if (sorted === "all") {
+          setSortedCategory("Ascending");
+          setEvents(events.sort(dynamicSort(param)));
+        }
+        break;
+      case "-title":
+        if (sorted === "all") {
+          setSortedTitle("Descending");
+          setEvents(events.sort(dynamicSort(param)));
+        }
+        break;
+      case "title":
+        if (sorted === "all") {
+          setSortedTitle("Ascending");
+          setEvents(events.sort(dynamicSort(param)));
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
+  const getUsers = async () => {
+    try {
+      const response = await fetchUsersAsync();
+      setUsers(response);
+      console.log("Users:");
+      console.log(response);
+    } catch (e) {
+      console.log("error fetching users");
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     getEvents();
+    getUsers();
   }, []); //eslint-disable-line
-
   // Handles event dialog window data
   const handleShow = (data) => {
     setDialogData(data);
@@ -144,37 +218,36 @@ const Events = () => {
       },
     },
   });
+  console.log("USERS: ", users);
+  const eventSender = users.filter((o1) =>
+    events.map((o2) => o1.id === o2.senderId)
+  );
+
+  console.log("EVENTSENDER:", eventSender);
 
   // All events containing array
   const allArray = events.map((data) => (
     <li onClick={() => handleShow(data)} key={data.id}>
-      <EventCard data={data} handleDelete={deleteEvent} />
+      <EventCard
+        eventSender={eventSender}
+        data={data}
+        handleDelete={deleteEvent}
+      />
     </li>
   ));
 
   // events sorted by category choice
   const sortedArray = events
     .filter((item) => item.category === sorted)
-    .map(
-      ({ title, body, category, date, startTime, endTime, senderId, id }) => {
-        return {
-          title,
-          body,
-          category,
-          date,
-          startTime,
-          endTime,
-          senderId,
-          id,
-        };
-      }
-    )
     .map((data) => (
       <li onClick={() => handleShow(data)} key={data.id}>
-        <EventCard data={data} handleDelete={deleteEvent} />
+        <EventCard
+          data={data}
+          eventSender={eventSender}
+          handleDelete={deleteEvent}
+        />
       </li>
     ));
-
   // remove duplicates from menuitems (category)
   const obj = [
     ...new Map(
@@ -205,6 +278,28 @@ const Events = () => {
           >
             Show All Events
           </Button>
+          <Typography align="center">
+            <Button
+              onClick={() => {
+                if (sortedCategory === "Descending") {
+                  sorter("category");
+                } else sorter("-category");
+              }}
+            >
+              SORT BY CATEGORY {sortedCategory}
+            </Button>
+          </Typography>
+          <Typography align="center">
+            <Button
+              onClick={() => {
+                if (sortedTitle === "Descending") {
+                  sorter("title");
+                } else sorter("-title");
+              }}
+            >
+              SORT BY TITLE {sortedTitle}
+            </Button>
+          </Typography>
         </Typography>
       </ThemeProvider>
       <ScrollMenu
