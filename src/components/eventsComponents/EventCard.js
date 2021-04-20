@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Card,
   CardContent,
@@ -13,6 +14,7 @@ import Moment from "react-moment";
 const EventCard = (props) => {
   const { data } = props;
   const { title, body, category, date, startTime, endTime } = data; //eslint-disable-line
+  console.log(JSON.stringify(data));
 
   const eventCardTheme = createMuiTheme({
     spacing: 5,
@@ -46,8 +48,8 @@ const EventCard = (props) => {
       MuiCardContent: {
         root: {
           padding: "20px",
-          marginLeft: "0",
-          marginRight: "0",
+          marginLeft: 0,
+          marginRight: 0,
         },
       },
     },
@@ -104,12 +106,9 @@ const EventCard = (props) => {
                 margin="0"
               >
                 <Typography component={"span"} variant={"subtitle"}>
-                  <p>Event starts at:</p>
-                  <Moment format="DD-MM-YYYY" date={startTime} />{" "}
-                  <Moment format="HH:mm:ss" date={startTime} />
-                  <p>Event ends at:</p>
-                  <Moment format="DD-MM-YYYY" date={endTime} />{" "}
-                  <Moment format="HH:mm:ss" date={endTime} />
+                  Posted {""}
+                  <Moment format="DD-MM-YYYY" date={date} />{" "}
+                  <Moment format="HH:mm:ss" date={date} /> By:
                 </Typography>
               </Box>
             </CardContent>

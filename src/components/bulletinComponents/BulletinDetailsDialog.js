@@ -1,8 +1,9 @@
 import { makeStyles, Dialog, AppBar, Toolbar, Slide, IconButton, Typography, Button } from "@material-ui/core"; //eslint-disable-line
-import React from "react";
+import React, { useContext } from "react";
 import CloseIcon from "@material-ui/icons/Close"
 import DeleteIcon from '@material-ui/icons/Delete';
 import BackendAPI from "../../api/BackendAPI";
+import { UserContext } from "../../contexts/UserContext"
 
 const {
   getImageUrl
@@ -36,9 +37,9 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(1),
     paddingTop: theme.spacing(2)
   },
-  pinDeletePos:{
+  pinDeletePos: {
     margin: 0,
-    top:"auto",
+    top: "auto",
     right: theme.spacing(2),
     bottom: theme.spacing(2),
     left: "auto",
@@ -54,30 +55,39 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const BulletinDetailsDialog = (props) => {
   const { open, handleDialogClose, data, handleDelete, handlePin } = props
   const { title, body, category, date, senderId, image, id, pinned } = data //eslint-disable-line
-  const admin = true // Placeholder!!!
-  const classes =  useStyles()
+  const { user } = useContext(UserContext)
+
+  const classes = useStyles()
+
+  const checkId = (userId, senderId) => {
+    if (userId === senderId) {
+      return true
+    } else {
+      return false
+    }
+  }
 
   const PinAndDelete = () => {
-    return( 
+    return (
       <div className={classes.pinDeletePos}>
-        <Button
-         variant="contained" 
-         color="secondary" 
-         className={classes.buttonMargin}
-         onClick={()=> handlePin(data)}
-         >{!pinned? "Pin": "Unpin"}</Button>
-        <Button // If Admin: Render button. otherwise render nothing
-              variant="contained"
-              color="secondary"
-              onClick={() => handleDelete(id, category)}
-              startIcon={<DeleteIcon />}
-            >Delete</Button>
+        {user.isAdmin ? <Button // Only check for admin for pins
+          variant="contained"
+          color="secondary"
+          className={classes.buttonMargin}
+          onClick={() => handlePin(data)}
+        >{!pinned ? "Pin" : "Unpin"}</Button> : null}
+        {checkId(user.id,senderId) || user.isAdmin ? <Button // Check if user is admin or current user owns the item
+          variant="contained"
+          color="secondary"
+          onClick={() => handleDelete(id, category)}
+          startIcon={<DeleteIcon />}
+        >Delete</Button> : null}
       </div>
     )
   }
 
   return (
-    <div style={{position:"relative"}}>
+    <div style={{ position: "relative" }}>
       <Dialog fullScreen open={open} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
           <Toolbar>
@@ -87,20 +97,20 @@ const BulletinDetailsDialog = (props) => {
             <Typography variant="h5" className={classes.title}>
               {category}
             </Typography>
-            
+
           </Toolbar>
         </AppBar>
         <div >
           {data.image != null // Renders image on items that have one
             ? <img src={getImageUrl(image)} className={classes.image} alt={title} />
-            : null }
+            : null}
           <Typography component="h4" variant="h4" className={classes.title}>
             {title}
           </Typography>
           <Typography className={classes.content}>
             {body}
           </Typography>
-          {admin ?  <PinAndDelete/> : null }
+          <PinAndDelete />
         </div>
       </Dialog>
     </div>
