@@ -112,8 +112,8 @@ const BackendAPI = () => {
     }
   };
 
-  const deleteEventAsync = async (id) => {
-    return delFromUrl(id, "events");
+  const deleteEventAsync = async (id, category) => {
+    return delFromUrl(id, category, "events");
   };
 
   const deleteIdeaAsync = async (id, category) => {

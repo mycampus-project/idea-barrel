@@ -22,16 +22,15 @@ const Events = () => {
   const [sorted, setSorted] = useState("all");
   const [show, setShow] = useState(false);
   const [dialogData, setDialogData] = useState("");
-
   const [selected, setSelected] = useState("all");
   const { setSnackbar } = useContext(SnackbarContext);
   const { user } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const { fetchUsersAsync } = BackendAPI();
-
-  const [sortedCategory, setSortedCategory] = useState("");
-  const [sortedTitle, setSortedTitle] = useState("");
+  const [sortedCategory, setSortedCategory] = useState("Ascending");
+  const [sortedTitle, setSortedTitle] = useState("Ascending");
   const [events, setEvents] = useState([]);
+  const sortedEvents = events.filter((item) => item.category === sorted);
 
   const getEvents = async () => {
     try {
@@ -65,16 +64,15 @@ const Events = () => {
         : 0 * sortOrder;
     };
   };
-  console.log(events);
+  console.log("EVENTS: ", events);
+  console.log("SORTED: ", sortedEvents);
 
   const sorter = (param) => {
-    console.log(sorted);
     switch (param) {
       case "-category":
         if (sorted === "all") {
           setSortedCategory("Descending");
           setEvents(events.sort(dynamicSort(param)));
-          console.log(events);
         }
         break;
       case "category":
@@ -94,6 +92,7 @@ const Events = () => {
           setSortedTitle("Ascending");
           setEvents(events.sort(dynamicSort(param)));
         }
+
         break;
       default:
         break;
@@ -133,7 +132,6 @@ const Events = () => {
     setSelected({ selected: text });
     handleSorted(text);
   };
-
   // sort the event list depending on scrollmenu choice
   const handleSorted = (event) => {
     if (event !== "all") {

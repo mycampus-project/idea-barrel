@@ -14,6 +14,7 @@ import Moment from "react-moment";
 const EventCard = (props) => {
   const { data } = props;
   const { title, body, category, date, startTime, endTime } = data; //eslint-disable-line
+  console.log(JSON.stringify(data));
 
   const eventCardTheme = createMuiTheme({
     spacing: 5,
