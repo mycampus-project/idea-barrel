@@ -23,7 +23,9 @@ const BulletinListItem = (props) => {
     },
     cover: {
       width: 120,
-      height: 120
+      height: 120,
+      marginTop:"auto",
+      marginBottom: "auto"
     },
     row: {
       display: "flex",
