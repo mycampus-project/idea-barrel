@@ -4,6 +4,7 @@ import CloseIcon from "@material-ui/icons/Close"
 import DeleteIcon from '@material-ui/icons/Delete';
 import BackendAPI from "../../api/BackendAPI";
 import { UserContext } from "../../contexts/UserContext"
+import Moment from "react-moment";
 
 const {
   getImageUrl
@@ -16,6 +17,16 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "64px",
     padding: theme.spacing(1)
   },
+  root: {
+    [theme.breakpoints.up("sm")]:{
+        width: "50%",
+        justifyContent: "center",
+        marginLeft: "auto",
+        marginRight: "auto", 
+        marginTop: "5px",
+     
+    }
+  },
   title: {
     marginLeft: theme.spacing(2),
     marginTop: theme.spacing(2),
@@ -23,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     width: "100%",
-    hieght: undefined,
+    height: undefined,
     aspectRatio: 2 / 1,
     overflow: "hidden",
   },
@@ -33,11 +44,21 @@ const useStyles = makeStyles((theme) => ({
   buttonMargin: {
     marginRight: theme.spacing(2)
   },
+  subHeader:{
+    marginLeft: theme.spacing(2),
+
+  },
   content: {
     flex: 1,
     marginLeft: theme.spacing(2),
     marginTop: theme.spacing(2)
   },
+  separator: {
+    margin: theme.spacing(2),
+    backgroundColor: "lightGrey",
+    height: "1px",
+  },
+
   pinDeletePos: {
     margin: 0,
     top: "auto",
@@ -55,7 +76,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const BulletinDetailsDialog = (props) => {
   const { open, handleDialogClose, data, handleDelete, handlePin } = props
-  const { title, body, category, date, senderId, image, id, pinned } = data //eslint-disable-line
+  const { title, body, category, date, senderId, image, id, pinned, senderName } = data //eslint-disable-line
   const { user } = useContext(UserContext)
 
   const classes = useStyles()
@@ -87,6 +108,7 @@ const BulletinDetailsDialog = (props) => {
     )
   }
 
+
   return (
     <div style={{ position: "relative" }}>
       <Dialog fullScreen open={open} TransitionComponent={Transition}>
@@ -101,13 +123,21 @@ const BulletinDetailsDialog = (props) => {
 
           </Toolbar>
         </AppBar>
-        <div >
+        <div className={classes.root}>
           {data.image != null // Renders image on items that have one
             ? <img src={getImageUrl(image)} className={classes.image} alt={title} />
             : null}
           <Typography component="h4" variant="h4" className={classes.title}>
             {title}
           </Typography>
+          <div className={classes.separator}/>
+          <Typography variant="subtitle1" color="textSecondary" className={classes.subHeader}>
+            By: {senderName}
+          </Typography>
+          <Typography variant="subtitle2" color="textSecondary" className={classes.subHeader}>
+            On: <Moment format="DD/MM/YYYY" date={date} /> at <Moment format="HH:mm" date={date} />
+          </Typography>
+          <div className={classes.separator}/>
           <Typography className={classes.content}>
             {body}
           </Typography>
