@@ -29,7 +29,7 @@ const CalendarPage = () => {
           End: new Date(el.endTime),
           Start: new Date(el.startTime),
           Summary: el.title,
-          IsReadonly: true,
+          IsReadonly: true
         };
       });
       setLocalData({
