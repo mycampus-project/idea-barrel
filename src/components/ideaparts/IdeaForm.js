@@ -1,28 +1,35 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import DummyAPI from "../../api/DummyAPI";
-import { Button } from "@material-ui/core";
+import BackendAPI from "../../api/BackendAPI";
+import { Button, Container } from "@material-ui/core";
+//import { navigate } from "hookrouter";
 
-const {postIdeaAsync} = DummyAPI();
+const {postIdeaAsync} = BackendAPI();
 
 const postIdea = async (user, title, body, cat) => {
-  const post = {
+  const data = {
+    senderId: JSON.parse(window.localStorage.getItem("user")).fName +" "+ JSON.parse(window.localStorage.getItem("user")).lName,
+    category: cat,
     title: title,
     body: body,
-    votes: 0,
-    catory: cat,
+    upvotes: 0,
+    //votes: 0,
+    //user: user,
+    
   };
-  try {
-    const postRequest = await postIdeaAsync(user.id, post);
-    console.log(postRequest);
-    window.location.reload();
-  } catch (e) {
-    console.log("error posting an idea");
-    console.log(e);
-  }
-};
 
-class IdeaFormDemo extends React.Component {
+  const res = await postIdeaAsync(data)
+  if (res.status === 200) {
+      //navigate('/idea-barrel')
+      window.location.reload();
+
+  } else if (res.status === 400) {
+      console.log("Unable to submit idea", res.json())
+  } else {
+      console.log("This shouldn't happend")
+  }
+}
+
+class IdeaForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,6 +49,7 @@ class IdeaFormDemo extends React.Component {
   render() {
       let user = this.props.data;
     return (
+      <Container maxWidth="xs" style={{border: 'solid 2px blue'}}>
       <form>
         <h1>
           Submit an idea {this.state.username} {this.state.age}
@@ -54,14 +62,13 @@ class IdeaFormDemo extends React.Component {
         <input type="text" name="cat" onChange={this.myChangeHandler} />
         <br />
         <br />
-        <Button variant="outlined" color="primary" onClick={() => postIdea(user, this.state.title, this.state.body, this.state.cat)}>
+        <Button variant="outlined" onClick={() => postIdea(user, this.state.title, this.state.body, this.state.cat)}>
           Click me to submit the idea
         </Button>
       </form>
+      </Container>
     );
   }
 }
 
-ReactDOM.render(<IdeaFormDemo />, document.getElementById("root"));
-
-export default IdeaFormDemo;
+export default IdeaForm;
