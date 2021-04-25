@@ -15,7 +15,7 @@ const EventDialog = (props) => {
   const { data, handleClose, deleteEvent, show, isAdmin } = props;
   const { title, body, category, startTime, endTime, id } = data;
   console.log("isAdmin eventDialog:", isAdmin);
-
+  console.log("DELETE EVENT PROP:", deleteEvent);
   const useStyles = makeStyles({
     dialogGrid: {
       justifyContent: "flex-end",

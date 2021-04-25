@@ -49,7 +49,7 @@ const BulletinListItem = (props) => {
 
   const classes = useStyles()
 
-  const { title, image, body, category, date, senderId, id, pinned } = props.data //eslint-disable-line
+  const { title, image, body, category, date, senderId, id, pinned, senderName } = props.data //eslint-disable-line
 
   useEffect(() => {
     console.log(props.data)
@@ -69,7 +69,7 @@ const BulletinListItem = (props) => {
             {category}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
-            By: {senderId}
+            By: {senderName}
           </Typography>
           <Typography variant="subtitle2" color="textSecondary">
             <Moment format="DD/MM/YYYY" date={date} /> at <Moment format="HH:MM" date={date} />
