@@ -40,4 +40,4 @@ jobs:
         DISCORD_WEBHOOK: 'https://discordapp.com/api/webhooks/819631417847840799/fHDibLVKp_SSnjr7vHmbbqX-789HCPjqwikQr_p6p6B-5PdOaUB3z9FaexnTEnXcVQok'
       uses: Ilshidur/action-discord@master
       with:
-       args: 'Production build has been updated, time to restart the App Service! @mikael'
+       args: 'Production build has been updated, time to restart the App Service! @Mikael'
