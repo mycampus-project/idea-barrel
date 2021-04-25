@@ -36,7 +36,8 @@ const APIDemo = () => {
     title: "adeswfrrfgdrghtyfvgg",
     body: "swertgfdtgyet5hgrst6fhydrs5ythsery5ht srty5dxfhcy",
     category: "asdfsewgerhy5e",
-    senderId: "haista js vittu"
+    senderId: "js on best",
+    pinned: true
   }
 
   useEffect(() => {
