@@ -1,7 +1,7 @@
 const BackendAPI = () => {
   const dev_token =
     "eb245d43fefbc85ad21a136e56a944100c8f8f35ee74e0fce599a048059a6fec";
-  const rootUrl = "https://mkayyeedev.ninja";
+  const rootUrl = "http://mkayyeedev.ninja";
 
   const fetchFromUrl = async (url) => {
     const notes = await fetch(rootUrl + "/" + url, {
