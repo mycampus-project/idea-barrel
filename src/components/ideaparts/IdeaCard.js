@@ -206,7 +206,7 @@ justifyContent="space-between"              >
                   </Typography>
                 ) : null}
 
-              {JSON.parse(window.localStorage.getItem("user")).isAdmin ? (
+              {JSON.parse(window.localStorage.getItem("user"))?.isAdmin ? (
               <DeleteForever
                 onClick={() => deleteIdea(id, category)}
                 style={{
