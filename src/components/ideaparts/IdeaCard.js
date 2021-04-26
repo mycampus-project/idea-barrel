@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core/styles";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import { DeleteForever } from "@material-ui/icons";
+import StarIcon from '@material-ui/icons/Star';
 import BackendAPI from "../../api/BackendAPI";
 import "../../App.css";
 
@@ -77,7 +78,7 @@ const useStyles = (theme) => ({
     marginBottom:"0.6em",
 
  backgroundColor:"yellow",
-    width : "12em",
+    width : "auto",
   },
   bodyCont: {
     overflowY: "scroll",
@@ -109,7 +110,7 @@ const deleteIdea = async (id, category) => {
   }
 };
 
-const upvoteIdea = async (id, senderId, upvotes, category, title, body) => {
+const upvoteIdea = async (id, senderId, upvotes, category, title, body, department) => {
   try {
     const data = {
       upvotes: upvotes + 1,
@@ -118,6 +119,7 @@ const upvoteIdea = async (id, senderId, upvotes, category, title, body) => {
       category: category,
       title: title,
       body: body,
+      department:department
     };
     // TODO  if current user = idea senderID...
     const res = await updateIdeaAsync(data);
@@ -145,12 +147,13 @@ class IdeaCard extends React.Component {
   }
 
   render() {
-    const { title, category, id, body, senderId } = this.props.data;
+    const { title, category, id, body, senderId, department } = this.props.data;
 
     return (
       // Card for event details and dialog for more info
       <div className={this.props.classes.root}>
         <Card className={this.props.classes["card"+this.props.cellH]}>
+          
               <Box
               display="flex"
               flex="1"
@@ -160,11 +163,31 @@ justifyContent="space-between"              >
                   title={title}
                   titleTypographyProps={{ variant: "h5" }}
                 />
+                
+                
                 <Container className={this.props.classes.categoryCont}>
+                  <Box display="flex"
+              flex="1"
+                flexDirection="row"
+justifyContent="space-between"  >
+  
                 <Typography variant="h6" className={this.props.classes.category}>
-                  {category}
+                  {category} -
                 </Typography>
+                <Typography variant="h6" className={this.props.classes.category}>
+                   - {department}
+                   
+                </Typography>
+                {JSON.parse(window.localStorage.getItem("user"))?.department === department ? (
+
+<StarIcon />) : null }
+                
+                
+                </Box>
+                
                 </Container>
+                
+                
 
                 <Box className={this.props.classes.bodyCont}>
                 <Typography className={this.props.classes.body}>
@@ -189,7 +212,7 @@ justifyContent="space-between"              >
                   variant="contained"
                   color="primary"
                   onClick={() => {
-                    upvoteIdea(id, senderId, this.state.upvotes, category, title, body);
+                    upvoteIdea(id, senderId, this.state.upvotes, category, title, body, department);
                     this.setState( state => ({
                       upvotes: state.upvotes +1
                     }));
@@ -206,7 +229,7 @@ justifyContent="space-between"              >
                   </Typography>
                 ) : null}
 
-              {JSON.parse(window.localStorage.getItem("user")).isAdmin ? (
+              {JSON.parse(window.localStorage.getItem("user"))?.isAdmin || JSON.parse(window.localStorage.getItem("user"))?.department === department ? (
               <DeleteForever
                 onClick={() => deleteIdea(id, category)}
                 style={{
