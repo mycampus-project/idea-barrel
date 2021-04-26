@@ -36,3 +36,33 @@
     transform: rotate(360deg);
   }
 }
+
+ul {
+  list-style-type: none;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+li {
+  padding-bottom: 10px;
+}
+.menu-item {
+  padding: 0 1em;
+  margin: 5px 10px;
+  user-select: none;
+  cursor: pointer;
+  border: none;
+}
+.menu-item-wrapper.active {
+  border: 1px blue solid;
+}
+.menu-wrapper {
+  width: 100%;
+}
+.menu-item.active {
+  border: 1px green solid;
+}
+.scroll-menu-arrow {
+  padding: 20px;
+  cursor: pointer;
+  size: 3em;
+}
