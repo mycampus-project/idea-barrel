@@ -30,14 +30,16 @@ const Events = () => {
   const [sortedCategory, setSortedCategory] = useState("Ascending");
   const [sortedTitle, setSortedTitle] = useState("Ascending");
   const [events, setEvents] = useState([]);
-  const sortedEvents = events.filter((item) => item.category === sorted);
+  const [menuCategories, setMenuCategories] = useState([]);
+  const [isOwnerOrAdmin, setOwnerOrAdmin] = useState(false);
+  const [sortedEvents, setSortedEvents] = useState([]);
 
   const getEvents = async () => {
     try {
       const response = await fetchEventsAsync();
-      console.log("eventspage user:", user);
-      console.log("eventspage user:", user.isAdmin);
       setEvents(response);
+      setMenuCategories(response);
+      setSortedEvents(response);
     } catch (e) {
       console.log("error fetching bulletins");
     }
@@ -64,20 +66,20 @@ const Events = () => {
         : 0 * sortOrder;
     };
   };
-  console.log("EVENTS: ", events);
-  console.log("SORTED: ", sortedEvents);
-
   const sorter = (param) => {
+    console.log("PARAM:", param);
     switch (param) {
       case "-category":
         if (sorted === "all") {
           setSortedCategory("Descending");
+          setSortedEvents(events);
           setEvents(events.sort(dynamicSort(param)));
         }
         break;
       case "category":
         if (sorted === "all") {
           setSortedCategory("Ascending");
+          setSortedEvents(events);
           setEvents(events.sort(dynamicSort(param)));
         }
         break;
@@ -85,12 +87,16 @@ const Events = () => {
         if (sorted === "all") {
           setSortedTitle("Descending");
           setEvents(events.sort(dynamicSort(param)));
+        } else {
+          handleEvents(param, "Descending");
         }
         break;
       case "title":
         if (sorted === "all") {
           setSortedTitle("Ascending");
           setEvents(events.sort(dynamicSort(param)));
+        } else {
+          handleEvents(param, "Ascending");
         }
 
         break;
@@ -103,8 +109,6 @@ const Events = () => {
     try {
       const response = await fetchUsersAsync();
       setUsers(response);
-      console.log("Users:");
-      console.log(response);
     } catch (e) {
       console.log("error fetching users");
       console.log(e);
@@ -116,7 +120,13 @@ const Events = () => {
     getUsers();
   }, []); //eslint-disable-line
   // Handles event dialog window data
+
   const handleShow = (data) => {
+    if (data.senderId === user.id || user.isAdmin) {
+      setOwnerOrAdmin(true);
+    } else {
+      setOwnerOrAdmin(false);
+    }
     setDialogData(data);
     setShow(true);
   };
@@ -132,12 +142,21 @@ const Events = () => {
     setSelected({ selected: text });
     handleSorted(text);
   };
+  console.log(sortedEvents);
+  const handleEvents = (param, sortingOrder) => {
+    console.log("HANDLEEVENTS:", param, sortingOrder);
+    setSortedTitle(sortingOrder);
+    setSortedEvents(
+      sortedEvents
+        .filter((item) => item.category === sorted)
+        .sort(dynamicSort(param))
+    );
+  };
   // sort the event list depending on scrollmenu choice
   const handleSorted = (event) => {
     if (event !== "all") {
       // separate category and id to enable sorting
       console.log("EVENT:", event);
-
       // split category text to separate category from id (stored in event)
       const array = event.split(" ").map((data) => {
         return data;
@@ -216,12 +235,9 @@ const Events = () => {
       },
     },
   });
-  console.log("USERS: ", users);
   const eventSender = users.filter((o1) =>
     events.map((o2) => o1.id === o2.senderId)
   );
-
-  console.log("EVENTSENDER:", eventSender);
 
   // All events containing array
   const allArray = events.map((data) => (
@@ -235,7 +251,7 @@ const Events = () => {
   ));
 
   // events sorted by category choice
-  const sortedArray = events
+  const sortedArray = sortedEvents
     .filter((item) => item.category === sorted)
     .map((data) => (
       <li onClick={() => handleShow(data)} key={data.id}>
@@ -249,10 +265,9 @@ const Events = () => {
   // remove duplicates from menuitems (category)
   const obj = [
     ...new Map(
-      events.map((item) => [JSON.stringify(item.category), item])
+      menuCategories.map((item) => [JSON.stringify(item.category), item])
     ).values(),
   ];
-
   // Scrollmenu items mapping
   const menuItems = obj.map(({ category, id }) => (
     <MenuItem
@@ -276,28 +291,46 @@ const Events = () => {
           >
             Show All Events
           </Button>
-          <Typography align="center">
-            <Button
-              onClick={() => {
-                if (sortedCategory === "Descending") {
-                  sorter("category");
-                } else sorter("-category");
-              }}
-            >
-              SORT BY CATEGORY {sortedCategory}
-            </Button>
-          </Typography>
-          <Typography align="center">
-            <Button
-              onClick={() => {
-                if (sortedTitle === "Descending") {
-                  sorter("title");
-                } else sorter("-title");
-              }}
-            >
-              SORT BY TITLE {sortedTitle}
-            </Button>
-          </Typography>
+          {sorted === "all" ? (
+            <div>
+              <Typography align="center">
+                <Button
+                  onClick={() => {
+                    if (sortedCategory === "Descending") {
+                      sorter("category");
+                    } else sorter("-category");
+                  }}
+                >
+                  SORT BY CATEGORY {sortedCategory}
+                </Button>
+              </Typography>
+              <Typography align="center">
+                <Button
+                  onClick={() => {
+                    if (sortedTitle === "Descending") {
+                      sorter("title");
+                    } else sorter("-title");
+                  }}
+                >
+                  SORT BY TITLE {sortedTitle}
+                </Button>
+              </Typography>
+            </div>
+          ) : (
+            <div>
+              <Typography align="center">
+                <Button
+                  onClick={() => {
+                    if (sortedTitle === "Descending") {
+                      sorter("title");
+                    } else sorter("-title");
+                  }}
+                >
+                  SORT BY TITLE {sortedTitle}
+                </Button>
+              </Typography>
+            </div>
+          )}
         </Typography>
       </ThemeProvider>
       <ScrollMenu
@@ -312,9 +345,10 @@ const Events = () => {
       />
       {sorted === "all" ? <ul>{allArray}</ul> : <ul>{sortedArray}</ul>}
       <EventDialog
-        isAdmin={user.isAdmin} // admin privileges prop
+        userData={user}
         show={show}
         handleClose={handleClose}
+        handleOwner={isOwnerOrAdmin}
         data={dialogData}
         deleteEvent={deleteEvent}
       />

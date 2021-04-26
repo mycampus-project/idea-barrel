@@ -13,8 +13,16 @@ import Moment from "react-moment";
 
 const EventCard = (props) => {
   const { data } = props;
-  const { title, body, category, date, startTime, endTime } = data; //eslint-disable-line
-  console.log(JSON.stringify(data));
+  const {
+    title,
+    body,
+    category,
+    date,
+    startTime,
+    endTime,
+    senderfName,
+    senderlName,
+  } = data; //eslint-disable-line
 
   const eventCardTheme = createMuiTheme({
     spacing: 5,
@@ -108,7 +116,8 @@ const EventCard = (props) => {
                 <Typography component={"span"} variant={"subtitle"}>
                   Posted {""}
                   <Moment format="DD-MM-YYYY" date={date} />{" "}
-                  <Moment format="HH:mm:ss" date={date} /> By:
+                  <Moment format="HH:mm:ss" date={date} /> by: {senderfName}{" "}
+                  {senderlName}
                 </Typography>
               </Box>
             </CardContent>
