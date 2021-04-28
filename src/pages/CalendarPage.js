@@ -21,56 +21,55 @@ const { fetchEventsAsync,fetchUsersAsync } = BackendAPI();
 
 const CalendarPage = () => {
   const { user} = useContext(UserContext); // eslint-disable-line
-    const [ setUsers] = useState([]);
+    const [ setUsers] = useState([]); 
 
-  const [localData, setLocalData] = useState(null);
+  const [localData, setLocalData] = useState(null)
 
-  const getUsers = async () => {
-    try {
-      const response = await fetchUsersAsync();
-      setUsers(response);
-      console.log("Users:")
-      console.log(response);
-    } catch (e) {
-      console.log("error fetching users");
-      console.log(e);
-    }
-  };
-  
-  const getEvents = async () => {
-    try {
-      const response = await fetchEventsAsync();
-      console.log("user: ", user.fName, user.lName);
-      console.log("response :", response);
-      let temp = [...response];
-      temp = temp.map((el) => {
-        return {
-          Id: el._rid,
-          End: new Date(el.endTime),
-          Start: new Date(el.startTime),
-          Summary: el.title,
-          IsReadonly: true
-        };
-      });
-      setLocalData({
-        dataSource: temp,
-        fields: {
-          subject: { name: "Summary", default: "No title is provided" },
-          startTime: { name: "Start" },
-          endTime: { name: "End" },
-        },
-        adaptor: new WebApiAdaptor(),
-        crossDomain: true,
-      });
-    } catch (e) {
-      console.log("error fetching bulletins");
-    }
-  };
 
   useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const response = await fetchUsersAsync();
+        setUsers(response);
+        console.log("Users:")
+        console.log(response);
+      } catch (e) {
+        console.log("error fetching users");
+        console.log(e);
+      }
+    };
+    const getEvents = async () => {
+      try {
+        const response = await fetchEventsAsync();
+        console.log("user: ", user.fName, user.lName);
+        console.log("response :", response);
+        let temp = [...response];
+        temp = temp.map((el) => {
+          return {
+            Id: el._rid,
+            End: new Date(el.endTime),
+            Start: new Date(el.startTime),
+            Summary: el.title,
+            IsReadonly: true
+          };
+        });
+        setLocalData({
+          dataSource: temp,
+          fields: {
+            subject: { name: "Summary", default: "No title is provided" },
+            startTime: { name: "Start" },
+            endTime: { name: "End" },
+          },
+          adaptor: new WebApiAdaptor(),
+          crossDomain: true,
+        });
+      } catch (e) {
+        console.log("error fetching bulletins");
+      }
+    };
     getUsers();
     getEvents();
-  }, []);
+  }, []); // eslint-disable-line
 
   return (
     <div>
