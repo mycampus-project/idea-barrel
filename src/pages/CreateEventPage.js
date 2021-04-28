@@ -29,6 +29,9 @@ const CreateEventPage = () => {
   });
   const [eventData, setEventData] = useState({
     senderId: user.id,
+    senderEmail: user.email,
+    senderfName: user.fName,
+    senderlName: user.lName,
     title: "",
     body: "",
     category: "",
@@ -114,14 +117,17 @@ const CreateEventPage = () => {
 
   const postEvent = async () => {
     const data = {
-      senderId: user.id,
+      senderId: eventData.senderId,
+      senderEmail: eventData.senderEmail,
+      senderfName: eventData.senderfName,
+      senderlName: eventData.senderlName,
       title: eventData.title,
       body: eventData.body,
       category: eventData.category,
       startTime: startTime,
       endTime: endTime,
     };
-    console.log("DATA: ", data);
+    console.log("POSTED DATA DATA: ", data);
     console.log("USER CREATEVENT:", user);
 
     const res = await postEventAsync(data);
@@ -289,10 +295,10 @@ const CreateEventPage = () => {
             className={style.dateStartPicker}
             selected={startTime}
             showTimeSelect
+            shouldCloseOnSelect={true}
             showWeekNumbers
             filterDate={filterPassedTime}
             filterTime={filterPassedTime}
-            shouldCloseOnSelect={false}
             timeFormat="HH:mm"
             dateFormat="dd/MM/yyyy HH:mm"
             onChange={(date) => setStartTime(date)}

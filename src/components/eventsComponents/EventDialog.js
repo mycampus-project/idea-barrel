@@ -1,4 +1,5 @@
 import Moment from "react-moment";
+import React from "react";
 import {
   Button,
   Dialog,
@@ -12,10 +13,9 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import CloseIcon from "@material-ui/icons/Close";
 
 const EventDialog = (props) => {
-  const { data, handleClose, deleteEvent, show, isAdmin } = props;
+  const { data, handleClose, deleteEvent, show, handleOwner } = props;
   const { title, body, category, startTime, endTime, id } = data;
-  console.log("isAdmin eventDialog:", isAdmin);
-  console.log("DELETE EVENT PROP:", deleteEvent);
+
   const useStyles = makeStyles({
     dialogGrid: {
       justifyContent: "flex-end",
@@ -50,6 +50,7 @@ const EventDialog = (props) => {
   // deleteEvent - can delete everything atm
   return (
     <Dialog open={show} fullWidth={true}>
+      {handleOwner ? <body>This is your own post</body> : ""}
       <Grid container className={styles.dialogGrid}>
         <Button
           className={styles.closeButton}
@@ -78,7 +79,7 @@ const EventDialog = (props) => {
       </DialogContent>
       <Button
         className={styles.dialogDeleteButton}
-        disabled={!isAdmin}
+        disabled={!handleOwner}
         variant="contained"
         color="secondary"
         onClick={() => {

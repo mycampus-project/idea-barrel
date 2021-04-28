@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     formItem: {
         width: "80%"
     },
-    FormControl: {
+    formControl: {
         paddingTop: theme.spacing(1),
 
     },
