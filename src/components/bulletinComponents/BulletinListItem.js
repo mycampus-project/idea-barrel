@@ -44,7 +44,7 @@ const BulletinListItem = (props) => {
       marginLeft: 25
     },
     highlighted: {
-      backgroundColor: "#80d2ff",
+      backgroundColor: theme.palette.info.light,
       display: "flex",
       flexDirection: "row",
       border: "1px solid",
