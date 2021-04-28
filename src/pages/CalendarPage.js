@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect,useContext } from "react";
 import {
   Inject,
   ScheduleComponent,
@@ -11,16 +11,37 @@ import {
   ViewDirective,
   TimelineViews,
   TimelineMonth,
+  EventSettingsModel,
 } from "@syncfusion/ej2-react-schedule";
 import BackendAPI from "../api/BackendAPI";
-import { WebApiAdaptor } from "@syncfusion/ej2-data";
-const { fetchEventsAsync } = BackendAPI();
+import { WebApiAdaptor,DataManager } from "@syncfusion/ej2-data";
+import { UserContext } from "../contexts/UserContext";
+
+
+const { fetchEventsAsync,fetchUsersAsync } = BackendAPI();
 
 const CalendarPage = () => {
+  const { user} = useContext(UserContext); // eslint-disable-line
+    const [ setUsers] = useState([]);
+
   const [localData, setLocalData] = useState(null);
+
+  const getUsers = async () => {
+    try {
+      const response = await fetchUsersAsync();
+      setUsers(response);
+      console.log("Users:")
+      console.log(response);
+    } catch (e) {
+      console.log("error fetching users");
+      console.log(e);
+    }
+  };
+  
   const getEvents = async () => {
     try {
       const response = await fetchEventsAsync();
+      console.log("user: ", user.fName, user.lName);
       console.log("response :", response);
       let temp = [...response];
       temp = temp.map((el) => {
@@ -48,12 +69,13 @@ const CalendarPage = () => {
   };
 
   useEffect(() => {
+    getUsers();
     getEvents();
   }, []);
 
   return (
     <div>
-      <ScheduleComponent currentView="Week" eventSettings={localData}>
+      <ScheduleComponent currentView="WorkWeek" eventSettings={localData} >
         <ViewsDirective>
           <ViewDirective option="Day" interval={3}></ViewDirective>
           <ViewDirective option="Week"></ViewDirective>
