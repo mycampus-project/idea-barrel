@@ -1,6 +1,6 @@
 import { Card, CardMedia, Typography, makeStyles } from "@material-ui/core"; //eslint-disable-line
 import RoomIcon from '@material-ui/icons/Room';
-import React, { useEffect } from "react";
+import React from "react";
 import Moment from "react-moment";
 import BackendAPI from "../../api/BackendAPI";
 
@@ -57,9 +57,6 @@ const BulletinListItem = (props) => {
 
   const { title, image, body, category, date, senderId, id, pinned, senderName } = props.data //eslint-disable-line
 
-  useEffect(() => {
-    console.log(props.data)
-  }, []); //eslint-disable-line
   return (
     <div style={{ position: "relative" }}>
       <Card className={!pinned ? classes.row : classes.highlighted} >

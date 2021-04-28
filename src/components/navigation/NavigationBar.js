@@ -14,7 +14,14 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'flex-start',
     padding: theme.spacing(1),
     minHeight: "64px",
-    flexGrow: 1
+    flexGrow: 1, 
+     [theme.breakpoints.up("lg")]: {
+      width: "50%",
+      justifyContent: "center",
+      marginLeft: "auto",
+      marginRight: "auto",
+      marginTop: "5px",
+    }
   },
   image: {
     flexGrow: 1,
@@ -31,7 +38,9 @@ const useStyles = makeStyles((theme) => ({
   },
   offset: theme.mixins.toolbar,
   desktopNav: {
-    padding: theme.spacing(2),
+    paddingLeft: "8px",
+    paddingRight: "8px",
+    paddingTop: "16px",
     flexGrow: 1,
     color: "#FFFFFF"
   }

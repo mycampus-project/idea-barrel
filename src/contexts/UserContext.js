@@ -1,4 +1,6 @@
-import React, { createContext, useState, useContext } from "react" //eslint-disable-line
+import React, { useState, useEffect,  } from "react" //eslint-disable-line
+
+
 
 export const UserContext = React.createContext({
     setUser: () =>{},
@@ -19,8 +21,6 @@ export const UserContainer = ({children}) => {
     _ts: 1615660487})
 
     const handleUserChange = (user) => {
-        console.log("CTX setUser")
-        console.log(user)
         setUser(user)
     }
 
@@ -28,7 +28,7 @@ export const UserContainer = ({children}) => {
         setUser: handleUserChange,
         user
     }
-
+    
     return(
         <UserContext.Provider value={contextValue}>
             {children}
