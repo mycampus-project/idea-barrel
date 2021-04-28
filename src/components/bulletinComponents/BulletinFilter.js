@@ -21,7 +21,6 @@ const BulletinFilter = (props) => {
 
     return (
         <div className={classes.center}>
-            <h1 style={{ textAlign: "center" }}>Filter</h1>
             <Button onClick={handleFilterClick} variant="contained" color="primary" className={classes.buttonMargin} value="Announcement">
                 Announcement
                 </Button>
