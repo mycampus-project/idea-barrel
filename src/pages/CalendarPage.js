@@ -11,10 +11,9 @@ import {
   ViewDirective,
   TimelineViews,
   TimelineMonth,
-  EventSettingsModel,
 } from "@syncfusion/ej2-react-schedule";
 import BackendAPI from "../api/BackendAPI";
-import { WebApiAdaptor,DataManager } from "@syncfusion/ej2-data";
+import { WebApiAdaptor } from "@syncfusion/ej2-data";
 import { UserContext } from "../contexts/UserContext";
 
 
