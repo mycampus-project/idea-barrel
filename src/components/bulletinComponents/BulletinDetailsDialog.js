@@ -12,8 +12,10 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     position: "relative",
     minHeight: "64px",
-    padding: theme.spacing(1)
+    padding: theme.spacing(1),
+    
   },
+
   root: {
     [theme.breakpoints.up("sm")]: {
       width: "50%",
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   image: {
     width: "100%",
     height: undefined,
-    aspectRatio: 2 / 1,
+    aspectRatio: 16 / 9,
     overflow: "hidden",
   },
   padding: {
@@ -249,7 +251,7 @@ const BulletinDetailsDialog = (props) => {
     <div style={{ position: "relative" }}>
       <Dialog fullScreen open={open} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
-          <Toolbar>
+          <Toolbar className={classes.toolbar}>
             <IconButton edge="start" color="inherit" onClick={onClose} aria-label="close">
               <CloseIcon />
             </IconButton>
