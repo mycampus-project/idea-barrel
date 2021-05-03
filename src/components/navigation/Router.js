@@ -5,6 +5,7 @@ import IdeaBarrelPage from "../../pages/IdeaBarrelPage";
 import HomePage from "../../pages/HomePage";
 import CalendarPage from "../../pages/CalendarPage.js";
 import CreateEventPage from "../../pages/CreateEventPage"
+import IdeaForm from "../../components/ideaparts/IdeaForm";
 import { useRoutes } from "hookrouter";
 
 
@@ -15,7 +16,9 @@ const routes = {
   "/events": () => <EventsPage />,
   "/idea-barrel": () => <IdeaBarrelPage />,
   "/calendar": () => <CalendarPage />,
-  "/event-create": () => <CreateEventPage/>
+  "/event-create": () => <CreateEventPage/>,
+  "/idea-form": () => <IdeaForm/>
+
 };
 
 const Router = () => {

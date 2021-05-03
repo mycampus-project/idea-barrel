@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import IdeaForm from "../components/ideaparts/IdeaForm";
 import IdeaList from "../components/ideaparts/IdeaList.js"
-
+import AddIcon from "@material-ui/icons/Add";
+import { navigate } from "hookrouter";
 import BackendAPI from "../api/BackendAPI";
-import { Typography } from "@material-ui/core";
+import { Typography, Fab } from "@material-ui/core";
 
 const { fetchIdeasAsync } = BackendAPI();
 
@@ -36,6 +36,10 @@ const IdeaBarrelPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const ideaForm = () => {
+    navigate("/idea-form");
+  };
+
   return (
     <div>
       {JSON.parse(window.localStorage.getItem("user"))?.fName ? (
@@ -55,7 +59,21 @@ const IdeaBarrelPage = () => {
                 ) : <Typography>Loading...</Typography>
       }   
       <br></br>   
-      <IdeaForm data={user}></IdeaForm>
+      <Fab
+        color="primary"
+        aria-label="add"
+        style={{
+          margin: 0,
+          top: "auto",
+          right: 16,
+          bottom: 16,
+          left: "auto",
+          position: "fixed",
+        }}
+        onClick={() => ideaForm()}
+      >
+        <AddIcon />
+      </Fab>
     </div>
   );
 };
