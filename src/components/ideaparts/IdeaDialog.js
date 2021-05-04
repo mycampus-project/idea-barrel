@@ -13,6 +13,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import DeleteIcon from "@material-ui/icons/Delete";
 
+//Pop-up window that open on top of IdeaList when clicking an item
 
 const IdeaDialog = (props) => {
   const { deleteIdeaAsync, updateIdeaAsync } = BackendAPI();
@@ -61,12 +62,12 @@ const IdeaDialog = (props) => {
       marginLeft: "25%",
       marginRight: "25%",
       paddingBottom: "0%",
-      paddingTop: "0%"
-    }
+      paddingTop: "0%",
+    },
   });
   const styles = useStyles();
 
-
+  // HTTP delete from backend
   const deleteIdea = async (id, category) => {
     try {
       await deleteIdeaAsync(id, category);
@@ -78,6 +79,7 @@ const IdeaDialog = (props) => {
     }
   };
 
+  //HTTP PUT (update) upvote amount to idea object in backend
   const upvoteIdea = async (
     id,
     senderId,
@@ -113,9 +115,6 @@ const IdeaDialog = (props) => {
     }
   };
 
-
- 
-
   return (
     <Dialog open={show} fullWidth={true}>
       <Typography align="center" style={{ wordWrap: "break-word" }}>
@@ -130,42 +129,44 @@ const IdeaDialog = (props) => {
           ></Button>
         </Grid>
         <DialogTitle className={styles.dialogTitle}>{title}</DialogTitle>
-        <DialogTitle className={styles.depCat}>{department} {category}</DialogTitle>
-
+        <DialogTitle className={styles.depCat}>
+          {department} {category}
+        </DialogTitle>
 
         <DialogContent className={styles.dialogBody}>{body}</DialogContent>
         <DialogContent className={styles.dialogDateTime}>
-        <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          upvoteIdea(
-                            id,
-                            senderId,
-                            upvotes,
-                            category,
-                            title,
-                            body,
-                            department
-                          );
-                        }}
-                        startIcon={<ArrowUpwardIcon />}
-                      >
-                        Upvote
-                      </Button>
-                      {JSON.parse(window.localStorage.getItem("user"))?.isAdmin ||
-                    JSON.parse(window.localStorage.getItem("user"))
-                      ?.department === department ? (
-                      <Button
-                      className={styles.dialogDeleteButton}
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => {
-                        window.confirm("Do you want to delete this idea?") &&
-                        deleteIdea(id, category);
-                      }}
-                      startIcon={<DeleteIcon />}/>
-                    ) : null}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              upvoteIdea(
+                id,
+                senderId,
+                upvotes,
+                category,
+                title,
+                body,
+                department
+              );
+            }}
+            startIcon={<ArrowUpwardIcon />}
+          >
+            Upvote
+          </Button>
+          {JSON.parse(window.localStorage.getItem("user"))?.isAdmin ||
+          JSON.parse(window.localStorage.getItem("user"))?.department ===
+            department ? (
+            <Button
+              className={styles.dialogDeleteButton}
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                window.confirm("Do you want to delete this idea?") &&
+                  deleteIdea(id, category);
+              }}
+              startIcon={<DeleteIcon />}
+            />
+          ) : null}
         </DialogContent>
       </Typography>
     </Dialog>
