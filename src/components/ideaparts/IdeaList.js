@@ -18,20 +18,19 @@ class IdeaList extends React.Component {
   }
 
   columnSize = (props) => {
-  
-    if (isWidthUp("md" ||"lg"||"xl", this.props.width)) {
+    if (isWidthUp("md" || "lg" || "xl", this.props.width)) {
       if (this.state.dynCellHeight !== 420) {
         this.setState((state) => ({
-          dynCellHeight: 420
+          dynCellHeight: 420,
         }));
       }
       return 2;
     }
     if (this.state.dynCellHeight !== 520) {
-    this.setState((state) => ({
-      dynCellHeight: 520
-    }));
-  }
+      this.setState((state) => ({
+        dynCellHeight: 520,
+      }));
+    }
     return 1;
   };
 
@@ -55,10 +54,9 @@ class IdeaList extends React.Component {
     console.log(param);
     var newSort;
     if (this.state[stateSort] === "Ascending") {
-      newSort = "Descending";      
-    }
-    else newSort = "Ascending";
-    
+      newSort = "Descending";
+    } else newSort = "Ascending";
+
     console.log("Ajettu sortteri");
     this.setState((state) => ({
       list: state.list.sort(this.dynamicSort(param)),
@@ -75,25 +73,32 @@ class IdeaList extends React.Component {
         <Button
           onClick={() => {
             if (this.state.categorySort === "Ascending") {
-            this.sorter("category");
-            }
-            else this.sorter("-category");
-          }}>
+              this.sorter("category");
+            } else this.sorter("-category");
+          }}
+        >
           SORT BY CATEGORY {this.state.categorySort}
         </Button>
         <Button
           onClick={() => {
             if (this.state.upvotesSort === "Ascending") {
-            this.sorter("upvotes");
-            }
-            else this.sorter("-upvotes");
-          }}>
+              this.sorter("upvotes");
+            } else this.sorter("-upvotes");
+          }}
+        >
           SORT BY UPVOTES {this.state.upvotesSort}
         </Button>
-        <GridList cols={this.columnSize()} cellHeight={this.state.dynCellHeight}>
+        <GridList
+          cols={this.columnSize()}
+          cellHeight={this.state.dynCellHeight}
+        >
           {this.state.list.map((tile) => (
             <GridListTile key={tile.id} cols={tile.cols || 1}>
-              <IdeaCard key={tile} data={tile} cellH={this.state.dynCellHeight}></IdeaCard>
+              <IdeaCard
+                key={tile}
+                data={tile}
+                cellH={this.state.dynCellHeight}
+              ></IdeaCard>
             </GridListTile>
           ))}
         </GridList>

@@ -46,8 +46,9 @@ const EventDialog = (props) => {
       marginBottom: "2rem",
     },
     dialogDeleteButton: {
-      width: "50%",
+      width: "15%",
       height: "40px",
+      marginLeft: "2rem",
       marginTop: "2rem",
       marginBottom: "2rem",
     },
@@ -102,17 +103,19 @@ const EventDialog = (props) => {
           </Button>
         </DialogContent>
         {handleOwner === true ? (
-          <Button
-            className={styles.dialogDeleteButton}
-            disabled={!handleOwner}
-            variant="contained"
-            color="secondary"
-            onClick={() => {
-              window.confirm("Do you want to delete this event?") &&
-                deleteEvent(id, category);
-            }}
-            startIcon={<DeleteIcon />}
-          ></Button>
+          <Typography variant="h2" align="left">
+            <Button
+              className={styles.dialogDeleteButton}
+              disabled={!handleOwner}
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                window.confirm("Do you want to delete this event?") &&
+                  deleteEvent(id, category);
+              }}
+              startIcon={<DeleteIcon />}
+            ></Button>
+          </Typography>
         ) : null}
       </Typography>
     </Dialog>
