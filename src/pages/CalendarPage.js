@@ -17,8 +17,7 @@ import { WebApiAdaptor } from "@syncfusion/ej2-data";
 import { UserContext } from "../contexts/UserContext";
 import { SnackbarContext } from "../contexts/SnackbarContext";
 
-const { fetchEventsAsync } = BackendAPI();
-const { postEventAsync } = BackendAPI();
+const { fetchEventsAsync, postEventAsync, deleteEventAsync } = BackendAPI();
 
 const CalendarPage = () => {
   const { setSnackbar } = useContext(SnackbarContext);
@@ -32,7 +31,7 @@ const CalendarPage = () => {
       return true
   }
   const checkEVent = (user,data) => {
-    if (data.category === "Not Specify")
+    if (data.category === "Not specified")
     {
       if (user.email === data.senderEmail)
         return true
@@ -82,8 +81,8 @@ const CalendarPage = () => {
     const data = {
       body: args.addedRecords[0].Description
         ? args.addedRecords[0].Description
-        : "Not specify",
-      category: "Not Specify",
+        : "Not specified",
+      category: "Not specified",
       date: new Date().toISOString(),
       endTime: new Date(
         args.addedRecords[0].End
@@ -139,6 +138,65 @@ const CalendarPage = () => {
     // Fetch event again here
     getEvents();
   };
+  /*---------------------
+  */
+  const deleteEvent = (args) => {
+    console.log("what happen? ", args.addedRecords[0]);
+    const data = {
+      body: args.deletedRecords[0].Description
+        ? args.deletedRecords[0].Description
+        : "Not specified",
+      category: "Not specified",
+      date: new Date().toISOString(),
+      endTime: new Date(
+        args.deletedRecords[0].End
+          ? args.deletedRecords[0].End
+          : args.deletedRecords[0].EndTime
+      ).toISOString(),
+      id: args.deletedRecords[0].Id,
+      senderEmail: user.email,
+      senderId: user.id,
+      senderfName: user.fName,
+      senderlName: user.lName,
+      startTime: new Date(
+        args.deletedRecords[0].Start
+          ? args.deletedRecords[0].Start
+          : args.deletedRecords[0].StartTime
+      ).toISOString(),
+      title: args.deletedRecords[0].Summary
+        ? args.deletedRecords[0].Summary
+        : args.deletedRecords[0].Subject,
+      description: args.deletedRecords[0].Description,
+    };
+    console.log("Data after added: ", data);
+
+    // post data API here
+    
+    const delEvent = (id, category) => {
+      deleteEventAsync(id, category).then((res) => {
+        // creates a new state without the deleted object
+        if (res.status === 200) {
+          // removes event if
+          setSnackbar("Deleted event succesfully", 3, 2000);
+        } else if (res.status === 400) {
+          setSnackbar("Response returned status 400, cannot delete", 0, 2000);
+          console.log("ERROR status:", res.status);
+        } else {
+          setSnackbar(
+            "Something went wrong deleting event, status: ",
+            res.status,
+            1,
+            2000
+          );
+          console.log("ERROR STATUS", res.status);
+        }
+      });
+    };
+    delEvent(data.id, data.category);
+
+    // Fetch event again here
+    getEvents();
+  };
   useEffect(() => {
     // Data of user
     console.log("data of current user: ", user);
@@ -159,6 +217,11 @@ const CalendarPage = () => {
             args.addedRecords != null
           ) {
             createEvent(args);
+          }
+          if (args.requestType === "eventRemoved" &&
+          args.addedRecords != null )
+          {
+            deleteEvent(args);
           }
           
         }}
