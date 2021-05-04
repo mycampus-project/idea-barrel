@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import UserDialog from "../components/UserDialog";
 import { Button } from "@material-ui/core";
 
+// Home page for the app. It is used for user selection ans general guidance
+
 const HomePage = () => {
   const [userDlgOpen, setUserDlgOpen] = useState(false);
-  const user = (JSON.parse(window.localStorage.getItem("user")));
-
+  const user = JSON.parse(window.localStorage.getItem("user"));
 
   const handleUserDlgClose = () => {
     setUserDlgOpen(false);
@@ -35,13 +36,18 @@ const HomePage = () => {
       </Button>
       <br></br>
       {JSON.parse(window.localStorage.getItem("user"))?.fName ? (
-
-<div>
-      <h3>
-        Current user :  {user?.fName +" "+ user?.lName}, department head of {user?.department}. </h3>
-        <h3> Admins can delete objects. Submitted ideas related to your department have a star icon next to the category.</h3>
-      </div>
-      ) : null }
+        <div>
+          <h3>
+            Current user : {user?.fName + " " + user?.lName}, department head of{" "}
+            {user?.department}.{" "}
+          </h3>
+          <h3>
+            {" "}
+            Admins can delete objects. Submitted ideas related to your
+            department have a star icon next to the category.
+          </h3>
+        </div>
+      ) : null}
       <UserDialog open={userDlgOpen} handleUserDlgClose={handleUserDlgClose} />
     </div>
   );

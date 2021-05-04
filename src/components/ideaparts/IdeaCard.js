@@ -11,6 +11,8 @@ import StarIcon from "@material-ui/icons/Star";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import "../../App.css";
 
+// Custom listitem card for IdeaList
+
 const useStyles = (theme) => ({
   root: {
     display: "inherit",
@@ -141,11 +143,7 @@ class IdeaCard extends React.Component {
                     {category}
                   </Typography>
                   <br></br>
-                  <Typography
-                    variant="h6"
-                  >
-                    More details
-                  </Typography>
+                  <Typography variant="h6">More details</Typography>
                   <ArrowForwardIcon />
                 </Box>
               </Container>
