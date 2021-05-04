@@ -25,6 +25,8 @@ const useStyles = makeStyles((theme) => ({
       marginTop: "5px",
     }
   },
+  listItem: {
+  }
 
 }))
 
@@ -160,13 +162,13 @@ const BulletinPage = () => {
   const filteredList = bulletins
     .filter((item) => item.category === filter)
     .map((d) => (
-      <li onClick={() => handleDialogOpen(d)} key={d.id}>
+      <li onClick={() => handleDialogOpen(d)} key={d.id} className={classes.lis}>
         <BulletinListItem data={d} handleDelete={handleDelete} />
       </li>
     ));
 
   const listItem = bulletins.map((d) => (
-    <li onClick={() => handleDialogOpen(d)} key={d.id}>
+    <li onClick={() => handleDialogOpen(d)} key={d.id} className={classes.listItem}>
       <BulletinListItem data={d} handleDelete={handleDelete} />
     </li>
   ));

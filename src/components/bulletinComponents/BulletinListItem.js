@@ -1,4 +1,4 @@
-import { Card, CardMedia, Typography, makeStyles } from "@material-ui/core"; //eslint-disable-line
+import { Card, CardMedia, Typography, makeStyles,CardContent } from "@material-ui/core"; //eslint-disable-line
 import RoomIcon from '@material-ui/icons/Room';
 import React from "react";
 import Moment from "react-moment";
@@ -12,7 +12,7 @@ const BulletinListItem = (props) => {
 
   const useStyles = makeStyles((theme) => ({
     root: {
-      display: "flex"
+      display: "flex",
     },
     details: {
       display: 'flex',
@@ -27,17 +27,29 @@ const BulletinListItem = (props) => {
       marginTop:"auto",
       marginBottom: "auto"
     },
+    media: {
+      height: 0,
+      maxHeight: "200px",
+      paddingTop: '56.25%', // 16:9
+      marginTop:"auto",
+      marginBottom: "auto",
+      overflow:"hidden"
+    },
     row: {
-      display: "flex",
       flexDirection: "row",
+      border: "1px solid",
+      borderColor: theme.palette.primary.main
     },
     boxPadding: {
       marginLeft: 25
     },
     highlighted: {
-      backgroundColor: "#80d2ff",
+      backgroundColor: theme.palette.info.light,
       display: "flex",
       flexDirection: "row",
+      border: "1px solid",
+      borderColor: theme.palette.primary.main
+      
     },
     pinPos: {
       margin: 0,
@@ -47,9 +59,22 @@ const BulletinListItem = (props) => {
       left: "auto",
       position: "absolute"
     },
-    position: {
+    title: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      paddingTop: theme.spacing(2)
+    }, 
+    category: {
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1)
+    }, 
+    sender: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1)
+    }, 
+    date: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
     }
   }))
 
@@ -61,22 +86,24 @@ const BulletinListItem = (props) => {
     <div style={{ position: "relative" }}>
       <Card className={!pinned ? classes.row : classes.highlighted} >
         {image != null
-          ? <CardMedia className={classes.cover} image={getImageUrl(image)} />
-          : <div></div>
+          ? <CardMedia className={classes.media} image={getImageUrl(image)} />
+          : null
         }
         <div className={classes.details}>
-          <Typography component="h4" variant="h4" className={classes.position}>
+          <CardContent>
+          <Typography component="h4" variant="h4" className={classes.title}>
             {title}
           </Typography>
-          <Typography component="h6" variant="h6" className={classes.position}>
+          <Typography component="h6" variant="h6" className={classes.category}>
             {category}
           </Typography>
-          <Typography variant="subtitle1" color="textSecondary" className={classes.position}>
+          <Typography variant="subtitle1" color="textSecondary" className={classes.sender}>
             By: {senderName}
           </Typography>
-          <Typography variant="subtitle2" color="textSecondary" className={classes.position}>
+          <Typography variant="subtitle2" color="textSecondary" className={classes.date}>
             <Moment format="DD/MM/YYYY" date={date} /> at <Moment format="HH:mm" date={date} />
           </Typography>
+          </CardContent>
         </div>
         <div className={classes.pinPos}>
           {!pinned ? null : <RoomIcon />}
