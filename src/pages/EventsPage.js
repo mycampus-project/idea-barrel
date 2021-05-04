@@ -27,78 +27,41 @@ const Events = () => {
   const { user } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const { fetchUsersAsync } = BackendAPI();
-  const [sortedCategory, setSortedCategory] = useState("Ascending");
-  const [sortedTitle, setSortedTitle] = useState("Ascending");
+  const [sortedCategory, setSortedCategory] = useState("Sort by category");
   const [events, setEvents] = useState([]);
-  const [menuCategories, setMenuCategories] = useState([]);
   const [isOwnerOrAdmin, setOwnerOrAdmin] = useState(false);
-  const [sortedEvents, setSortedEvents] = useState([]);
 
   const getEvents = async () => {
     try {
       const response = await fetchEventsAsync();
       setEvents(response);
-      setMenuCategories(response);
-      setSortedEvents(response);
+      console.log("EVENTS: ", response);
     } catch (e) {
       console.log("error fetching bulletins");
     }
   };
-  const dynamicSort = (property) => {
-    var sortOrder = 1;
-    if (property[0] === "-") {
-      sortOrder = -1;
-      property = property.substr(1);
-    } else {
-      return function (a, b) {
-        return a[property] < b[property]
-          ? -1
-          : a[property] > b[property]
-          ? 1
-          : 0 * sortOrder;
-      };
-    }
-    return function (a, b) {
-      return a[property] > b[property]
-        ? -1
-        : a[property] > b[property]
-        ? 1
-        : 0 * sortOrder;
-    };
+  const formatDate = (string) => {
+    const parsed = new Date(string);
+    console.log(parsed);
+    return parsed;
   };
-  const sorter = (param) => {
-    console.log("PARAM:", param);
-    switch (param) {
-      case "-category":
-        if (sorted === "all") {
-          setSortedCategory("Descending");
-          setSortedEvents(events);
-          setEvents(events.sort(dynamicSort(param)));
-        }
-        break;
-      case "category":
-        if (sorted === "all") {
-          setSortedCategory("Ascending");
-          setSortedEvents(events);
-          setEvents(events.sort(dynamicSort(param)));
-        }
-        break;
-      case "-title":
-        if (sorted === "all") {
-          setSortedTitle("Descending");
-          setEvents(events.sort(dynamicSort(param)));
-        } else {
-          handleEvents(param, "Descending");
-        }
-        break;
-      case "title":
-        if (sorted === "all") {
-          setSortedTitle("Ascending");
-          setEvents(events.sort(dynamicSort(param)));
-        } else {
-          handleEvents(param, "Ascending");
-        }
 
+  // sorting button, either by category or latest
+  const sorter = (param) => {
+    switch (param) {
+      case "category":
+        const sortedNames = events.sort((a, b) =>
+          a.category.localeCompare(b.category)
+        );
+        setSortedCategory("Sort by category");
+        setEvents(sortedNames);
+        break;
+      case "latest":
+        const sortedDates = events.sort(
+          (a, b) => formatDate(b.date) - formatDate(a.date)
+        );
+        setSortedCategory("Sort by latest");
+        setEvents(sortedDates);
         break;
       default:
         break;
@@ -141,16 +104,6 @@ const Events = () => {
   const onSelect = (text) => {
     setSelected({ selected: text });
     handleSorted(text);
-  };
-  console.log(sortedEvents);
-  const handleEvents = (param, sortingOrder) => {
-    console.log("HANDLEEVENTS:", param, sortingOrder);
-    setSortedTitle(sortingOrder);
-    setSortedEvents(
-      sortedEvents
-        .filter((item) => item.category === sorted)
-        .sort(dynamicSort(param))
-    );
   };
   // sort the event list depending on scrollmenu choice
   const handleSorted = (event) => {
@@ -226,7 +179,7 @@ const Events = () => {
       MuiButton: {
         // category button
         outlinedPrimary: {
-          color: "blue",
+          color: "#3F51B5",
           borderRadius: 20,
           width: "70%",
           marginTop: "2%",
@@ -251,7 +204,7 @@ const Events = () => {
   ));
 
   // events sorted by category choice
-  const sortedArray = sortedEvents
+  const sortedArray = events
     .filter((item) => item.category === sorted)
     .map((data) => (
       <li onClick={() => handleShow(data)} key={data.id}>
@@ -265,7 +218,7 @@ const Events = () => {
   // remove duplicates from menuitems (category)
   const obj = [
     ...new Map(
-      menuCategories.map((item) => [JSON.stringify(item.category), item])
+      events.map((item) => [JSON.stringify(item.category), item])
     ).values(),
   ];
   // Scrollmenu items mapping
@@ -291,50 +244,23 @@ const Events = () => {
           >
             Show All Events
           </Button>
-          {sorted === "all" ? (
-            <div>
-              <Typography align="center">
-                <Button
-                  onClick={() => {
-                    if (sortedCategory === "Descending") {
-                      sorter("category");
-                    } else sorter("-category");
-                  }}
-                >
-                  SORT BY CATEGORY {sortedCategory}
-                </Button>
-              </Typography>
-              <Typography align="center">
-                <Button
-                  onClick={() => {
-                    if (sortedTitle === "Descending") {
-                      sorter("title");
-                    } else sorter("-title");
-                  }}
-                >
-                  SORT BY TITLE {sortedTitle}
-                </Button>
-              </Typography>
-            </div>
-          ) : (
-            <div>
-              <Typography align="center">
-                <Button
-                  onClick={() => {
-                    if (sortedTitle === "Descending") {
-                      sorter("title");
-                    } else sorter("-title");
-                  }}
-                >
-                  SORT BY TITLE {sortedTitle}
-                </Button>
-              </Typography>
-            </div>
-          )}
+          <div>
+            <Typography align="center">
+              <Button
+                onClick={() => {
+                  if (sortedCategory === "Sort by category") {
+                    sorter("latest");
+                  } else sorter("category");
+                }}
+              >
+                {sortedCategory}
+              </Button>
+            </Typography>
+          </div>
         </Typography>
       </ThemeProvider>
       <ScrollMenu
-        data={menuItems}
+        data={sortedArray.length < 1 ? menuItems : ""}
         arrowLeft={ArrowLeft}
         arrowRight={ArrowRight}
         wheel={true}
