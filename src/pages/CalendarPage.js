@@ -31,6 +31,17 @@ const CalendarPage = () => {
     else
       return true
   }
+  const checkEVent = (user,data) => {
+    if (data.category === "Not Specify")
+    {
+      if (user.email === data.senderEmail)
+        return true
+      else
+        return false
+    }
+    else
+    return true
+  }
   const getEvents = async () => {
     try {
       const response = await fetchEventsAsync();
@@ -38,6 +49,7 @@ const CalendarPage = () => {
       console.log("events from database :", response);
       let temp = [...response];
       temp = temp.map((el) => {
+        if (checkEVent(user,el)){
         return {
           Id: el.id,
           End: new Date(el.endTime),
@@ -46,7 +58,9 @@ const CalendarPage = () => {
           IsReadonly: checkUser(user,el),
           //isAllDay: true,
           Description: el.body
-        };
+        };}
+        else
+        return {}
       });
       setLocalData({
         dataSource: temp,
