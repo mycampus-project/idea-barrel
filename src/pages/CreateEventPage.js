@@ -61,10 +61,12 @@ const CreateEventPage = () => {
 
   // check that form does not have empty fields
   const handleForm = (event) => {
+    console.log(event.target.name);
     setEventData({
       ...eventData,
       [event.target.name]: event.target.value,
     });
+
     switch (event.target.name) {
       case "senderId":
         errors.senderId =
@@ -97,21 +99,20 @@ const CreateEventPage = () => {
               updateErrors("categoryError", null);
         break;
       default:
-        break;
     }
   };
+  console.log("ERRORS:", errors);
 
   const filterPassedTime = (time) => {
     const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() - 1);
+    currentDate.setDate(currentDate.getDate());
     const selectedDate = new Date(time);
 
     return currentDate.getTime() < selectedDate.getTime();
   };
   const filterSelectedTime = (time) => {
     const selectedDate = new Date(time);
-    selectedDate.setDate(selectedDate.getDate() + 1);
-
+    selectedDate.setDate(selectedDate.getDate());
     return startTime.getTime() < selectedDate.getTime();
   };
 
@@ -124,11 +125,11 @@ const CreateEventPage = () => {
       title: eventData.title,
       body: eventData.body,
       category: eventData.category,
-      startTime: startTime,
-      endTime: endTime,
+      startTime: startTime.toISOString(),
+      endTime: endTime.toISOString(),
     };
     console.log("POSTED DATA DATA: ", data);
-    console.log("USER CREATEVENT:", user);
+    console.log("SUBMIT:", submitEnabled);
 
     const res = await postEventAsync(data);
     validateErrors();
@@ -203,6 +204,7 @@ const CreateEventPage = () => {
       display: "flex",
       width: "100%",
       justifyContent: "center",
+      left: 0,
     },
     endPicker: {
       display: "flex",
@@ -297,14 +299,15 @@ const CreateEventPage = () => {
           <DatePicker
             className={style.dateStartPicker}
             selected={startTime}
+            popperPlacement={"top-center"}
             showTimeSelect
+            onChange={setStartTime}
             shouldCloseOnSelect={true}
             showWeekNumbers
             filterDate={filterPassedTime}
             filterTime={filterPassedTime}
             timeFormat="HH:mm"
             dateFormat="dd/MM/yyyy HH:mm"
-            onChange={(date) => setStartTime(date)}
           />
         </div>
         <Typography component="p" variant="p" className={style.pickerTitle}>
@@ -314,14 +317,15 @@ const CreateEventPage = () => {
           <DatePicker
             className={style.dateEndPicker}
             selected={endTime}
+            popperPlacement={"top-center"}
             showTimeSelect
             showWeekNumbers
+            shouldCloseOnSelect={true}
+            onChange={setEndTime}
             filterDate={filterSelectedTime}
             filterTime={filterSelectedTime}
-            shouldCloseOnSelect={false}
             timeFormat="HH:mm"
             dateFormat="dd/MM/yyyy HH:mm"
-            onChange={(date) => setEndTime(date)}
           />
         </div>
         <br />
