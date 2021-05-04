@@ -138,7 +138,7 @@ const BulletinDetailsDialog = (props) => {
       senderName,
     });
   }, []); // eslint-disable-line
-
+  // Check if current user is same as sender 
   const checkId = (userId, senderId) => {
     if (userId === senderId) {
       return true;
@@ -146,7 +146,7 @@ const BulletinDetailsDialog = (props) => {
       return false;
     }
   };
-
+  // Enables editing mode and sets the editing mode state to current bulletin data
   const enableEditMode = () => {
     setEditMode(true);
     setEditState({
@@ -161,13 +161,13 @@ const BulletinDetailsDialog = (props) => {
       senderName,
     });
   };
-
+  // disable edit mode and reset error states
   const disableEditMode = () => {
     setEditMode(false);
     setErrors({ title: false, body: false });
     setHelpers({ title: "", body: "" });
   };
-
+  // just check if edit will be enabled or disabled
   const determineEditMode = () => {
     if (editMode) {
       disableEditMode();
@@ -175,7 +175,7 @@ const BulletinDetailsDialog = (props) => {
       enableEditMode();
     }
   };
-  // TODO DO THIS
+  // Handle edited bulletin submit event 
   const handleEditSubmit = () => {
     try {
       updateBulletinAsync(editState).then((res) => {
@@ -191,7 +191,7 @@ const BulletinDetailsDialog = (props) => {
     }
     console.log("submit");
   };
-
+  // update state hook
   const updateField = (e) => {
     setEditState({
       ...editState,
@@ -207,21 +207,22 @@ const BulletinDetailsDialog = (props) => {
 
   const [errors, setErrors] = useState({ title: false, body: false });
   const [helpers, setHelpers] = useState({ title: "", body: "" });
-
+  // update error message hook
   const updateHelperMsg = (helper, message) => {
     setHelpers({
       ...helpers,
       [helper]: message,
     });
   };
-
+  // update error bool
   const updateErrorBool = (error, bool) => {
     setErrors({
       ...errors,
       [error]: bool,
     });
   };
-
+  // handles displaying of errors
+  // executes on on blur events depending on either title or body
   const handleOnBlur = (event) => {
     switch (event.target.id) {
       case "title": {
@@ -247,11 +248,11 @@ const BulletinDetailsDialog = (props) => {
       default:
     }
   };
-
+  // validate inputs 
   const validate = () => {
     if (errors.title || errors.body === true) return true;
   };
-
+  // component for pin, edit and delete buttons
   const PinEditAndDelete = () => {
     return (
       <div className={classes.pinDeletePos}>
