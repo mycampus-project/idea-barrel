@@ -1,7 +1,7 @@
 const BackendAPI = () => {
   const dev_token =
     "eb245d43fefbc85ad21a136e56a944100c8f8f35ee74e0fce599a048059a6fec";
-  const rootUrl = "http://ibapi.mkayyeedev.ninja";
+  const rootUrl = "https://mkayyeedev.ninja";
 
   const fetchFromUrl = async (url) => {
     const notes = await fetch(rootUrl + "/" + url, {
@@ -53,11 +53,11 @@ const BackendAPI = () => {
 
   const getImageUrl = (fileName) => {
     return rootUrl + "/image/" + fileName;
-  }
+  };
 
   const postBulletinForm = async (data) => {
     // Multer from the backend API expects fieldname "file"
-    // for processing anything. Convert "image" to "file" here. 
+    // for processing anything. Convert "image" to "file" here.
     if (data.image) {
       data.file = data.image;
       delete data.image;
@@ -69,17 +69,16 @@ const BackendAPI = () => {
     const res = await fetch(rootUrl + "/bulletins/form", {
       method: "POST",
       headers: {
-        dev_token
+        dev_token,
       },
-      body: form
-
+      body: form,
     });
     return res;
-  }
+  };
 
   const postBulletinRegular = async (data) => {
     return postDataToUrl(data, "bulletins");
-  }
+  };
 
   const fetchUsersAsync = async () => {
     return fetchFromUrl("users");
@@ -151,7 +150,7 @@ const BackendAPI = () => {
     updateEventAsync,
     updateIdeaAsync,
     updateBulletinAsync,
-    getImageUrl
+    getImageUrl,
   };
 };
 

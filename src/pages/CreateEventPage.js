@@ -11,16 +11,15 @@ import React, { useState, useContext } from "react";
 import BackendAPI from "../api/BackendAPI";
 import { navigate } from "hookrouter";
 import { SnackbarContext } from "../contexts/SnackbarContext";
-//import { findByLabelText } from "@testing-library/dom";
+import { UserContext } from "../contexts/UserContext";
 
 const CreateEventPage = () => {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const { setSnackbar } = useContext(SnackbarContext);
+  const { user } = useContext(UserContext);
   const [errors, setErrors] = useState({
-    senderId: true,
-    senderIdError: "Cant be empty",
     title: true,
     titleError: "Cant be empty",
     body: true,
@@ -29,7 +28,10 @@ const CreateEventPage = () => {
     categoryError: "Cant be empty",
   });
   const [eventData, setEventData] = useState({
-    senderId: "",
+    senderId: user.id,
+    senderEmail: user.email,
+    senderfName: user.fName,
+    senderlName: user.lName,
     title: "",
     body: "",
     category: "",
@@ -116,12 +118,17 @@ const CreateEventPage = () => {
   const postEvent = async () => {
     const data = {
       senderId: eventData.senderId,
+      senderEmail: eventData.senderEmail,
+      senderfName: eventData.senderfName,
+      senderlName: eventData.senderlName,
       title: eventData.title,
       body: eventData.body,
       category: eventData.category,
       startTime: startTime,
       endTime: endTime,
     };
+    console.log("POSTED DATA DATA: ", data);
+    console.log("USER CREATEVENT:", user);
 
     const res = await postEventAsync(data);
     validateErrors();
@@ -234,23 +241,7 @@ const CreateEventPage = () => {
       <form noValidate onSubmit={onSubmit} className={style.formStyle}>
         <Grid container spacing={2} className={style.fieldContainer}>
           <Grid item xs={12}>
-            <Typography className={style.senderId} component="h5" variant="h5">
-              SenderId
-            </Typography>
-            <TextField
-              className={style.senderIdField}
-              variant="outlined"
-              name="senderId"
-              autoFocus
-              required
-              value={eventData.senderId}
-              label="Insert sender id"
-              onChange={handleForm}
-              onBlur={handleForm}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography component="h5" variant="h5" className={style.title}>
+            <Typography component="h4" variant="h4" className={style.title}>
               Event title
             </Typography>
             <TextField
@@ -265,7 +256,7 @@ const CreateEventPage = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography component="h5" variant="h5" className={style.info}>
+            <Typography component="h4" variant="h4" className={style.info}>
               Event info
             </Typography>
             <TextField
@@ -282,7 +273,7 @@ const CreateEventPage = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography component="h5" variant="h5" className={style.category}>
+            <Typography component="h4" variant="h4" className={style.category}>
               Event category
             </Typography>
             <TextField
@@ -304,10 +295,10 @@ const CreateEventPage = () => {
             className={style.dateStartPicker}
             selected={startTime}
             showTimeSelect
+            shouldCloseOnSelect={true}
             showWeekNumbers
             filterDate={filterPassedTime}
             filterTime={filterPassedTime}
-            shouldCloseOnSelect={false}
             timeFormat="HH:mm"
             dateFormat="dd/MM/yyyy HH:mm"
             onChange={(date) => setStartTime(date)}

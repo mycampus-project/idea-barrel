@@ -5,16 +5,14 @@ import { Button, Container } from "@material-ui/core";
 
 const {postIdeaAsync} = BackendAPI();
 
-const postIdea = async (user, title, body, cat) => {
+const postIdea = async (user, title, body, cat, department) => {
   const data = {
-    senderId: "matti", //user.fName + " " + user.Lname,
+    senderId: JSON.parse(window.localStorage.getItem("user")).fName +" "+ JSON.parse(window.localStorage.getItem("user")).lName,
     category: cat,
     title: title,
     body: body,
+    department: department,
     upvotes: 0,
-    //votes: 0,
-    //user: user,
-    
   };
 
   const res = await postIdeaAsync(data)
@@ -36,11 +34,13 @@ class IdeaForm extends React.Component {
       title: "",
       body: "",
       cat: "",
+      department:"HR",
     };
   }
 
 
   myChangeHandler = (event) => {
+    event.preventDefault();
     let nam = event.target.name;
     let val = event.target.value;
     this.setState({[nam]: val});
@@ -60,9 +60,15 @@ class IdeaForm extends React.Component {
         <input type="text" name="body" onChange={this.myChangeHandler} />
         <p>Category</p>
         <input type="text" name="cat" onChange={this.myChangeHandler} />
+        <p>Recipient department</p>
+        <select name="department" onChange={this.myChangeHandler}>
+    <option value="HR">HR</option>
+    <option value="Cloud Computing">Cloud Computing</option>
+    <option value="5G Networks">5G Networks</option>
+</select>
         <br />
         <br />
-        <Button variant="outlined" onClick={() => postIdea(user, this.state.title, this.state.body, this.state.cat)}>
+        <Button variant="outlined" onClick={() => postIdea(user, this.state.title, this.state.body, this.state.cat, this.state.department)}>
           Click me to submit the idea
         </Button>
       </form>

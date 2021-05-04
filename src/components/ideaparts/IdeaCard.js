@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core/styles";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import { DeleteForever } from "@material-ui/icons";
+import StarIcon from '@material-ui/icons/Star';
 import BackendAPI from "../../api/BackendAPI";
 import "../../App.css";
 
@@ -40,14 +41,23 @@ const useStyles = (theme) => ({
     borderRadius: "50%",
     maxWidth: "5%",
   },
-  card: {
+  card420: {
     display: "flex",
     flexDirection: "column",
     border: "solid 3px blue",
-    height: "22.9em",
     justifyContent: "space-between",
     padding: "0.5em",
-    width: "100%"
+    width: "100%",
+    height: "30em"
+  },
+  card520: {
+    display: "flex",
+    flexDirection: "column",
+    border: "solid 3px blue",
+    justifyContent: "space-between",
+    padding: "0.5em",
+    width: "100%",
+    height: "37em"
   },
   date: {
     textAlign: "end",
@@ -68,13 +78,14 @@ const useStyles = (theme) => ({
     marginBottom:"0.6em",
 
  backgroundColor:"yellow",
-    width : "12em",
+    width : "auto",
   },
   bodyCont: {
+    overflowY: "scroll",
     justifyContent:"left",
     border: "solid 1px black",
     width : "100%",
-    height: "55%"
+    height: "45%"
   },
   eventDetailButton: {
     position: "absolute",
@@ -92,14 +103,14 @@ const deleteIdea = async (id, category) => {
   try {
     await deleteIdeaAsync(id, category);
     console.log("deleted");
-    window.location.reload();
+    //window.location.reload();
   } catch (e) {
     console.log("error deleting an idea");
     console.log(e);
   }
 };
 
-const upvoteIdea = async (id, senderId, upvotes, category, title, body) => {
+const upvoteIdea = async (id, senderId, upvotes, category, title, body, department) => {
   try {
     const data = {
       upvotes: upvotes + 1,
@@ -108,11 +119,13 @@ const upvoteIdea = async (id, senderId, upvotes, category, title, body) => {
       category: category,
       title: title,
       body: body,
+      department:department
     };
     // TODO  if current user = idea senderID...
     const res = await updateIdeaAsync(data);
-    window.location.reload();
+    //window.location.reload();
     if (res.status === 200) {
+      
       console.log("upvoted");
     } else if (res.status === 400) {
       console.log("Unable to update idea", res.json());
@@ -129,20 +142,18 @@ class IdeaCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "",
-      body: "",
-      cat: "",
+      upvotes: this.props.data.upvotes,
     };
   }
 
   render() {
-    const { title, category, id, body, upvotes, senderId } = this.props.data;
-    console.log("UPVOTES " + upvotes);
+    const { title, category, id, body, senderId, department } = this.props.data;
 
     return (
       // Card for event details and dialog for more info
       <div className={this.props.classes.root}>
-        <Card className={this.props.classes.card}>
+        <Card className={this.props.classes["card"+this.props.cellH]}>
+          
               <Box
               display="flex"
               flex="1"
@@ -152,21 +163,42 @@ justifyContent="space-between"              >
                   title={title}
                   titleTypographyProps={{ variant: "h5" }}
                 />
+                
+                
                 <Container className={this.props.classes.categoryCont}>
+                  <Box display="flex"
+              flex="1"
+                flexDirection="row"
+justifyContent="space-between"  >
+  
                 <Typography variant="h6" className={this.props.classes.category}>
-                  {category}
+                  {category} -
                 </Typography>
+                <Typography variant="h6" className={this.props.classes.category}>
+                   - {department}
+                   
+                </Typography>
+                {JSON.parse(window.localStorage.getItem("user"))?.department === department ? (
+
+<StarIcon />) : null }
+                
+                
+                </Box>
+                
                 </Container>
                 
-                <Container className={this.props.classes.bodyCont}>
+                
+
+                <Box className={this.props.classes.bodyCont}>
                 <Typography className={this.props.classes.body}>
                   {body}
                 </Typography>
-                </Container>
+
+                </Box>
                 
              
             
-          <Container maxWidth="md" flexWrap="nowrap">
+          <Container maxWidth="md" flexwrap="nowrap">
             <Box display="flex" flexdirection="row" justifyContent="space-between">
               {/* <Typography className={this.props.classes.date}>
                   {date}
@@ -179,23 +211,25 @@ justifyContent="space-between"              >
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() =>
-                    upvoteIdea(id, senderId, upvotes, category, title, body)
-                  }
+                  onClick={() => {
+                    upvoteIdea(id, senderId, this.state.upvotes, category, title, body, department);
+                    this.setState( state => ({
+                      upvotes: state.upvotes +1
+                    }));
+                  }}
                   startIcon={<ArrowUpwardIcon />}
                 >
                   Upvote
                 </Button>
 
               </MuiThemeProvider>
-              {upvotes ? (
+              {this.state.upvotes ? (
                   <Typography variant="h6" className={this.props.classes.category}>
-                    Upvotes: {upvotes}
+                    Upvotes: {this.state.upvotes}
                   </Typography>
                 ) : null}
 
-              {/* TODO: Conditional formatting. Flagging for users, delete for admin */}
-
+              {JSON.parse(window.localStorage.getItem("user"))?.isAdmin || JSON.parse(window.localStorage.getItem("user"))?.department === department ? (
               <DeleteForever
                 onClick={() => deleteIdea(id, category)}
                 style={{
@@ -207,7 +241,7 @@ justifyContent="space-between"              >
                   padding: "0.05em",
                   margin: "0.2em",
                 }}
-              ></DeleteForever>
+              ></DeleteForever> ) : null }
             </Box>
           </Container>
           </Box>

@@ -1,5 +1,5 @@
-import { Fab } from "@material-ui/core"; //eslint-disable-line
 import React, { useContext, useEffect, useState } from "react";
+import { Fab, makeStyles } from "@material-ui/core"; //eslint-disable-line
 import AddIcon from "@material-ui/icons/Add";
 import BackendAPI from "../api/BackendAPI";
 import BulletinDetailsDialog from "../components/bulletinComponents/BulletinDetailsDialog.js";
@@ -7,6 +7,7 @@ import BulletinListItem from "../components/bulletinComponents/BulletinListItem"
 import BulletinFilter from "../components/bulletinComponents/BulletinFilter";
 import CreateBulletinDialog from "../components/bulletinComponents/CreateBulletinDialog";
 import { SnackbarContext } from "../contexts/SnackbarContext";
+import { UserContext } from "../contexts/UserContext"
 
 const {
   fetchBulletinsAsync,
@@ -14,7 +15,36 @@ const {
   updateBulletinAsync,
 } = BackendAPI();
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    [theme.breakpoints.up("lg")]: {
+      width: "50%",
+      justifyContent: "center",
+      marginLeft: "auto",
+      marginRight: "auto",
+      marginTop: "5px",
+    }
+  },
+  listItem: {
+  }
+
+}))
+
+
 const BulletinPage = () => {
+
+  const classes = useStyles()
+  const { user  } = useContext(UserContext)
+  const [tempUser, setTempUser] = useState({email: "default",
+  fName: "default",
+  id: "defauly",
+  isAdmin: false,
+  lName: "default",
+  _attachments: "default",
+  _etag: "default",
+  _rid: "default",
+  _self: "default",
+  _ts: 1615660487})
   const { setSnackbar } = useContext(SnackbarContext);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogData, setDialogData] = useState("");
@@ -32,14 +62,30 @@ const BulletinPage = () => {
   const getBulletins = async () => {
     try {
       const response = await fetchBulletinsAsync(); // Data array
-      console.log(response)
       const complete = sortBulletinArray(response);
-      console.log(complete)
       setBulletins(complete);
     } catch (e) {
       setSnackbar("There was an error fetching bulletins", 0, 5000);
     }
   };
+
+  const userFromLocal = async () => {
+    const localStorageUserGet = window.localStorage.getItem("user")
+    if (localStorageUserGet != null || undefined) {
+      const parse = JSON.parse(localStorageUserGet)
+      return parse
+    } else {
+      console.log("not setting from local");
+    }
+  }
+  useEffect(()=>{
+    userFromLocal().then((it)=> {
+      console.log(it);
+      setTempUser(it)
+    })
+    console.log("CTX user");
+    console.log(user);
+  },[tempUser.id])//eslint-disable-line
 
   useEffect(() => {
     getBulletins();
@@ -56,7 +102,6 @@ const BulletinPage = () => {
 
   const handleDialogClose = () => setDialogOpen(false);
   const handleCreateClose = () => setCreateDialog(false);
-  //const createBulletinNav = () => navigate("/bulletin-create")
   const createBulletinNav = () => handleCreateDialogOpen();
 
   // Handle bulletin delete
@@ -117,20 +162,20 @@ const BulletinPage = () => {
   const filteredList = bulletins
     .filter((item) => item.category === filter)
     .map((d) => (
-      <li onClick={() => handleDialogOpen(d)} key={d.id}>
+      <li onClick={() => handleDialogOpen(d)} key={d.id} className={classes.lis}>
         <BulletinListItem data={d} handleDelete={handleDelete} />
       </li>
     ));
 
   const listItem = bulletins.map((d) => (
-    <li onClick={() => handleDialogOpen(d)} key={d.id}>
+    <li onClick={() => handleDialogOpen(d)} key={d.id} className={classes.listItem}>
       <BulletinListItem data={d} handleDelete={handleDelete} />
     </li>
   ));
 
   return (
     <div>
-      <div>
+      <div className={classes.filters}>
         <BulletinFilter handleFilterClick={handleFilterClick} />
       </div>
       <div>
@@ -161,9 +206,11 @@ const BulletinPage = () => {
         data={dialogData}
         handleDelete={handleDelete}
       />
+      
       <CreateBulletinDialog
         open={createDialog}
         handleCreateClose={handleCreateClose}
+        user={tempUser}
       />
     </div>
   );

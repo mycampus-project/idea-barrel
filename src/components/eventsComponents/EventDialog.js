@@ -1,4 +1,5 @@
 import Moment from "react-moment";
+import React from "react";
 import {
   Button,
   Dialog,
@@ -6,20 +7,14 @@ import {
   DialogContent,
   Grid,
   makeStyles,
+  Typography,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CloseIcon from "@material-ui/icons/Close";
 
 const EventDialog = (props) => {
-  const { data, handleClose, deleteEvent, show, isAdmin } = props;
-  const { title, body, category, date, id } = data;
-  console.log("isAdmin eventDialog:", isAdmin);
-
-  // if not admin, delete button is disabled
-  const adminPrivileges = {
-    ...(isAdmin && { disabled: false }),
-  };
-  const admin = adminPrivileges.disabled;
+  const { data, handleClose, deleteEvent, show, handleOwner } = props;
+  const { title, body, category, startTime, endTime, id } = data;
 
   const useStyles = makeStyles({
     dialogGrid: {
@@ -27,9 +22,9 @@ const EventDialog = (props) => {
       borderRadius: 0,
     },
     closeButton: {
-      marginTop: "1%",
-      marginRight: "1%",
-      padding: 0,
+      marginTop: "0%",
+      marginRight: "0%",
+      borderRadius: "20px",
     },
     dialogTitle: {
       width: "100%",
@@ -37,6 +32,7 @@ const EventDialog = (props) => {
     },
     dialogBody: {
       width: "100%",
+      minHeight: "100px",
     },
     dialogCategory: {
       width: "100%",
@@ -46,7 +42,7 @@ const EventDialog = (props) => {
     },
     dialogDeleteButton: {
       width: "100%",
-      marginTop: "5rem",
+      marginTop: "2rem",
     },
   });
   const styles = useStyles();
@@ -54,10 +50,11 @@ const EventDialog = (props) => {
   // deleteEvent - can delete everything atm
   return (
     <Dialog open={show} fullWidth={true}>
+      {handleOwner ? <body>This is your own post</body> : ""}
       <Grid container className={styles.dialogGrid}>
         <Button
           className={styles.closeButton}
-          color="black"
+          color="primary"
           startIcon={<CloseIcon />}
           aria-label="closeEvent"
           onClick={handleClose}
@@ -71,12 +68,18 @@ const EventDialog = (props) => {
       </DialogContent>
       <DialogContent className={styles.dialogBody}>{body}</DialogContent>
       <DialogContent className={styles.dialogDateTime}>
-        <Moment format="DD-MM-YYYY" date={date} />{" "}
-        <Moment format="HH:mm:ss" date={date} />
+        <Typography component={"span"} variant={"body"}>
+          <p>Event starts at:</p>
+          <Moment format="DD-MM-YYYY" date={startTime} />{" "}
+          <Moment format="HH:mm:ss" date={startTime} />
+          <p>Event ends at:</p>
+          <Moment format="DD-MM-YYYY" date={endTime} />{" "}
+          <Moment format="HH:mm:ss" date={endTime} />
+        </Typography>
       </DialogContent>
       <Button
         className={styles.dialogDeleteButton}
-        disabled={admin}
+        disabled={!handleOwner}
         variant="contained"
         color="secondary"
         onClick={() => {

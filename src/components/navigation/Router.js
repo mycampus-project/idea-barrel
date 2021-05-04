@@ -7,6 +7,8 @@ import CalendarPage from "../../pages/CalendarPage.js";
 import CreateEventPage from "../../pages/CreateEventPage"
 import { useRoutes } from "hookrouter";
 
+
+
 const routes = {
   "/": () => <HomePage />,
   "/bulletin": () => <BulletinPage />,
