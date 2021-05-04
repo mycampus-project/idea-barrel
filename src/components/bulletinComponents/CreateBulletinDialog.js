@@ -45,7 +45,7 @@ const CreateBulletinDialog = (props) => {
     const { open, handleCreateClose} = props
 
     const { user } = useContext(UserContext)
-
+    // formats the user string to e fname lname 
     const formatUserString = () => {
         return `${user.fName} ${user.lName}`
     }
@@ -80,38 +80,38 @@ const CreateBulletinDialog = (props) => {
             setSnackbar(e, 0, 5000)
         }
     }
-
+    // error message update hook
     const updateHelperMsg = (helper, message) => {
         setHelpers({
             ...helpers,
             [helper]: message
         })
     }
-
+    // error update hook
     const updateErrorBool = (error, bool) => {
         setErrors({
             ...errors,
             [error]: bool
         })
     }
-
+    // state update hook 
     const updateField = e => {
         setFormState({
             ...formState,
             [e.target.id]: e.target.value
         })
     }
-
+    // updates the image state
     const updateImage = (event) => {
         setFile(event.target.files[0])
         setPreview(URL.createObjectURL(event.target.files[0]))
     
     }
-
+    // hanldes image selection 
     const handleImageSelectClick = e => {
         hiddenFileInput.current.click()
     }
-
+    // handles all the errors 
     const handleOnBlur = (event) => {
         switch (event.target.id) {
             case "title": {

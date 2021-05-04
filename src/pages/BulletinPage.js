@@ -132,6 +132,7 @@ const BulletinPage = () => {
   const handleFilterClick = (event) => {
     setFilter(event.currentTarget.value);
   };
+  // filtered items list
   const filteredList = bulletins
     .filter((item) => item.category === filter)
     .map((d) => (
@@ -139,8 +140,8 @@ const BulletinPage = () => {
         <BulletinListItem data={d} handleDelete={handleDelete} />
       </li>
     ));
-
-  const listItem = bulletins.map((d) => (
+    // the actualy bulletin list 
+  const list = bulletins.map((d) => (
     <li onClick={() => handleDialogOpen(d)} key={d.id} className={classes.listItem}>
       <BulletinListItem data={d} handleDelete={handleDelete} />
     </li>
@@ -155,7 +156,7 @@ const BulletinPage = () => {
         <h1 style={{ textAlign: "center" }}>Bulletins</h1>
       </div>
       <div>
-        {filter === "None" ? <ul>{listItem}</ul> : <ul>{filteredList}</ul>}
+        {filter === "None" ? <ul>{list}</ul> : <ul>{filteredList}</ul>}
       </div>
       <Fab
         color="primary"
