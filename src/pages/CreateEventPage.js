@@ -249,6 +249,7 @@ const CreateEventPage = () => {
               variant="outlined"
               name="title"
               required
+              inputProps={{ maxLength: 30 }}
               value={eventData.title}
               label="Insert event title"
               onChange={handleForm}
@@ -261,6 +262,7 @@ const CreateEventPage = () => {
             </Typography>
             <TextField
               className={style.infoField}
+              inputProps={{ maxLength: 300 }}
               variant="outlined"
               name="body"
               multiline
@@ -277,6 +279,7 @@ const CreateEventPage = () => {
               Event category
             </Typography>
             <TextField
+              inputProps={{ maxLength: 30 }}
               className={style.categoryField}
               variant="outlined"
               name="category"
