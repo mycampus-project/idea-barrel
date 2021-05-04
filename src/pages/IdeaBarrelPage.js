@@ -42,20 +42,10 @@ const IdeaBarrelPage = () => {
 
   return (
     <div>
-      {JSON.parse(window.localStorage.getItem("user"))?.fName ? (
 
-<div>
-      <h2>
-        Current user :  {user?.fName +" "+ user?.lName}, department head of {user?.department}.</h2>
-      <h3>Submitted ideas related to your department have a star icon next to the category.</h3>
-      </div>
-      ) : <h1>Return to home page and select a user profile</h1> }
-      {JSON.parse(window.localStorage.getItem("user"))?.isAdmin ? (
-        <h3>You have admin rights with delete permissions</h3>
-        ) : <h3>Department heads have rights with delete permissions on ideas targeted to their department</h3> }
       
       {ideas.length > 0 ? (
-                  <IdeaList data={ideas}></IdeaList>
+                  <IdeaList data={ideas} user={user}></IdeaList>
                 ) : <Typography>Loading...</Typography>
       }   
       <br></br>   
