@@ -23,10 +23,6 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     minHeight: "64px",
     padding: theme.spacing(1),
-<<<<<<< HEAD
-=======
-    
->>>>>>> 29ce1fcd5182902e254856795987c75f979a092a
   },
 
   root: {
@@ -312,7 +308,6 @@ const BulletinDetailsDialog = (props) => {
     <div style={{ position: "relative" }}>
       <Dialog fullScreen open={open} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
-<<<<<<< HEAD
           <Toolbar>
             <IconButton
               edge="start"
@@ -320,10 +315,6 @@ const BulletinDetailsDialog = (props) => {
               onClick={onClose}
               aria-label="close"
             >
-=======
-          <Toolbar className={classes.toolbar}>
-            <IconButton edge="start" color="inherit" onClick={onClose} aria-label="close">
->>>>>>> 29ce1fcd5182902e254856795987c75f979a092a
               <CloseIcon />
             </IconButton>
             <Typography variant="h5">{category} </Typography>
