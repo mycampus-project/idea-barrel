@@ -29,6 +29,7 @@ const Events = () => {
   const { fetchUsersAsync } = BackendAPI();
   const [sortedCategory, setSortedCategory] = useState("Sort by category");
   const [events, setEvents] = useState([]);
+  //const [savedParam, setSavedParam] = useState("category");
   const [isOwnerOrAdmin, setOwnerOrAdmin] = useState(false);
 
   const getEvents = async () => {
@@ -54,6 +55,7 @@ const Events = () => {
           a.category.localeCompare(b.category)
         );
         setSortedCategory("Sort by category");
+        //setSavedParam("latest")
         setEvents(sortedNames);
         break;
       case "latest":
