@@ -3,8 +3,11 @@ import BackendAPI from "../../api/BackendAPI";
 import { Button, Container } from "@material-ui/core";
 import { navigate } from "hookrouter";
 
+//Form component for colleting and sending new ideas
+
 const { postIdeaAsync } = BackendAPI();
 
+// HTTP POST to backend
 const postIdea = async (user, title, body, cat, department) => {
   const data = {
     senderId:
@@ -34,7 +37,7 @@ class IdeaForm extends React.Component {
     this.state = {
       title: "",
       body: "",
-      cat: "",
+      cat: "Facilities",
       department: "HR",
     };
   }
