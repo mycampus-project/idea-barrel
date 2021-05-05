@@ -35,16 +35,6 @@ const BulletinPage = () => {
 
   const classes = useStyles()
   const { user  } = useContext(UserContext)
-  const [tempUser, setTempUser] = useState({email: "default",
-  fName: "default",
-  id: "defauly",
-  isAdmin: false,
-  lName: "default",
-  _attachments: "default",
-  _etag: "default",
-  _rid: "default",
-  _self: "default",
-  _ts: 1615660487})
   const { setSnackbar } = useContext(SnackbarContext);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogData, setDialogData] = useState("");
@@ -58,7 +48,7 @@ const BulletinPage = () => {
     const complete = [...pins, ...rest]; // Sets the pinned items to the start of the array first
     return complete;
   };
-
+   // fetch bulletins from the api 
   const getBulletins = async () => {
     try {
       const response = await fetchBulletinsAsync(); // Data array
@@ -68,29 +58,12 @@ const BulletinPage = () => {
       setSnackbar("There was an error fetching bulletins", 0, 5000);
     }
   };
-
-  const userFromLocal = async () => {
-    const localStorageUserGet = window.localStorage.getItem("user")
-    if (localStorageUserGet != null || undefined) {
-      const parse = JSON.parse(localStorageUserGet)
-      return parse
-    } else {
-      console.log("not setting from local");
-    }
-  }
-  useEffect(()=>{
-    userFromLocal().then((it)=> {
-      console.log(it);
-      setTempUser(it)
-    })
-    console.log("CTX user");
-    console.log(user);
-  },[tempUser.id])//eslint-disable-line
-
+ 
   useEffect(() => {
     getBulletins();
   }, []); //eslint-disable-line
 
+  // Handle dialog opening
   const handleDialogOpen = (data) => {
     setDialogData(data);
     setDialogOpen(true);
@@ -210,7 +183,7 @@ const BulletinPage = () => {
       <CreateBulletinDialog
         open={createDialog}
         handleCreateClose={handleCreateClose}
-        user={tempUser}
+        user={user}
       />
     </div>
   );
