@@ -7,7 +7,7 @@ import BackendAPI from "../../api/BackendAPI";
 const {
   getImageUrl
 } = BackendAPI();
-
+// component representing a bulletin list item
 const BulletinListItem = (props) => {
 
   const useStyles = makeStyles((theme) => ({

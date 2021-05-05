@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1)
       },
 }))
-
+// Component representing the bulletin creation dialog
 const CreateBulletinDialog = (props) => {
     const { postBulletinsAsync } = BackendAPI();
     const { open, handleCreateClose} = props

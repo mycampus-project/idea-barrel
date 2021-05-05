@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "center"
     },
 }))
-
+// a component that contains the filter buttons for bulletin page
 const BulletinFilter = (props) => {
     const { handleFilterClick } = props
     const classes = useStyles()

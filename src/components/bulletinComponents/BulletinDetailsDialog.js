@@ -124,7 +124,7 @@ const BulletinDetailsDialog = (props) => {
   });
   const classes = useStyles();
   const { getImageUrl, updateBulletinAsync } = BackendAPI();
-
+  // Set edit state to current data 
   useEffect(() => {
     setEditState({
       title,

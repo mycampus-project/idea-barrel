@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
-
+// Base bulletin page component
 const BulletinPage = () => {
 
   const classes = useStyles()
@@ -41,7 +41,8 @@ const BulletinPage = () => {
   const [bulletins, setBulletins] = useState([]);
   const [filter, setFilter] = useState("None"); //eslint-disable-line
   const [createDialog, setCreateDialog] = useState(false);
-
+  // Sort the bulletin array based on pinned and un pinned
+  // Pinned items get placed on the top of the list
   const sortBulletinArray = (data) => {
     const pins = data.filter((item) => item.pinned === true);
     const rest = data.filter((item) => item.pinned === false || item.pinned === undefined); // fixes if the the pinned is property is missing
@@ -68,13 +69,13 @@ const BulletinPage = () => {
     setDialogData(data);
     setDialogOpen(true);
   };
-
+  // Handle dialog opening
   const handleCreateDialogOpen = () => {
     setCreateDialog(true);
   };
 
-  const handleDialogClose = () => setDialogOpen(false);
-  const handleCreateClose = () => setCreateDialog(false);
+  const handleDialogClose = () => setDialogOpen(false); // Handle dialog close
+  const handleCreateClose = () => setCreateDialog(false); // Handle dialog close  
   const createBulletinNav = () => handleCreateDialogOpen();
 
   // Handle bulletin delete
