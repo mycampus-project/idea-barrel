@@ -5,37 +5,35 @@ import Container from "@material-ui/core/Container";
 import IdeaCard from "../ideaparts/IdeaCard.js";
 import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
 import { Button } from "@material-ui/core";
+import IdeaDialog from "../ideaparts/IdeaDialog.js";
+
+//Custom list component for idea list items
 
 class IdeaList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       list: this.props.data,
+      user: this.props.user,
+      show: false,
+      dialogData: "",
       categorySort: "Ascending",
       upvotesSort: "Ascending",
-      dynCellHeight: 420,
     };
   }
 
+  // Determine windows width and show one or two cards side-by-side depending on the width
   columnSize = (props) => {
     if (isWidthUp("md" || "lg" || "xl", this.props.width)) {
-      if (this.state.dynCellHeight !== 420) {
-        this.setState((state) => ({
-          dynCellHeight: 420,
-        }));
-      }
       return 2;
-    }
-    if (this.state.dynCellHeight !== 520) {
-      this.setState((state) => ({
-        dynCellHeight: 520,
-      }));
     }
     return 1;
   };
 
+  // Sort object contents by attribute. Ascending or descending.
   dynamicSort(property) {
     var sortOrder = 1;
+    //check for "-" operator and sort asc/desc depending on that
     if (property[0] === "-") {
       sortOrder = -1;
       property = property.substr(1);
@@ -46,7 +44,22 @@ class IdeaList extends React.Component {
       return result * sortOrder;
     };
   }
+  // Open idea dialog pop up
+  handleShow = (data) => {
+    this.setState((state) => ({
+      show: true,
+      dialogData: data,
+    }));
+  };
 
+  // Closes the idea dialog pop up
+  handleClose = () => {
+    this.setState((state) => ({
+      show: false,
+    }));
+  };
+
+  // sort items
   sorter = (param) => {
     var stateSort = param.replace("-", "") + "Sort";
     console.log("statesort");
@@ -69,8 +82,9 @@ class IdeaList extends React.Component {
     console.log(this.state.list);
 
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="md">
         <Button
+          variant="outlined"
           onClick={() => {
             if (this.state.categorySort === "Ascending") {
               this.sorter("category");
@@ -80,6 +94,7 @@ class IdeaList extends React.Component {
           SORT BY CATEGORY {this.state.categorySort}
         </Button>
         <Button
+          variant="outlined"
           onClick={() => {
             if (this.state.upvotesSort === "Ascending") {
               this.sorter("upvotes");
@@ -89,19 +104,24 @@ class IdeaList extends React.Component {
           SORT BY UPVOTES {this.state.upvotesSort}
         </Button>
         <GridList
+          style={{ marginTop: "0.5em" }}
           cols={this.columnSize()}
-          cellHeight={this.state.dynCellHeight}
+          cellHeight={420}
         >
           {this.state.list.map((tile) => (
             <GridListTile key={tile.id} cols={tile.cols || 1}>
-              <IdeaCard
-                key={tile}
-                data={tile}
-                cellH={this.state.dynCellHeight}
-              ></IdeaCard>
+              <div onClick={() => this.handleShow(tile)}>
+                <IdeaCard key={tile} data={tile} cellH={420}></IdeaCard>
+              </div>
             </GridListTile>
           ))}
         </GridList>
+        <IdeaDialog
+          userData={this.state.user}
+          show={this.state.show}
+          handleClose={this.handleClose}
+          data={this.state.dialogData}
+        />
       </Container>
     );
   }
