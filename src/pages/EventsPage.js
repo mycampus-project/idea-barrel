@@ -6,9 +6,7 @@ import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import {
   Button, //eslint-disable-line
-  Typography,
-  ThemeProvider,
-  createMuiTheme, //eslint-disable-line
+  makeStyles,
 } from "@material-ui/core";
 import { SnackbarContext } from "../contexts/SnackbarContext";
 import { UserContext } from "../contexts/UserContext";
@@ -35,14 +33,12 @@ const Events = () => {
     try {
       const response = await fetchEventsAsync();
       setEvents(response);
-      console.log("EVENTS: ", response);
     } catch (e) {
       console.log("error fetching bulletins");
     }
   };
   const formatDate = (string) => {
     const parsed = new Date(string);
-    console.log(parsed);
     return parsed;
   };
 
@@ -53,14 +49,14 @@ const Events = () => {
         const sortedNames = events.sort((a, b) =>
           a.category.localeCompare(b.category)
         );
-        setSortedCategory("Sort by category");
+        setSortedCategory("Sort by latest");
         setEvents(sortedNames);
         break;
       case "latest":
         const sortedDates = events.sort(
           (a, b) => formatDate(b.date) - formatDate(a.date)
         );
-        setSortedCategory("Sort by latest");
+        setSortedCategory("Sort by category");
         setEvents(sortedDates);
         break;
       default:
@@ -109,17 +105,15 @@ const Events = () => {
   const handleSorted = (event) => {
     if (event !== "all") {
       // separate category and id to enable sorting
-      console.log("EVENT:", event);
       // split category text to separate category from id (stored in event)
       const array = event.split(" ").map((data) => {
         return data;
       });
-      const id = array[array.length - 1];
+      //const id = array[array.length - 1];
       // Slice array to remove id, string it, replace commas with spaces to return the whole original category name
       const category = array.slice(0, -1).toString().replace(/,/g, " ");
 
       // not used for anything but
-      console.log(id);
       setSorted(category);
     } else {
       setSorted(event);
@@ -174,20 +168,21 @@ const Events = () => {
   const ArrowLeft = Arrow({ text: "<", className: "arrowprev" });
   const ArrowRight = Arrow({ text: ">", className: "arrownext" });
 
-  const categoryButtonTheme = createMuiTheme({
-    overrides: {
-      MuiButton: {
-        // category button
-        outlinedPrimary: {
-          color: "#3F51B5",
-          borderRadius: 20,
-          width: "70%",
-          marginTop: "2%",
-          marginBottom: "2%",
-        },
-      },
+  const useStyles = makeStyles((theme) => ({
+    sortedText: {
+      marginTop: "2%",
+      marginBottom: "2%",
     },
-  });
+    buttonMargin: {
+      margin: theme.spacing(1),
+    },
+    center: {
+      marginTop: theme.spacing(1),
+      justifyContent: "center",
+    },
+  }));
+  const style = useStyles();
+
   const eventSender = users.filter((o1) =>
     events.map((o2) => o1.id === o2.senderId)
   );
@@ -233,32 +228,41 @@ const Events = () => {
   ));
 
   return (
-    <div className="EventsPage">
-      <ThemeProvider theme={categoryButtonTheme}>
-        <Typography align="center">
-          <Button
-            className="eventButton"
-            onClick={() => handleSorted("all")}
-            variant="outlined"
-            color="primary"
-          >
-            Show All Events
-          </Button>
+    <div className={style.center}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Button
+          className={style.buttonMargin}
+          variant="contained"
+          color="primary"
+          onClick={() => handleSorted("all")}
+        >
+          Show All Events
+        </Button>
+        {sorted === "all" ? (
           <div>
-            <Typography align="center">
-              <Button
-                onClick={() => {
-                  if (sortedCategory === "Sort by category") {
-                    sorter("latest");
-                  } else sorter("category");
-                }}
-              >
-                {sortedCategory}
-              </Button>
-            </Typography>
+            <Button
+              className={style.buttonMargin}
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                if (sortedCategory === "Sort by category") {
+                  sorter("category");
+                } else sorter("latest");
+              }}
+            >
+              {sortedCategory}
+            </Button>
           </div>
-        </Typography>
-      </ThemeProvider>
+        ) : (
+          <div className={style.sortedText}>Sorting by category: {sorted}</div>
+        )}
+      </div>
       <ScrollMenu
         data={sortedArray.length < 1 ? menuItems : ""}
         arrowLeft={ArrowLeft}
