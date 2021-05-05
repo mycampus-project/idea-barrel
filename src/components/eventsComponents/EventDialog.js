@@ -13,6 +13,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import CloseIcon from "@material-ui/icons/Close";
 import { navigate } from "hookrouter";
 
+// Dialog that show event info when clicked
 const EventDialog = (props) => {
   const { data, handleClose, deleteEvent, show, handleOwner } = props;
   const { title, body, category, startTime, endTime, id } = data;
@@ -59,7 +60,6 @@ const EventDialog = (props) => {
   });
   const styles = useStyles();
 
-  // deleteEvent - can delete everything atm
   return (
     <Dialog open={show} fullWidth={true}>
       <Typography align="center" style={{ wordWrap: "break-word" }}>

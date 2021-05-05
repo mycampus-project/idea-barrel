@@ -19,6 +19,7 @@ const CreateEventPage = () => {
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const { setSnackbar } = useContext(SnackbarContext);
   const { user } = useContext(UserContext);
+  // error states for form validation
   const [errors, setErrors] = useState({
     title: true,
     titleError: "Cant be empty",
@@ -27,6 +28,7 @@ const CreateEventPage = () => {
     category: true,
     categoryError: "Cant be empty",
   });
+  // data for event to send through
   const [eventData, setEventData] = useState({
     senderId: user.id,
     senderEmail: user.email,
@@ -38,6 +40,7 @@ const CreateEventPage = () => {
     startTime: "",
     endTime: "",
   });
+  // error updating and checking if any exist
   const updateErrors = (error, boolean) => {
     setErrors({
       ...errors,
@@ -61,12 +64,11 @@ const CreateEventPage = () => {
 
   // check that form does not have empty fields
   const handleForm = (event) => {
-    console.log(event.target.name);
     setEventData({
       ...eventData,
       [event.target.name]: event.target.value,
     });
-
+    // sets errors on each of the form parts if any is 0 length, removes error otherwise
     switch (event.target.name) {
       case "senderId":
         errors.senderId =
@@ -101,15 +103,15 @@ const CreateEventPage = () => {
       default:
     }
   };
-  console.log("ERRORS:", errors);
-
+  // filters dates and times before current day
   const filterPassedTime = (time) => {
     const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate());
+    currentDate.setDate(currentDate.getDate() - 1);
     const selectedDate = new Date(time);
 
     return currentDate.getTime() < selectedDate.getTime();
   };
+  // filters dates before chosen start time, next available is 30 minutes after it
   const filterSelectedTime = (time) => {
     const selectedDate = new Date(time);
     selectedDate.setDate(selectedDate.getDate());
@@ -125,11 +127,10 @@ const CreateEventPage = () => {
       title: eventData.title,
       body: eventData.body,
       category: eventData.category,
+      // backend uses ISO strings so these will be converted
       startTime: startTime.toISOString(),
       endTime: endTime.toISOString(),
     };
-    console.log("POSTED DATA DATA: ", data);
-    console.log("SUBMIT:", submitEnabled);
 
     const res = await postEventAsync(data);
     validateErrors();
