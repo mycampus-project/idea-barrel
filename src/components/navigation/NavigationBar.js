@@ -45,27 +45,29 @@ const useStyles = makeStyles((theme) => ({
     color: "#FFFFFF"
   }
 }))
-
+// Component representing the navigation bar
 const NavigationBar = () => {
   const classes = useStyles()
   const [open, setOpen] = useState(null)
   const [width, setWidth] = useState(window.innerWidth)
-
+  // open dropdown menu
   const handleMenuClick = (event) => {
     setOpen(event.currentTarget)
   }
+  // handle dropdown close
   const handleMenuClose = () => {
     setOpen(null)
   }
-
+  // handle dropdown nav
   const handleNavigate = (url) => {
     navigate(url, true)
     setOpen(null)
   }
+  // hack to have the right width to use with the breakpoint
   const updateWidth = () => {
     setWidth(window.innerWidth)
   }
-
+  // update width state when the window is resized 
   window.addEventListener("resize", updateWidth)
   return (
     <div className={classes.root}>
